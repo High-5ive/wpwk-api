@@ -15,11 +15,11 @@ import java.util.List;
 public class FileUploadController {
 
     @PostMapping("upload/files")
-    public String uploadMulti(@RequestParam("files[0]")MultipartFile file) throws Exception{
+    public String uploadMulti(@RequestParam("files")List<MultipartFile> files) throws Exception{
 
         String basePath = FileSystemView.getFileSystemView().getHomeDirectory().toString() + "/multi";
 
-        //for(MultipartFile file : formData) {
+        for(MultipartFile file : files) {
             String originalName = file.getOriginalFilename();
             String filePath = basePath + "/" + originalName;
 
@@ -27,7 +27,7 @@ public class FileUploadController {
 
             File dest = new File(filePath);
             file.transferTo(dest);
-        //}
+        }
         return "uploaded";
     }
 }
