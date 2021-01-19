@@ -29,8 +29,8 @@ public class ContentsController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/contents/{option}/{keyWord}")
-    public ResponseEntity<Contents> findContents(@PathVariable String option, @PathVariable String keyWord) {
+    @GetMapping("/contents/{option}/{keyword}")
+    public ResponseEntity<Contents> findContents(@PathVariable String option, @PathVariable String keyword) {
         Contents contents = null;
         HashMap<String, String> map = new HashMap<>();
         try {
@@ -38,7 +38,8 @@ public class ContentsController {
             // 이름 map.put("name",keyword);
             // 제작자 map.put("creator", keyword);
             // 해시태그 map.put("tag" ,keyword);
-            map.put(option, keyWord);
+            map.put("option", option); // option : title, keyword : 보육
+            map.put("keyword", keyword); // option : title, keyword : 보육
             contents = contentsService.findContents(map);
         } catch (Exception e) {
             e.printStackTrace();

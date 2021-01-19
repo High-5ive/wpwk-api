@@ -15,8 +15,20 @@
 
     <!-- 컨텐츠 아이디를 이용한 조회 -->
     <select id="findContents" resultType="com.ssafy.wpwk.model.Contents" parameterType="hashmap">
-        SELECT * FROM contents
-        WHERE id = #{id}
+        <choose>
+            <when test="option == 'tagName'">
+                SELECT * FROM contents
+                WHERE
+            </when>
+            <when test="option == 'nickname'">
+                SELECT * FROM contents
+                WHERE
+            </when>
+            <when test="option == 'title'">
+                SELECT * FROM contents
+                WHERE title = #{keyword}
+            </when>
+        </choose>
     </select>
 
     <!--데이터 수정 -->
