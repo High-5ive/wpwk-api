@@ -20,9 +20,9 @@ public interface ContentsService {
 
     List<Contents> findAllContents() throws Exception;
 
-    void update(long contentsId, Contents contents) throws Exception;
+    void update(Long contentsId, Contents contents) throws Exception;
 
-    void delete(long contentsId) throws Exception;
+    void delete(Long contentsId) throws Exception;
 
     /*
     댓글 CRUD

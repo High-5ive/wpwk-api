@@ -63,7 +63,7 @@ public class ContentsController {
     }
 
     @PutMapping("/contents/{contentsId}")
-    public ResponseEntity<Void> update(@PathVariable long contentsId,@RequestBody Contents contents) {
+    public ResponseEntity<Void> update(@PathVariable Long contentsId,@RequestBody Contents contents) {
         try {
             contentsService.update(contentsId,contents);
         } catch (Exception e) {
@@ -74,7 +74,7 @@ public class ContentsController {
     }
 
     @DeleteMapping("/contents/{contentsId}")
-    public ResponseEntity<Void> delete(@PathVariable long contentsId) {
+    public ResponseEntity<Void> delete(@PathVariable Long contentsId) {
         try {
             contentsService.delete(contentsId);
         } catch (Exception e) {

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Repository
@@ -13,7 +14,7 @@ public interface ContentsMapper {
 
     Long create(Contents contents) throws Exception;
 
-    Contents findContents(Long id) throws Exception;
+    Contents findContents(HashMap<String, String> map) throws Exception;
 
     List<Contents> findAllContents() throws Exception;
 

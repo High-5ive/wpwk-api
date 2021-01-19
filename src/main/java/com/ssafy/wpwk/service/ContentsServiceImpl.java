@@ -13,32 +13,32 @@ import java.util.List;
 public class ContentsServiceImpl implements ContentsService {
 
     @Autowired
-    ContentsMapper mapper;
+    ContentsMapper contentsMapper;
 
     @Override
     public long create(Contents contents) throws Exception {
 
-        return 0;
+        return contentsMapper.create(contents);
     }
 
     @Override
     public Contents findContents(HashMap<String, String> map) throws Exception {
-        return null;
+        return contentsMapper.findContents(map);
     }
 
     @Override
     public List<Contents> findAllContents() throws Exception {
-        return null;
+        return contentsMapper.findAllContents();
     }
 
     @Override
-    public void update(long contentsId, Contents contents) throws Exception {
-
+    public void update(Long contentsId, Contents contents) throws Exception {
+        contentsMapper.update(contentsId, contents);
     }
 
     @Override
-    public void delete(long contentsId) throws Exception {
-
+    public void delete(Long contentsId) throws Exception {
+        contentsMapper.delete(contentsId);
     }
 
     @Override
