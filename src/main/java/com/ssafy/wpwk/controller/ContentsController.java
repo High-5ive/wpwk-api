@@ -16,11 +16,10 @@ import java.util.List;
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
-@Api(value = "WPWK")
 public class ContentsController {
 
     @Autowired
-    ContentsServiceImpl contentsService;
+    private ContentsServiceImpl contentsService;
 
     @ApiOperation(value = "새로운 컨텐츠 제작(등록)")
     @PostMapping("/contents")
@@ -30,7 +29,7 @@ public class ContentsController {
             contentsService.create(contents);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -90,7 +89,7 @@ public class ContentsController {
             contentsService.update(contents);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -103,7 +102,7 @@ public class ContentsController {
             contentsService.delete(contentsId);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
