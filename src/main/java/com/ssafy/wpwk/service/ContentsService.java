@@ -22,7 +22,7 @@ public interface ContentsService {
 
     List<Contents> findAllContents() throws Exception;
 
-    void update(Long contentsId, Contents contents) throws Exception;
+    void update(Contents contents) throws Exception;
 
     void delete(Long contentsId) throws Exception;
 

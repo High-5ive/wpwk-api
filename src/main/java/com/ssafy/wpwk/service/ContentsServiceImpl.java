@@ -37,8 +37,8 @@ public class ContentsServiceImpl implements ContentsService {
     }
 
     @Override
-    public void update(Long contentsId, Contents contents) throws Exception {
-        contentsMapper.update(contentsId, contents);
+    public void update( Contents contents) throws Exception {
+        contentsMapper.update( contents);
     }
 
     @Override
