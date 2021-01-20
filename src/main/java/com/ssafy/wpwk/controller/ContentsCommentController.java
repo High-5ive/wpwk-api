@@ -1,8 +1,7 @@
 package com.ssafy.wpwk.controller;
 
-
 import com.ssafy.wpwk.model.ContentsComment;
-import com.ssafy.wpwk.service.CommentServiceImpl;
+import com.ssafy.wpwk.service.ContentsCommentServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,15 +13,15 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "{*}", maxAge = 6000)
-public class CommentController {
+public class ContentsCommentController {
 
     @Autowired
-    private CommentServiceImpl commentService;
+    private ContentsCommentServiceImpl commentService;
 
     @ApiOperation(value = "컨텐츠의 모든 댓글 조회")
     @GetMapping("/comment/{contentsId}")
     public ResponseEntity<List<ContentsComment>> allComments(@PathVariable Long contentsId) {
-        List<ContentsComment> commentList = null;
+        List<ContentsComment> commentList;
         try {
 
             commentList = commentService.allComments(contentsId);
@@ -68,7 +67,7 @@ public class CommentController {
 
     @ApiOperation(value = "컨텐츠 댓글 삭제")
     @DeleteMapping("/comment/{contentsId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long contentsId,@RequestBody Long commentId) {
+    public ResponseEntity<Void> deleteComment(@PathVariable Long contentsId, @RequestBody Long commentId) {
         try {
             //회원인지 검증 필요함
             // comment.user.nickname ? jwt.claim.get(nickname)

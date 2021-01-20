@@ -16,7 +16,7 @@
         UPDATE contents_comment SET
             comment = #{comment},
             user_id = #{user.id},
-            updated_at = #{updateBy},
+            updated_at = #{updateAt},
             updated_by = #{updateBy}
         WHERE id = #{id}
     </update>
