@@ -23,7 +23,7 @@ public class ContentsServiceImpl implements ContentsService {
 
     @Override
     public Contents findContents(HashMap<String, String> map) throws Exception {
-        return contentsMapper.findContents(map);
+        return contentsMapper.findContentsById(map);
     }
 
     @Override
