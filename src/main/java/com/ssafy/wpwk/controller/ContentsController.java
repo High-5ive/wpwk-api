@@ -2,6 +2,7 @@ package com.ssafy.wpwk.controller;
 
 import com.ssafy.wpwk.model.Contents;
 import com.ssafy.wpwk.model.ContentsComment;
+import com.ssafy.wpwk.service.ContentsItemServiceImpl;
 import com.ssafy.wpwk.service.ContentsServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,7 +17,6 @@ import java.util.List;
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
-@Api(value = "WPWK")
 public class ContentsController {
 
     @Autowired
@@ -66,7 +66,7 @@ public class ContentsController {
         if (contentsList == null)
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         else
-            return new ResponseEntity<List<Contents>>(contentsList, HttpStatus.OK);
+            return new ResponseEntity<>(contentsList, HttpStatus.OK);
     }
 
     @ApiOperation(value = "모든 컨텐츠 리스트 제공", response = List.class)
@@ -79,7 +79,7 @@ public class ContentsController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<List<Contents>>(contentsList, HttpStatus.OK);
+        return new ResponseEntity<>(contentsList, HttpStatus.OK);
     }
 
     @ApiOperation(value = "컨텐츠 수정")
