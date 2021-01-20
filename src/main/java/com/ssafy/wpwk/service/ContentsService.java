@@ -14,7 +14,7 @@ public interface ContentsService {
     /*
     컨텐츠 CRUD
      */
-    long create(Contents contents) throws Exception;
+    Long create(Contents contents) throws Exception;
 
     Contents findContentsById(Long contentsId) throws Exception;
 
@@ -22,14 +22,14 @@ public interface ContentsService {
 
     List<Contents> findAllContents() throws Exception;
 
-    void update(Long contentsId, Contents contents) throws Exception;
+    void update(Contents contents) throws Exception;
 
     void delete(Long contentsId) throws Exception;
 
     /*
     댓글 CRUD
      */
-    long addComment(ContentsComment comment) throws Exception;
+    Long addComment(ContentsComment comment) throws Exception;
 
     List<ContentsComment> allComments(String contentsId) throws Exception;
 

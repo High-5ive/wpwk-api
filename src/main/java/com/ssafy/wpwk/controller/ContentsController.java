@@ -46,10 +46,6 @@ public class ContentsController {
         List<Contents> contentsList = null;
         HashMap<String, String> map = new HashMap<>();
         try {
-            // hash
-            // �름 map.put("name",keyword);
-            // �작map.put("creator", keyword);
-            // �시�그 map.put("tag" ,keyword);
             map.put("option", option); // option : title, keyword : 보육
             map.put("keyword", keyword); // option : title, keyword : 보육
             contentsList = contentsService.findContentsByKeyword(map);
@@ -76,10 +72,10 @@ public class ContentsController {
         return new ResponseEntity<List<Contents>>(contentsList, HttpStatus.OK);
     }
 
-    @PutMapping("/contents/{contentsId}")
-    public ResponseEntity<Void> update(@PathVariable Long contentsId, @RequestBody Contents contents) {
+    @PutMapping("/contents")
+    public ResponseEntity<Void> update(@RequestBody Contents contents) {
         try {
-            contentsService.update(contentsId, contents);
+            contentsService.update(contents);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

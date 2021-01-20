@@ -20,8 +20,7 @@ public interface ContentsMapper {
 
     Contents findContentsById(Long id) throws Exception;
 
-    void update(@Param("id")Long id,
-                @Param("contents")Contents contents) throws Exception;
+    void update(Contents contents) throws Exception;
 
     void delete(Long id) throws Exception;
 }
