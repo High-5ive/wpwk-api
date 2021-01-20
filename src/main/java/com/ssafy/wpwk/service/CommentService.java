@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface CommentService {
 
+
     List<ContentsComment> allComments(Long contentsId);
 
 
