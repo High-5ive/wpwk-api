@@ -22,7 +22,12 @@ public class ContentsServiceImpl implements ContentsService {
     }
 
     @Override
-    public Contents findContents(HashMap<String, String> map) throws Exception {
+    public Contents findContentsById(Long contentsId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<Contents> findContentsByKeyword(HashMap<String, String> map) throws Exception {
         return contentsMapper.findContents(map);
     }
 

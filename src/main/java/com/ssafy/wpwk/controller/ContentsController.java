@@ -29,9 +29,21 @@ public class ContentsController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/contents/{option}/{keyWord}")
-    public ResponseEntity<Contents> findContents(@PathVariable String option, @PathVariable String keyWord) {
+    @GetMapping("/contents/{contentsId}")
+    public ResponseEntity<Contents> findContentsById(@PathVariable Long contentsId) {
         Contents contents = null;
+        try {
+            contents = contentsService.findContentsById(contentsId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(contents, HttpStatus.OK);
+    }
+
+    @GetMapping("/contents/{option}/{keyWord}")
+    public ResponseEntity<List<Contents>> findContents(@PathVariable String option, @PathVariable String keyWord) {
+        List<Contents> contentsList = null;
         HashMap<String, String> map = new HashMap<>();
         try {
             // hash
@@ -39,15 +51,16 @@ public class ContentsController {
             // 제작자 map.put("creator", keyword);
             // 해시태그 map.put("tag" ,keyword);
             map.put(option, keyWord);
-            contents = contentsService.findContents(map);
+            contentsList = contentsService.findContentsByKeyword(map);
         } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        if (contents == null)
+        if (contentsList == null)
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         else
-            return new ResponseEntity<Contents>(contents, HttpStatus.OK);
+            return new ResponseEntity<List<Contents>>(contentsList, HttpStatus.OK);
     }
 
     @GetMapping("/contents")
@@ -63,9 +76,9 @@ public class ContentsController {
     }
 
     @PutMapping("/contents/{contentsId}")
-    public ResponseEntity<Void> update(@PathVariable Long contentsId,@RequestBody Contents contents) {
+    public ResponseEntity<Void> update(@PathVariable Long contentsId, @RequestBody Contents contents) {
         try {
-            contentsService.update(contentsId,contents);
+            contentsService.update(contentsId, contents);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -95,5 +108,6 @@ public class ContentsController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
 }
