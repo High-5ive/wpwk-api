@@ -1,10 +1,7 @@
 package com.ssafy.wpwk.controller;
 
 import com.ssafy.wpwk.model.Contents;
-import com.ssafy.wpwk.model.ContentsComment;
-import com.ssafy.wpwk.service.ContentsItemServiceImpl;
 import com.ssafy.wpwk.service.ContentsServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,7 +35,7 @@ public class ContentsController {
     @ApiOperation(value = "회원이 클릭한 컨텐츠 제공", response = Contents.class)
     @GetMapping("/contents/{contentsId}")
     public ResponseEntity<Contents> findContentsById(@PathVariable Long contentsId) {
-        Contents contents = null;
+        Contents contents;
         try {
             contents = contentsService.findContentsById(contentsId);
         } catch (Exception e) {
@@ -51,7 +48,7 @@ public class ContentsController {
     @ApiOperation(value = "키워드(태그,제목,제작자)로 검색한 컨텐츠 리스트 제공", response = List.class)
     @GetMapping("/contents/{option}/{keyword}")
     public ResponseEntity<List<Contents>> findContents(@PathVariable String option, @PathVariable String keyword) {
-        List<Contents> contentsList = null;
+        List<Contents> contentsList;
         HashMap<String, String> map = new HashMap<>();
         try {
 
@@ -72,7 +69,7 @@ public class ContentsController {
     @ApiOperation(value = "모든 컨텐츠 리스트 제공", response = List.class)
     @GetMapping("/contents")
     public ResponseEntity<List<Contents>> findAllContents() {
-        List<Contents> contentsList = null;
+        List<Contents> contentsList;
         try {
             contentsList = contentsService.findAllContents();
         } catch (Exception e) {
