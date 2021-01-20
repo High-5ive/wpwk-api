@@ -14,9 +14,11 @@ public interface ContentsMapper {
 
     Long create(Contents contents) throws Exception;
 
-    Contents findContents(HashMap<String, String> map) throws Exception;
+    List<Contents> findContentsByKeyword(HashMap<String, String> map) throws Exception;
 
     List<Contents> findAllContents() throws Exception;
+
+    Contents findContentsById(Long id) throws Exception;
 
     void update(@Param("id")Long id,
                 @Param("contents")Contents contents) throws Exception;

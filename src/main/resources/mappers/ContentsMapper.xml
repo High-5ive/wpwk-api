@@ -13,8 +13,14 @@
         SELECT * FROM contents
     </select>
 
-    <!-- 컨텐츠 아이디를 이용한 조회 -->
-    <select id="findContents" resultType="com.ssafy.wpwk.model.Contents" parameterType="hashmap">
+    <!-- 컨텐츠 검색 이용한 조회 -->
+    <select id="findContentsById">
+        SELECT * FROM contents
+        WHERE id = #{id}
+    </select>
+
+    <!-- 컨텐츠 검색 이용한 조회 -->
+    <select id="findContentsByKeyword" resultType="com.ssafy.wpwk.model.Contents" parameterType="hashmap">
         <choose>
             <when test="option == 'tagName'">
                 SELECT * FROM contents
@@ -27,6 +33,7 @@
             <when test="option == 'title'">
                 SELECT * FROM contents
                 WHERE title = #{keyword}
+                ORDER BY id DESC;
             </when>
         </choose>
     </select>
