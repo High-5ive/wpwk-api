@@ -57,13 +57,4 @@ public class ContentsServiceImpl implements ContentsService {
         contentsMapper.delete(contentsId);
     }
 
-    @Override
-    public Long addComment(ContentsComment comment) throws Exception {
-        return null;
-    }
-
-    @Override
-    public List<ContentsComment> allComments(String contentsId) throws Exception {
-        return null;
-    }
 }
