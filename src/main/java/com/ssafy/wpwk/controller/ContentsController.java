@@ -41,15 +41,15 @@ public class ContentsController {
         return new ResponseEntity<>(contents, HttpStatus.OK);
     }
 
-    @GetMapping("/contents/{option}/{keyWord}")
-    public ResponseEntity<List<Contents>> findContents(@PathVariable String option, @PathVariable String keyWord) {
+    @GetMapping("/contents/{option}/{keyword}")
+    public ResponseEntity<List<Contents>> findContents(@PathVariable String option, @PathVariable String keyword) {
         List<Contents> contentsList = null;
         HashMap<String, String> map = new HashMap<>();
         try {
             // hash
-            // �름 map.put("name",keyword);
-            // �작map.put("creator", keyword);
-            // �시�그 map.put("tag" ,keyword);
+            // �름 map.put("name",keyword);
+            // �작map.put("creator", keyword);
+            // �시�그 map.put("tag" ,keyword);
             map.put("option", option); // option : title, keyword : 보육
             map.put("keyword", keyword); // option : title, keyword : 보육
             contentsList = contentsService.findContentsByKeyword(map);

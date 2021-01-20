@@ -23,11 +23,12 @@ public class ContentsServiceImpl implements ContentsService {
 
     @Override
     public Contents findContentsById(Long contentsId) throws Exception {
-        return null;
+        return contentsMapper.findContentsById(contentsId);
     }
 
     @Override
     public List<Contents> findContentsByKeyword(HashMap<String, String> map) throws Exception {
+        return contentsMapper.findContentsByKeyword(map);
     }
 
     @Override
@@ -47,7 +48,6 @@ public class ContentsServiceImpl implements ContentsService {
 
     @Override
     public long addComment(ContentsComment comment) throws Exception {
-
         return 0;
     }
 
