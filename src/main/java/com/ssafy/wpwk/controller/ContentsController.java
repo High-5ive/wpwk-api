@@ -21,8 +21,16 @@ public class ContentsController {
 
     @ApiOperation(value = "새로운 컨텐츠 제작(등록)")
     @PostMapping("/contents")
-    public ResponseEntity<Void> create(@RequestBody Contents contents) {
-        //todo
+    public ResponseEntity<Void> create(@RequestBody Contents resource) {
+
+        Contents contents = Contents.builder()
+                                    .title(resource.getTitle())
+                                    .spendTime(resource.getSpendTime())
+                                    .createdBy("server1")
+                                    .contentsItem(resource.getContentsItem())
+                                    .updatedBy("server1")
+                                    .build();
+
         try {
             contentsService.create(contents);
         } catch (Exception e) {

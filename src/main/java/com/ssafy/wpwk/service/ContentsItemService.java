@@ -15,4 +15,6 @@ public interface ContentsItemService {
     /** 컨텐츠 아이디를 이용한 컨텐츠 아이템 삭제 */
     void deleteByContentsId(Long contentsId) throws Exception;
 
+    /** 컨텐츠 아이디를 이용한 컨텐츠 아이템 수정 */
+    void updateByContentsId(Long contentsId, List<ContentsItem> contentsItem) throws Exception;
 }

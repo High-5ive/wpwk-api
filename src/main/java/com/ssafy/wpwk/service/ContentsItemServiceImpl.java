@@ -30,4 +30,14 @@ public class ContentsItemServiceImpl implements ContentsItemService{
     public void deleteByContentsId(Long contentsId) throws Exception {
         contentsItemMapper.deleteByContentsId(contentsId);
     }
+
+    @Override
+    public void updateByContentsId(Long contentsId,
+                                   List<ContentsItem> contentsItemList) throws Exception {
+        // 기존 컨텐츠 삭제 후 추가
+        // 1. 기존 컨텐츠 삭제
+        deleteByContentsId(contentsId);
+        // 2. 수정할 컨텐츠 추가
+        createByContentsId(contentsId, contentsItemList);
+    }
 }
