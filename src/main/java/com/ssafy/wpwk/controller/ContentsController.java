@@ -10,10 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
-@CrossOrigin(origins = {"*"},maxAge = 6000)
+@CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
 @Api(value = "WPWK")
 public class ContentsController {
@@ -21,7 +22,7 @@ public class ContentsController {
     @Autowired
     ContentsServiceImpl contentsService;
 
-    @ApiOperation(value="새로운 컨텐츠 제작(등록)")
+    @ApiOperation(value = "새로운 컨텐츠 제작(등록)")
     @PostMapping("/contents")
     public ResponseEntity<Void> create(@RequestBody Contents contents) {
         //todo
@@ -34,7 +35,7 @@ public class ContentsController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ApiOperation(value="회원이 클릭한 컨텐츠 제공", response = Contents.class)
+    @ApiOperation(value = "회원이 클릭한 컨텐츠 제공", response = Contents.class)
     @GetMapping("/contents/{contentsId}")
     public ResponseEntity<Contents> findContentsById(@PathVariable Long contentsId) {
         Contents contents = null;
@@ -68,7 +69,7 @@ public class ContentsController {
             return new ResponseEntity<List<Contents>>(contentsList, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "모든 컨텐츠 리스트 제공" ,response = List.class)
+    @ApiOperation(value = "모든 컨텐츠 리스트 제공", response = List.class)
     @GetMapping("/contents")
     public ResponseEntity<List<Contents>> findAllContents() {
         List<Contents> contentsList = null;
@@ -81,10 +82,11 @@ public class ContentsController {
         return new ResponseEntity<List<Contents>>(contentsList, HttpStatus.OK);
     }
 
-    @ApiOperation(value ="컨텐츠 수정")
+    @ApiOperation(value = "컨텐츠 수정")
     @PutMapping("/contents")
-    public ResponseEntity<Void> update( @RequestBody Contents contents) {
+    public ResponseEntity<Void> update(@RequestBody Contents contents) {
         try {
+            contents.setUpdatedAt(LocalDateTime.now());
             contentsService.update(contents);
         } catch (Exception e) {
             e.printStackTrace();
@@ -106,16 +108,4 @@ public class ContentsController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ApiOperation(value = "컨텐츠 댓글 등록")
-    @PostMapping("/contents/comment")
-    public ResponseEntity<Void> addComment(@RequestBody ContentsComment comment) {
-        try {
-            contentsService.addComment(comment);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }

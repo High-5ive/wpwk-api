@@ -1,7 +1,15 @@
 package com.ssafy.wpwk.model;
 
+import lombok.*;
+
 import java.time.LocalDateTime;
 
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
 public class ContentsComment {
 
     /*
