@@ -4,6 +4,7 @@ package com.ssafy.wpwk.model;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -61,4 +62,9 @@ public class Contents {
      * 컨텐츠 수정자
      * */
     private String updatedBy;
+
+    /**
+     * 컨텐츠 아이템
+     * */
+    private List<ContentsItem> contentsItem;
 }
