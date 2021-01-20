@@ -16,8 +16,7 @@ public class ContentsServiceImpl implements ContentsService {
     ContentsMapper contentsMapper;
 
     @Override
-    public long create(Contents contents) throws Exception {
-
+    public Long create(Contents contents) throws Exception {
         return contentsMapper.create(contents);
     }
 
@@ -37,8 +36,8 @@ public class ContentsServiceImpl implements ContentsService {
     }
 
     @Override
-    public void update( Contents contents) throws Exception {
-        contentsMapper.update( contents);
+    public void update(Contents contents) throws Exception {
+        contentsMapper.update(contents);
     }
 
     @Override
@@ -47,8 +46,8 @@ public class ContentsServiceImpl implements ContentsService {
     }
 
     @Override
-    public long addComment(ContentsComment comment) throws Exception {
-        return 0;
+    public Long addComment(ContentsComment comment) throws Exception {
+        return null;
     }
 
     @Override

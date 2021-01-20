@@ -47,7 +47,7 @@ public class ContentsController {
         return new ResponseEntity<>(contents, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "키워드(태그,제목,제작자)로 검색한 컨텐츠 리스트 제공" ,response = List.class)
+    @ApiOperation(value = "키워드(태그,제목,제작자)로 검색한 컨텐츠 리스트 제공", response = List.class)
     @GetMapping("/contents/{option}/{keyword}")
     public ResponseEntity<List<Contents>> findContents(@PathVariable String option, @PathVariable String keyword) {
         List<Contents> contentsList = null;
@@ -118,6 +118,4 @@ public class ContentsController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
 }
