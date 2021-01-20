@@ -26,12 +26,5 @@ public interface ContentsService {
 
     void delete(Long contentsId) throws Exception;
 
-    /*
-    댓글 CRUD
-     */
-    Long addComment(ContentsComment comment) throws Exception;
-
-    List<ContentsComment> allComments(String contentsId) throws Exception;
-
 
 }

@@ -1,4 +1,4 @@
-package com.ssafy.wpwk.controller;
+package com.ssafy.wpwk.service;
 
 import com.ssafy.wpwk.model.ContentsComment;
 import com.ssafy.wpwk.service.CommentService;

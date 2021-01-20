@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.wpwk.mappers.ContentsMapper">
+
+    <insert id="addComment" parameterType="com.ssafy.wpwk.model.ContentsComment">
+        INSERT INTO contents_comment (comment,create_by,update_by,user_id)
+        VALUES (#{comment},#{createBy},#{updateBy} #{user.id})
+    </insert>
+
+    <select id="allComments" resultType="com.ssafy.wpwk.model.ContentsComment">
+        SELECT *
+        FROM contents_comment
+    </select>
+
+    <update id="updateComment" parameterType="com.ssafy.wpwk.model.ContentsComment">
+        UPDATE contents_comment SET
+            comment = #{comment},
+            user_id = #{user.id},
+            updated_at = #{updateBy},
+            updated_by = #{updateBy}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteComment" parameterType="hashmap" >
+        DELETE FROM contents_comment
+        where id = #{id} and contents_id =#{contentsId} and user_id=#{userId}
+    </delete>
+
+</mapper>
