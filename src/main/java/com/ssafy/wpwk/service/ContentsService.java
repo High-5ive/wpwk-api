@@ -16,7 +16,9 @@ public interface ContentsService {
      */
     long create(Contents contents) throws Exception;
 
-    Contents findContents(HashMap<String, String> map) throws Exception;
+    Contents findContentsById(Long contentsId) throws Exception;
+
+    List<Contents> findContentsByKeyword(HashMap<String, String> map) throws Exception;
 
     List<Contents> findAllContents() throws Exception;
 

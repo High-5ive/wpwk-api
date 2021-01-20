@@ -28,6 +28,7 @@ public class Contents {
      * */
     private String title;
 
+
     /**
      * 컨텐츠 소요시간
      * */
