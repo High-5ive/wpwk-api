@@ -38,4 +38,9 @@
 
     </update>
 
+    <update id="changeUpdate" parameterType="Map">
+        UPDATE user
+        SET password = #{newPassword}
+        WHERE id= #{id}
+    </update>
 </mapper>

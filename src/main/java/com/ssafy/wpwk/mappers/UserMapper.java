@@ -31,4 +31,8 @@ public interface UserMapper {
 
     /*탈퇴를 요청한 유저의 상태값을 변경 */
     void deactivateUser(Long userId);
+
+    void updatePassword(@Param("id") Long id, @Param("newPassword") String newPassword);
+
+
 }
