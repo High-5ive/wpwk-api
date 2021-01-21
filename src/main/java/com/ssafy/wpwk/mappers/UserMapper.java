@@ -1,16 +1,14 @@
 package com.ssafy.wpwk.mappers;
 
 import com.ssafy.wpwk.model.User;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.mapstruct.Mapper;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 @Mapper
-
 public interface UserMapper {
 
     /*사용자 로그인 */

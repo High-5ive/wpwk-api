@@ -20,12 +20,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    /** 사용자 생성 요청 */
+    /**
+     * 사용자 생성 요청
+     */
     @PostMapping("/users")
     public ResponseEntity<?> create(@RequestBody User resource) throws URISyntaxException {
 
         // 해당 이메일을 사용하는 User가 존재하는 경우
-        if(userService.findUserByEmail(resource.getEmail()) != null) {
+        if (userService.findUserByEmail(resource.getEmail()) != null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
@@ -42,20 +44,24 @@ public class UserController {
         return ResponseEntity.created(new URI(url)).body("user create successfully");
     }
 
-    /** 사용자 목록 전체조회 */
+    /**
+     * 사용자 목록 전체조회
+     */
     @GetMapping("/users")
     public ResponseEntity<?> list() {
         return ResponseEntity.ok(userService.findAll());
     }
 
-    /** 아이디를 이용한 사용자 조회 */
-    @PostMapping("/users/{id}")
+    /**
+     * 아이디를 이용한 사용자 조회
+     */
+    @GetMapping("/users/{id}")
     public ResponseEntity<?> getUserById(@PathVariable("id") Long id) throws URISyntaxException {
 
         User user = userService.findUserById(id);
 
-        if(user != null) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
         User findUser = User.builder().email(user.getEmail())
@@ -68,7 +74,9 @@ public class UserController {
         return ResponseEntity.ok(findUser);
     }
 
-    /** 비밀번호 변경요청 */
+    /**
+     * 비밀번호 변경요청
+     */
     @PostMapping("/users/{id}/changePassword")
     public ResponseEntity<?> changePassword(@PathVariable("id") Long id,
                                             @RequestBody PasswordChangeDTO passwordChangeDTO,
@@ -79,9 +87,12 @@ public class UserController {
         // 2-2. 일치하는 경우
         // 3-1. 새 비밀번호와 현재 비밀번호가 일치하는 경우 -> CONFLICT 리턴
         // 3-2. 새 비밀번호와 현재 비밀번호가 일치하지 않는 경우 -> 새 비밀번호 변경 처리 후 OK리턴
+        return null;
     }
 
-    /** 사용자 탈퇴(비활성화) */
+    /**
+     * 사용자 탈퇴(비활성화)
+     */
     @DeleteMapping("/users/{id}")
     public ResponseEntity<?> deactivate(@PathVariable("id") Long id,
                                         Authentication authentication) {

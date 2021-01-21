@@ -1,5 +1,6 @@
 package com.ssafy.wpwk.service;
 
+import com.ssafy.wpwk.mappers.UserMapper;
 import com.ssafy.wpwk.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,6 +53,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deactivateUser(Long id) {
-        userMapper.deactivate(id);
+        userMapper.deactivateUser(id);
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ssafy.wpwk.mappers.ContentsMapper">
+<mapper namespace="com.ssafy.wpwk.mappers.UserMapper">
 
     <select id="login" parameterType="Map" resultType="com.ssafy.wpwk.model.User">
         SELECT *
@@ -9,9 +9,10 @@
           and password = #{password}
     </select>
 
-<!--    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.ssafy.wpwk.model.User">-->
-
-<!--    </insert>-->
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.ssafy.wpwk.model.User">
+        INSERT INTO user ( email, password, nickname,created_by,updated_by)
+        VALUES (#{email}, #{password}, #{nickname} ,#{createdBy} ,#{updatedBy})
+     </insert>
 
     <select id="findUserById" resultType="com.ssafy.wpwk.model.User">
         SELECT *
@@ -25,7 +26,7 @@
         WHERE email = #{email}
     </select>
 
-    <select id="findALl" resultType="com.ssafy.wpwk.model">
+    <select id="findAll" resultType="com.ssafy.wpwk.model.User">
         SELECT *
         FROM user
     </select>
