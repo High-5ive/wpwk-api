@@ -23,5 +23,5 @@ public interface UserService {
     List<User> findAll();
 
     /** 사용자 비활성화 */
-    void deactivate(Long id);
+    void deactivateUser(Long id);
 }

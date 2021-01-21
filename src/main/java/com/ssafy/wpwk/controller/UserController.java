@@ -85,7 +85,7 @@ public class UserController {
     @DeleteMapping("/users/{id}")
     public ResponseEntity<?> deactivate(@PathVariable("id") Long id,
                                         Authentication authentication) {
-        userService.deactivate(id);
+        userService.deactivateUser(id);
         return ResponseEntity.ok(id);
     }
 

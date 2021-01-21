@@ -2,6 +2,7 @@ package com.ssafy.wpwk.service;
 
 import com.ssafy.wpwk.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +13,16 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @Override
     /** 사용자 회원가입 */
     public void insertUser(User user) {
+
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+
         userMapper.insertUser(user);
     }
 
@@ -40,5 +48,10 @@ public class UserServiceImpl implements UserService {
     /** 사용자 목록 전체 조회 */
     public List<User> findAll() {
         return userMapper.findAll();
+    }
+
+    @Override
+    public void deactivateUser(Long id) {
+        userMapper.deactivate(id);
     }
 }
