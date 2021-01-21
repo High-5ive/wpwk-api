@@ -63,4 +63,9 @@ public class UserServiceImpl implements UserService {
     public void deactivateUser(Long id) {
         userMapper.deactivateUser(id);
     }
+
+    @Override
+    public void changePassword(Long id, String newPassword) {
+        userMapper.hangePassword(id, newPassword);
+    }
 }

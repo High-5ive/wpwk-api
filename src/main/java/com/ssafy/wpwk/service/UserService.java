@@ -24,4 +24,7 @@ public interface UserService {
 
     /** 사용자 비활성화 */
     void deactivateUser(Long id);
+
+    /** 사용자 비밀번호 변경 */
+    void changePassword(Long id, String newPassword);
 }

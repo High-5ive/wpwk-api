@@ -85,18 +85,29 @@ public class UserController {
 
         Claims claims = (Claims) authentication.getPrincipal();
 
-        Long userId = claims.get("userId", Long.class);
+        String email = claims.get("email", String.class);
 
-        System.out.println(userId);
-        System.out.println(passwordChangeDTO.getCurPassword());
-        System.out.println(passwordChangeDTO.getNewPassword());
+        String curPassword = passwordChangeDTO.getCurPassword();
+        String newPassword = passwordChangeDTO.getNewPassword();
+
         // TODO: 비밀번호 변경 로직
         // 1. 해당 유저의 비밀번호 일치여부 확인
+        User user = userService.login(email, passwordChangeDTO.getCurPassword());
+
         // 2-1. 일치하지 않는 경우 -> NO_CONTENT 리턴
+        if(user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // 현재 비밀번호가 일치하지 않을 때 -> 401 UNAUTHORIZED
+        }
+
         // 2-2. 일치하는 경우
         // 3-1. 새 비밀번호와 현재 비밀번호가 일치하는 경우 -> CONFLICT 리턴
+        if(curPassword.equals(newPassword)) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT); // 현재 비밀번호와 새 비밀번호가 일치한 경우 -> 409 CONFLICT
+        }
         // 3-2. 새 비밀번호와 현재 비밀번호가 일치하지 않는 경우 -> 새 비밀번호 변경 처리 후 OK리턴
-        return null;
+        userService.changePassword(user.getId(), newPassword);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
