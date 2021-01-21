@@ -66,6 +66,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void changePassword(Long id, String newPassword) {
-        userMapper.hangePassword(id, newPassword);
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        userMapper.changePassword(id, encodedPassword);
     }
 }

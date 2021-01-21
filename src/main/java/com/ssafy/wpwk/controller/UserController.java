@@ -26,7 +26,7 @@ public class UserController {
      */
     @PostMapping("/users")
     public ResponseEntity<?> create(@RequestBody User resource) throws URISyntaxException {
-
+        //todo 500에러 발생 추가 구현 필요...
         // 해당 이메일을 사용하는 User가 존재하는 경우
         if (userService.findUserByEmail(resource.getEmail()) != null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -78,9 +78,8 @@ public class UserController {
     /**
      * 비밀번호 변경요청
      */
-    @PostMapping("/users/changePassword/{id}")
-    public ResponseEntity<?> changePassword(@PathVariable("id") Long id,
-                                            @RequestBody PasswordChangeDTO passwordChangeDTO,
+    @PutMapping("/users/changePassword")
+    public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO,
                                             Authentication authentication) {
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -105,6 +104,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.CONFLICT); // 현재 비밀번호와 새 비밀번호가 일치한 경우 -> 409 CONFLICT
         }
         // 3-2. 새 비밀번호와 현재 비밀번호가 일치하지 않는 경우 -> 새 비밀번호 변경 처리 후 OK리턴
+
         userService.changePassword(user.getId(), newPassword);
 
         return new ResponseEntity<>(HttpStatus.OK);
