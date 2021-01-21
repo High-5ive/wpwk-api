@@ -15,7 +15,7 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     /** 사용자 회원가입 */
@@ -36,7 +36,15 @@ public class UserServiceImpl implements UserService {
     @Override
     /** 사용자 로그인 */
     public User login(String email, String password) {
-        return null;
+        User user = userMapper.findUserByEmail(email);
+
+        if(user == null) { return null; } // 해당 이메일로 유저가 조회되지 않은 경우
+
+        if(!passwordEncoder.matches(password, user.getPassword())) { // 비밀번호가 틀린 경우
+            return null;
+        }
+
+        return user;
     }
 
     @Override

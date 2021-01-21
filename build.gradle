@@ -36,7 +36,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    // jwt token
+    implementation 'io.jsonwebtoken:jjwt-api:0.10.7'
+    runtime 'io.jsonwebtoken:jjwt-impl:0.10.7'
+    runtime 'io.jsonwebtoken:jjwt-jackson:0.10.7'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
     runtimeOnly 'mysql:mysql-connector-java'
