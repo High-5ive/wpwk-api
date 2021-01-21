@@ -4,6 +4,7 @@ import com.ssafy.wpwk.model.Contents;
 import com.ssafy.wpwk.model.PasswordChangeDTO;
 import com.ssafy.wpwk.model.User;
 import com.ssafy.wpwk.service.UserService;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,10 +78,18 @@ public class UserController {
     /**
      * 비밀번호 변경요청
      */
-    @PostMapping("/users/{id}/changePassword")
+    @PostMapping("/users/changePassword/{id}")
     public ResponseEntity<?> changePassword(@PathVariable("id") Long id,
                                             @RequestBody PasswordChangeDTO passwordChangeDTO,
                                             Authentication authentication) {
+
+        Claims claims = (Claims) authentication.getPrincipal();
+
+        Long userId = claims.get("userId", Long.class);
+
+        System.out.println(userId);
+        System.out.println(passwordChangeDTO.getCurPassword());
+        System.out.println(passwordChangeDTO.getNewPassword());
         // TODO: 비밀번호 변경 로직
         // 1. 해당 유저의 비밀번호 일치여부 확인
         // 2-1. 일치하지 않는 경우 -> NO_CONTENT 리턴
