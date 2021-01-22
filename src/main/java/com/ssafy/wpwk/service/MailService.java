@@ -4,7 +4,9 @@ import com.ssafy.wpwk.model.User;
 import com.ssafy.wpwk.utils.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -15,6 +17,8 @@ public class MailService {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Async
+    @Transactional
     public void sendAuthMail(User user, String authKey) throws MessagingException, UnsupportedEncodingException {
         // mail 작성 관련
         MailUtil sendMail = new MailUtil(mailSender);
