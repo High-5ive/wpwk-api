@@ -1,10 +1,9 @@
 package com.ssafy.wpwk.controller;
 
-import com.ssafy.wpwk.model.Contents;
-import com.ssafy.wpwk.model.PasswordChangeDTO;
-import com.ssafy.wpwk.model.User;
+import com.ssafy.wpwk.model.*;
 import com.ssafy.wpwk.service.UserService;
 import io.jsonwebtoken.Claims;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
@@ -50,7 +50,7 @@ public class UserController {
      */
     @GetMapping("/users")
     public ResponseEntity<?> list() {
-        return ResponseEntity.ok(userService.findAll());
+        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
     /**
@@ -60,7 +60,6 @@ public class UserController {
     public ResponseEntity<?> getUserById(@PathVariable("id") Long id) throws URISyntaxException {
 
         User user = userService.findUserById(id);
-
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -72,7 +71,7 @@ public class UserController {
                 .updatedBy("server1")
                 .build();
 
-        return ResponseEntity.ok(findUser);
+        return new ResponseEntity<>(findUser, HttpStatus.OK);
     }
 
     /**
@@ -80,7 +79,7 @@ public class UserController {
      */
     @PutMapping("/users/changePassword")
     public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO,
-                                            Authentication authentication) {
+                                            Authentication authentication) throws URISyntaxException {
 
         Claims claims = (Claims) authentication.getPrincipal();
 
@@ -94,13 +93,13 @@ public class UserController {
         User user = userService.login(email, passwordChangeDTO.getCurPassword());
 
         // 2-1. 일치하지 않는 경우 -> NO_CONTENT 리턴
-        if(user == null) {
+        if (user == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // 현재 비밀번호가 일치하지 않을 때 -> 401 UNAUTHORIZED
         }
 
         // 2-2. 일치하는 경우
         // 3-1. 새 비밀번호와 현재 비밀번호가 일치하는 경우 -> CONFLICT 리턴
-        if(curPassword.equals(newPassword)) {
+        if (curPassword.equals(newPassword)) {
             return new ResponseEntity<>(HttpStatus.CONFLICT); // 현재 비밀번호와 새 비밀번호가 일치한 경우 -> 409 CONFLICT
         }
         // 3-2. 새 비밀번호와 현재 비밀번호가 일치하지 않는 경우 -> 새 비밀번호 변경 처리 후 OK리턴
@@ -113,11 +112,40 @@ public class UserController {
     /**
      * 사용자 탈퇴(비활성화)
      */
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<?> deactivate(@PathVariable("id") Long id,
-                                        Authentication authentication) {
+    @DeleteMapping("/users")
+    public ResponseEntity<?> deactivate(Authentication authentication) throws URISyntaxException {
+        Claims claims = (Claims) authentication.getPrincipal();
+
+        Long id = claims.get("userId", Long.class);
+
         userService.deactivateUser(id);
         return ResponseEntity.ok(id);
+    }
+
+    @PutMapping("/users")
+    public ResponseEntity<?> updateUser(@RequestBody ContentsAbilityDTO contentsAbilityDTO,
+                                        Authentication authentication) throws URISyntaxException {
+
+        Claims claims = (Claims) authentication.getPrincipal();
+
+        Long id = claims.get("userId", Long.class);
+
+        userService.updateUserAbilities(id, contentsAbilityDTO);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/users/abilities")
+    public ResponseEntity<?> findUserAbilities(Authentication authentication) {
+        Claims claims = (Claims) authentication.getPrincipal();
+
+        Long id = claims.get("userId", Long.class);
+
+        ContentsAbilityDTO abilityDTO = userService.findUserAbilitiesById(id);
+
+        System.out.println(abilityDTO);
+
+        return new ResponseEntity<>(abilityDTO, HttpStatus.OK);
     }
 
 }

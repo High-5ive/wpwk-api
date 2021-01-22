@@ -1,11 +1,14 @@
 package com.ssafy.wpwk.service;
 
 import com.ssafy.wpwk.mappers.UserMapper;
+import com.ssafy.wpwk.model.ContentsAbilityDTO;
 import com.ssafy.wpwk.model.User;
+import com.ssafy.wpwk.model.UserAbilityDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,9 +41,11 @@ public class UserServiceImpl implements UserService {
     public User login(String email, String password) {
         User user = userMapper.findUserByEmail(email);
 
-        if(user == null) { return null; } // 해당 이메일로 유저가 조회되지 않은 경우
+        if (user == null) {
+            return null;
+        } // 해당 이메일로 유저가 조회되지 않은 경우
 
-        if(!passwordEncoder.matches(password, user.getPassword())) { // 비밀번호가 틀린 경우
+        if (!passwordEncoder.matches(password, user.getPassword())) { // 비밀번호가 틀린 경우
             return null;
         }
 
@@ -69,4 +74,18 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = passwordEncoder.encode(newPassword);
         userMapper.changePassword(id, encodedPassword);
     }
+
+    @Override
+    public void updateUserAbilities(Long id, ContentsAbilityDTO contentsAbilityDTO) {
+
+        userMapper.updateUserAbilities(id, contentsAbilityDTO);
+
+    }
+
+
+    @Override
+    public ContentsAbilityDTO findUserAbilitiesById(Long id) {
+        return userMapper.findUserAbilitiesById(id);
+    }
+
 }

@@ -1,6 +1,10 @@
 package com.ssafy.wpwk.mappers;
 
+import com.ssafy.wpwk.model.Ability;
+import com.ssafy.wpwk.model.ContentsAbilityDTO;
 import com.ssafy.wpwk.model.User;
+
+import com.ssafy.wpwk.model.UserAbilityDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -27,12 +31,15 @@ public interface UserMapper {
     List<User> findAll();
 
     /*유저의 정보 업데이트 */
-    void updateUser(User user);
+    void updateUserAbilities(@Param("id") Long id, @Param("contentsAbilityDTO") ContentsAbilityDTO contentsAbilityDTO);
 
     /*탈퇴를 요청한 유저의 상태값을 변경 */
     void deactivateUser(Long userId);
 
+    /* 유저의 비밀번호 변경 */
     void changePassword(@Param("id") Long id, @Param("newPassword") String newPassword);
 
+    UserAbilityDTO userAbilities(Long id);
 
+    ContentsAbilityDTO findUserAbilitiesById(Long id);
 }

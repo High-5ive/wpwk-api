@@ -10,9 +10,9 @@
     </select>
 
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.ssafy.wpwk.model.User">
-        INSERT INTO user ( email, password, nickname,created_by,updated_by)
-        VALUES (#{email}, #{password}, #{nickname} ,#{createdBy} ,#{updatedBy})
-     </insert>
+        INSERT INTO user (email, password, nickname, created_by, updated_by)
+        VALUES (#{email}, #{password}, #{nickname}, #{createdBy}, #{updatedBy})
+    </insert>
 
     <select id="findUserById" resultType="com.ssafy.wpwk.model.User">
         SELECT *
@@ -31,16 +31,42 @@
         FROM user
     </select>
 
-    <update id="deactivateUser" >
+    <update id="deactivateUser">
         UPDATE user
         SET status = 0
         WHERE id = #{id}
-
     </update>
 
-    <update id="changePassword" parameterType="Map">
+    <update id="changePassword" parameterType="map">
         UPDATE user
         SET password = #{newPassword}
-        WHERE id= #{id}
+        WHERE id = #{id}
     </update>
+
+    <!--    유저의 역량 지표 업데이트-->
+    <update id="updateUserAbilities" parameterType="map">
+        UPDATE user
+        SET ability1 = ability1 + #{contentsAbilityDTO.abilities[0]},
+            ability2 = ability2 + #{contentsAbilityDTO.abilities[1]},
+            ability3 = ability3 + #{contentsAbilityDTO.abilities[2]},
+            ability4 = ability4 + #{contentsAbilityDTO.abilities[3]},
+            ability5 = ability5 + #{contentsAbilityDTO.abilities[4]},
+            ability6 = ability6 + #{contentsAbilityDTO.abilities[5]},
+            ability7 = ability7 + #{contentsAbilityDTO.abilities[6]},
+            ability8 = ability8 + #{contentsAbilityDTO.abilities[7]}
+        WHERE id = #{id}
+    </update>
+
+    <select id="findUserAbilitiesById" resultType="com.ssafy.wpwk.model.ContentsAbilityDTO">
+        SELECT ability1,
+               ability2,
+               ability3,
+               ability4,
+               ability5,
+               ability6,
+               ability7,
+               ability8
+        FROM user
+        WHERE id = #{id}
+    </select>
 </mapper>

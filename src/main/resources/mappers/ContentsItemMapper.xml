@@ -33,4 +33,6 @@
         DELETE FROM contents_item
         WHERE contents_id = #{contentsId}
     </delete>
+
+
 </mapper>
