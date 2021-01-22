@@ -3,12 +3,14 @@ package com.ssafy.wpwk.service;
 import com.ssafy.wpwk.model.User;
 import org.springframework.http.ResponseEntity;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface UserService {
 
     /** 사용자 회원가입 */
-    void insertUser(User user);
+    void insertUser(User user) throws UnsupportedEncodingException, MessagingException;
 
     /** 이메일을 이용한 사용자 조회 */
     User findUserByEmail(String email);
@@ -27,4 +29,7 @@ public interface UserService {
 
     /** 사용자 비밀번호 변경 */
     void changePassword(Long id, String newPassword);
+
+    /** 사용자 인증 */
+    void verification(Long id, String key);
 }
