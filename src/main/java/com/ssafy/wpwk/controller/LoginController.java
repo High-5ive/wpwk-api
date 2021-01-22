@@ -5,6 +5,7 @@ import com.ssafy.wpwk.model.LoginResponseDTO;
 import com.ssafy.wpwk.model.User;
 import com.ssafy.wpwk.service.UserService;
 import com.ssafy.wpwk.utils.JWTUtil;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
+@RestController
 public class LoginController {
 
     @Autowired
@@ -24,6 +25,7 @@ public class LoginController {
     private JWTUtil jwtUtil;
 
     /** 로그인 요청 */
+    @ApiOperation(value = "사용자 로그인 시도")
     @PostMapping("/login")
     public ResponseEntity<?> userLogin(@RequestBody LoginRequestDTO resource) {
 

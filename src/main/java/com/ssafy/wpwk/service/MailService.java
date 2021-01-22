@@ -28,8 +28,6 @@ public class MailService {
                 .append("<p>아래 링크를 클릭하시면 이메일 인증이 완료됩니다.</p>")
                 .append("<a href='http://localhost:8080/users/registerConfirm?uid=")
                 .append(user.getId())
-                .append("&email=")
-                .append(user.getEmail())
                 .append("&verificationKey=")
                 .append(authKey)
                 .append("' target='_blank'>이메일 인증 확인</a>")

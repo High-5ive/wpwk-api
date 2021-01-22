@@ -3,8 +3,9 @@ package com.ssafy.wpwk.controller;
 import com.ssafy.wpwk.model.*;
 import com.ssafy.wpwk.service.UserService;
 import io.jsonwebtoken.Claims;
-import io.swagger.models.auth.In;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -12,9 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
+
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
@@ -23,13 +23,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    private static String INIT_KEY = "DSFsfNW1f5615ds1fq623dfkj48wqKDDF55IJ";
+    @Value("${INIT_KEY}")
+    private String INIT_KEY;
 
     /**
      * 사용자 생성 요청
      */
+    @ApiOperation(value = "회원 가입 및 이메일 인증 요청")
     @PostMapping("/users")
-    public ResponseEntity<?> create(@RequestBody User resource) throws URISyntaxException, UnsupportedEncodingException, MessagingException {
+    public ResponseEntity<?> create(@RequestBody User resource) {
         //todo 500에러 발생 추가 구현 필요...
         // 해당 이메일을 사용하는 User가 존재하는 경우
         if (userService.findUserByEmail(resource.getEmail()) != null) {
@@ -43,15 +45,23 @@ public class UserController {
                 .updatedBy("server1")
                 .build();
 
-        userService.insertUser(user);
+        try {
+            userService.insertUser(user);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
-        String url = "users/" + user.getId();
-        return ResponseEntity.created(new URI(url)).body("user create successfully");
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     /**
      * 사용자 목록 전체조회
      */
+    @ApiOperation(value = "사용자 목록 전체 조회")
     @GetMapping("/users")
     public ResponseEntity<?> list() {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
@@ -60,8 +70,9 @@ public class UserController {
     /**
      * 아이디를 이용한 사용자 조회
      */
+    @ApiOperation(value = "아이디를 이용한 사용자 조회")
     @GetMapping("/users/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable("id") Long id) throws URISyntaxException {
+    public ResponseEntity<?> getUserById(@PathVariable("id") Long id)  {
 
         User user = userService.findUserById(id);
         if (user == null) {
@@ -81,9 +92,10 @@ public class UserController {
     /**
      * 비밀번호 변경요청
      */
+    @ApiOperation(value = "비밀번호 변경 요청")
     @PutMapping("/users/changePassword")
     public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO,
-                                            Authentication authentication) throws URISyntaxException {
+                                            Authentication authentication) {
 
         Claims claims = (Claims) authentication.getPrincipal();
 
@@ -98,16 +110,14 @@ public class UserController {
 
         // 2-1. 일치하지 않는 경우 -> NO_CONTENT 리턴
         if (user == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // 현재 비밀번호가 일치하지 않을 때 -> 401 UNAUTHORIZED
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
         // 2-2. 일치하는 경우
         // 3-1. 새 비밀번호와 현재 비밀번호가 일치하는 경우 -> CONFLICT 리턴
         if (curPassword.equals(newPassword)) {
             return new ResponseEntity<>(HttpStatus.CONFLICT); // 현재 비밀번호와 새 비밀번호가 일치한 경우 -> 409 CONFLICT
         }
         // 3-2. 새 비밀번호와 현재 비밀번호가 일치하지 않는 경우 -> 새 비밀번호 변경 처리 후 OK리턴
-
         userService.changePassword(user.getId(), newPassword);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -116,8 +126,9 @@ public class UserController {
     /**
      * 사용자 탈퇴(비활성화)
      */
+    @ApiOperation(value = "사용자 회원 탈퇴(비활성화)")
     @DeleteMapping("/users")
-    public ResponseEntity<?> deactivate(Authentication authentication) throws URISyntaxException {
+    public ResponseEntity<?> deactivate(Authentication authentication) {
         Claims claims = (Claims) authentication.getPrincipal();
 
         Long id = claims.get("userId", Long.class);
@@ -126,45 +137,54 @@ public class UserController {
         return ResponseEntity.ok(id);
     }
 
-    @PutMapping("/users")
-    public ResponseEntity<?> updateUser(@RequestBody ContentsAbilityDTO contentsAbilityDTO,
-                                        Authentication authentication) throws URISyntaxException {
+    @ApiOperation(value = "사용자 역량 정보 업데이트")
+    @PutMapping("/users/abilities")
+    public ResponseEntity<?> updateUser(@RequestBody AbilityDTO abilityDTO,
+                                        Authentication authentication) {
 
         Claims claims = (Claims) authentication.getPrincipal();
 
         Long id = claims.get("userId", Long.class);
-    /**
-     * 사용자 이메일 인증 요청
-     */
-    @GetMapping("/users/registerConfirm")
-    public ResponseEntity<?> confirm(@RequestParam("uid")Long userId, @RequestParam("email")String email,
-                                     @RequestParam("verificationKey")String verificationKey) {
-        User user = userService.findUserById(userId);
-
-        userService.updateUserAbilities(id, contentsAbilityDTO);
+        System.out.println(abilityDTO);
+        userService.updateUserAbilities(id, abilityDTO);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @ApiOperation(value = "사용자 역량 정보 조회")
     @GetMapping("/users/abilities")
     public ResponseEntity<?> findUserAbilities(Authentication authentication) {
         Claims claims = (Claims) authentication.getPrincipal();
-        if(verificationKey.equals(user.getVerificationKey())) { // authKey가 같은 경우 -> 응답코드 201
+
+        Long id = claims.get("userId", Long.class);
+        System.out.println(id);
+        AbilityDTO abilities = userService.findUserAbilitiesById(id);
+        System.out.println(abilities);
+        if (abilities == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(abilities, HttpStatus.OK);
+    }
+
+
+    /**
+     * 사용자 이메일 인증 요청
+     */
+    @ApiOperation(value = "사용자 이메일 인증 요청")
+    @GetMapping("/users/registerConfirm")
+    public ResponseEntity<?> confirm(@RequestParam("uid") Long userId,
+                                     @RequestParam("verificationKey") String verificationKey) {
+        User user = userService.findUserById(userId);
+
+        if (verificationKey.equals(user.getVerificationKey())) { // authKey가 같은 경우 -> 응답코드 201
             userService.verification(userId, INIT_KEY); // 사용자 인증
             return new ResponseEntity<>(HttpStatus.CREATED);
-        } else if(INIT_KEY.equals(user.getVerificationKey())) { // 이미 인증을 한 경우 -> 응답코드 208
+        } else if (INIT_KEY.equals(user.getVerificationKey())) { // 이미 인증을 한 경우 -> 응답코드 208
             return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
         } else { // 인증코드가 다른 경우 -> 응답코드 400
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Long id = claims.get("userId", Long.class);
-
-        ContentsAbilityDTO abilityDTO = userService.findUserAbilitiesById(id);
-
-        System.out.println(abilityDTO);
-
-        return new ResponseEntity<>(abilityDTO, HttpStatus.OK);
     }
 
 }

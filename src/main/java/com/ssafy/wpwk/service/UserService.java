@@ -1,8 +1,7 @@
 package com.ssafy.wpwk.service;
 
-import com.ssafy.wpwk.model.ContentsAbilityDTO;
+import com.ssafy.wpwk.model.AbilityDTO;
 import com.ssafy.wpwk.model.User;
-import com.ssafy.wpwk.model.UserAbilityDTO;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -11,8 +10,9 @@ import java.util.List;
 public interface UserService {
 
     /**
-    void insertUser(User user) throws UnsupportedEncodingException, MessagingException;
+     * 사용자 회원 가입
      */
+    void insertUser(User user) throws UnsupportedEncodingException, MessagingException;
 
     /**
      * 이메일을 이용한 사용자 조회
@@ -44,10 +44,19 @@ public interface UserService {
      */
     void changePassword(Long id, String newPassword);
 
-    void updateUserAbilities(Long id, ContentsAbilityDTO contentsAbilityDTO);
+    /**
+     * 사용자 역량 수정
+     */
+    void updateUserAbilities(Long id, AbilityDTO contentsAbilityDTO);
 
-    /** 사용자 인증 */
+    /**
+     * 사용자 인증
+     */
     void verification(Long id, String key);
-    ContentsAbilityDTO findUserAbilitiesById(Long id);
+
+    /**
+     * 사용자 역량 정보 조회
+     */
+    AbilityDTO findUserAbilitiesById(Long id);
 
 }

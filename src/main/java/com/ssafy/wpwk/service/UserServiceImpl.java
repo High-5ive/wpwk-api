@@ -1,15 +1,13 @@
 package com.ssafy.wpwk.service;
 
 import com.ssafy.wpwk.mappers.UserMapper;
-import com.ssafy.wpwk.model.ContentsAbilityDTO;
+import com.ssafy.wpwk.model.AbilityDTO;
 import com.ssafy.wpwk.model.User;
-import com.ssafy.wpwk.model.UserAbilityDTO;
 import com.ssafy.wpwk.utils.VerificationKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -26,8 +24,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MailService mailService;
 
+    /**
+     * 사용자 회원가입
+     */
     @Override
-    /** 사용자 회원가입 */
     public void insertUser(User user) throws UnsupportedEncodingException, MessagingException {
 
         String encodedPassword = passwordEncoder.encode(user.getPassword());
@@ -42,14 +42,18 @@ public class UserServiceImpl implements UserService {
         mailService.sendAuthMail(user, verificationKey);
     }
 
+    /**
+     * 이메일을 이용한 사용자 조회
+     */
     @Override
-    /** 이메일을 이용한 사용자 조회 */
     public User findUserByEmail(String email) {
         return userMapper.findUserByEmail(email);
     }
 
+    /**
+     * 사용자 로그인
+     */
     @Override
-    /** 사용자 로그인 */
     public User login(String email, String password) {
         User user = userMapper.findUserByEmail(email);
 
@@ -64,44 +68,60 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    /**
+     * 아이디를 이용한 사용자 조회
+     */
     @Override
-    /** 아이디를 이용한 사용자 조회 */
     public User findUserById(Long userId) {
         return userMapper.findUserById(userId);
     }
 
+    /**
+     * 사용자 목록 전체 조회
+     */
     @Override
-    /** 사용자 목록 전체 조회 */
     public List<User> findAll() {
         return userMapper.findAll();
     }
 
+    /**
+     * 사용자 회원 탈퇴
+     */
     @Override
     public void deactivateUser(Long id) {
         userMapper.deactivateUser(id);
     }
 
+    /**
+     * 사용자 비밀번호 변경
+     */
     @Override
     public void changePassword(Long id, String newPassword) {
         String encodedPassword = passwordEncoder.encode(newPassword);
         userMapper.changePassword(id, encodedPassword);
     }
 
+    /**
+     * 사용자 인증
+     */
     @Override
     public void verification(Long id, String key) {
         userMapper.verification(id, key);
     }
 
+    /**
+     * 사용자 역량 정보 수정
+     */
     @Override
-    public void updateUserAbilities(Long id, ContentsAbilityDTO contentsAbilityDTO) {
-
-        userMapper.updateUserAbilities(id, contentsAbilityDTO);
-
+    public void updateUserAbilities(Long id, AbilityDTO abilityDTO) {
+        userMapper.updateUserAbilities(id, abilityDTO);
     }
 
-
+    /**
+     * ID를 이용한 사용자 역량 정보 조회
+     */
     @Override
-    public ContentsAbilityDTO findUserAbilitiesById(Long id) {
+    public AbilityDTO findUserAbilitiesById(Long id) {
         return userMapper.findUserAbilitiesById(id);
     }
 

@@ -31,7 +31,6 @@ public class User {
      * */
     private String nickname;
 
-
     /**
      * 회원 상태(0:비활성화 / 1:활성화(일반고객) / 2:관리자)
      * */

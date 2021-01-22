@@ -8,29 +8,39 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ContentsItemServiceImpl implements ContentsItemService{
+public class ContentsItemServiceImpl implements ContentsItemService {
 
     @Autowired
     private ContentsItemMapper contentsItemMapper;
 
+    /**
+     * 페이지 번호와 컨텐츠 아이디를 통한 컨텐츠 아이템 조회
+     */
     @Override
-    /** 페이지 번호와 컨텐츠 아이디를 통한 컨텐츠 아이템 조회 */
     public ContentsItem findByContentsIdAndPageNo(Long contentsId, int pageNo) throws Exception {
         return contentsItemMapper.findByContentsIdAndPageNo(contentsId, pageNo);
     }
 
+    /**
+     * 컨텐츠 아이디를 이용한 컨텐츠 아이템 추가
+     */
     @Override
-    /** 컨텐츠 아이디를 이용한 컨텐츠 아이템 추가 */
     public void createByContentsId(Long contentsId, List<ContentsItem> contentsItemList) throws Exception {
         contentsItemMapper.createByContentsId(contentsId, contentsItemList);
     }
 
+
+    /**
+     * 컨텐츠 아이디를 이용한 컨텐츠 아이템 삭제
+     */
     @Override
-    /** 컨텐츠 아이디를 이용한 컨텐츠 아이템 삭제 */
     public void deleteByContentsId(Long contentsId) throws Exception {
         contentsItemMapper.deleteByContentsId(contentsId);
     }
 
+    /**
+     * 컨텐츠 아이디를 이용한 컨텐츠 아이템 수정
+     */
     @Override
     public void updateByContentsId(Long contentsId,
                                    List<ContentsItem> contentsItemList) throws Exception {

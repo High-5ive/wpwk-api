@@ -9,25 +9,33 @@ import java.util.List;
 
 public class ContentsCommentServiceImpl implements ContentsCommentService {
 
-    /** 컨텐츠 댓글 전체조회 */
+    /**
+     * 컨텐츠 댓글 전체조회
+     */
     @Override
     public List<ContentsComment> allComments(Long contentsId) {
         return null;
     }
 
-    /** 컨텐츠 댓글 생성 */
+    /**
+     * 컨텐츠 댓글 생성
+     */
     @Override
     public void addComment(ContentsComment comment) {
 
     }
 
-    /** 컨텐츠 댓글 수정 */
+    /**
+     * 컨텐츠 댓글 수정
+     */
     @Override
     public void updateComment(ContentsComment comment) {
 
     }
 
-    /** 컨텐츠 댓글 삭제 */
+    /**
+     * 컨텐츠 댓글 삭제
+     */
     @Override
     public void deleteComment(ContentsComment comment) {
 

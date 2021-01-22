@@ -18,17 +18,17 @@ public class ContentsItemController {
     ContentsItemServiceImpl contentsItemService;
 
     @ApiOperation(value = "페이지별 컨텐츠 아이템 정보 가져오기")
-    @GetMapping("/contentsItem/{contentsId}/{pageNo}")
-    public ResponseEntity<ContentsItem> readByPage(@PathVariable("contentsId") Long contentsId,
+    @GetMapping("/contentsItem/{id}/{pageNo}")
+    public ResponseEntity<?> readByPage(@PathVariable("id") Long id,
                                                    @PathVariable("pageNo") int pageNo) {
-        //todo
+
         ContentsItem contentsItem;
 
         try {
-            contentsItem = contentsItemService.findByContentsIdAndPageNo(contentsId, pageNo);
+            contentsItem = contentsItemService.findByContentsIdAndPageNo(id, pageNo);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         if(contentsItem == null) {
@@ -49,7 +49,7 @@ public class ContentsItemController {
             contentsItemService.updateByContentsId(contentsId, contentsItemList);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
