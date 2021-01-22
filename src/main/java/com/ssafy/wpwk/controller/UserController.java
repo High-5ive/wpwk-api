@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
@@ -139,7 +138,7 @@ public class UserController {
 
     @ApiOperation(value = "사용자 역량 정보 업데이트")
     @PutMapping("/users/abilities")
-    public ResponseEntity<?> updateUser(@RequestBody AbilityDTO abilityDTO,
+    public ResponseEntity<?> updateUser(@RequestBody AbilityRequestDTO abilityDTO,
                                         Authentication authentication) {
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -158,7 +157,7 @@ public class UserController {
 
         Long id = claims.get("userId", Long.class);
         System.out.println(id);
-        AbilityDTO abilities = userService.findUserAbilitiesById(id);
+        AbilityResponseDTO abilities = userService.findUserAbilitiesById(id);
         System.out.println(abilities);
         if (abilities == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -186,5 +185,4 @@ public class UserController {
         }
 
     }
-
 }

@@ -1,6 +1,7 @@
 package com.ssafy.wpwk.service;
 
-import com.ssafy.wpwk.model.AbilityDTO;
+import com.ssafy.wpwk.model.AbilityRequestDTO;
+import com.ssafy.wpwk.model.AbilityResponseDTO;
 import com.ssafy.wpwk.model.User;
 
 import javax.mail.MessagingException;
@@ -47,7 +48,7 @@ public interface UserService {
     /**
      * 사용자 역량 수정
      */
-    void updateUserAbilities(Long id, AbilityDTO contentsAbilityDTO);
+    void updateUserAbilities(Long id, AbilityRequestDTO contentsAbilityDTO);
 
     /**
      * 사용자 인증
@@ -57,6 +58,6 @@ public interface UserService {
     /**
      * 사용자 역량 정보 조회
      */
-    AbilityDTO findUserAbilitiesById(Long id);
+    AbilityResponseDTO findUserAbilitiesById(Long id);
 
 }

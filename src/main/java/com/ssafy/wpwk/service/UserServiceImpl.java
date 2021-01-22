@@ -1,7 +1,8 @@
 package com.ssafy.wpwk.service;
 
 import com.ssafy.wpwk.mappers.UserMapper;
-import com.ssafy.wpwk.model.AbilityDTO;
+import com.ssafy.wpwk.model.AbilityRequestDTO;
+import com.ssafy.wpwk.model.AbilityResponseDTO;
 import com.ssafy.wpwk.model.User;
 import com.ssafy.wpwk.utils.VerificationKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,7 +114,7 @@ public class UserServiceImpl implements UserService {
      * 사용자 역량 정보 수정
      */
     @Override
-    public void updateUserAbilities(Long id, AbilityDTO abilityDTO) {
+    public void updateUserAbilities(Long id, AbilityRequestDTO abilityDTO) {
         userMapper.updateUserAbilities(id, abilityDTO);
     }
 
@@ -121,7 +122,7 @@ public class UserServiceImpl implements UserService {
      * ID를 이용한 사용자 역량 정보 조회
      */
     @Override
-    public AbilityDTO findUserAbilitiesById(Long id) {
+    public AbilityResponseDTO findUserAbilitiesById(Long id) {
         return userMapper.findUserAbilitiesById(id);
     }
 

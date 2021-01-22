@@ -52,18 +52,18 @@
     <!--    유저의 역량 지표 업데이트-->
     <update id="updateUserAbilities" parameterType="map">
         UPDATE user
-        SET ability1 = ability1 + #{abilityDTO.abilities[0]},
-            ability2 = ability2 + #{abilityDTO.abilities[1]},
-            ability3 = ability3 + #{abilityDTO.abilities[2]},
-            ability4 = ability4 + #{abilityDTO.abilities[3]},
-            ability5 = ability5 + #{abilityDTO.abilities[4]},
-            ability6 = ability6 + #{abilityDTO.abilities[5]},
-            ability7 = ability7 + #{abilityDTO.abilities[6]},
-            ability8 = ability8 + #{abilityDTO.abilities[7]}
+        SET ability1 = ability1 + #{abilityRequestDTO.abilities[0]},
+            ability2 = ability2 + #{abilityRequestDTO.abilities[1]},
+            ability3 = ability3 + #{abilityRequestDTO.abilities[2]},
+            ability4 = ability4 + #{abilityRequestDTO.abilities[3]},
+            ability5 = ability5 + #{abilityRequestDTO.abilities[4]},
+            ability6 = ability6 + #{abilityRequestDTO.abilities[5]},
+            ability7 = ability7 + #{abilityRequestDTO.abilities[6]},
+            ability8 = ability8 + #{abilityRequestDTO.abilities[7]}
         WHERE id = #{id}
     </update>
 
-    <select id="findUserAbilitiesById" resultType="com.ssafy.wpwk.model.AbilityDTO">
+    <select id="findUserAbilitiesById" resultType="com.ssafy.wpwk.model.AbilityResponseDTO">
         SELECT ability1,
                ability2,
                ability3,

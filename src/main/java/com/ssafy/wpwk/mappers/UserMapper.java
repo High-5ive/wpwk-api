@@ -1,6 +1,7 @@
 package com.ssafy.wpwk.mappers;
 
-import com.ssafy.wpwk.model.AbilityDTO;
+import com.ssafy.wpwk.model.AbilityRequestDTO;
+import com.ssafy.wpwk.model.AbilityResponseDTO;
 import com.ssafy.wpwk.model.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -56,12 +57,12 @@ public interface UserMapper {
     /**
      * 사용자의 역량 정보 업데이트
      */
-    void updateUserAbilities(@Param("id") Long id, @Param("abilityDTO") AbilityDTO abilityDTO);
+    void updateUserAbilities(@Param("id") Long id, @Param("abilityRequestDTO") AbilityRequestDTO abilityDTO);
 
     /**
      * ID를 이용한 사용자 역량 정보 조회
      */
-    AbilityDTO findUserAbilitiesById(Long id);
+    AbilityResponseDTO findUserAbilitiesById(Long id);
 
 
 }
