@@ -5,10 +5,9 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
 @Builder
 public class User {
 
@@ -37,6 +36,11 @@ public class User {
      * 회원 상태(0:비활성화 / 1:활성화(일반고객) / 2:관리자)
      * */
     private int status;
+
+    /**
+     * 회원 이메일 인증키
+     * */
+    private String verificationKey;
 
     /**
      * 회원 생성일자

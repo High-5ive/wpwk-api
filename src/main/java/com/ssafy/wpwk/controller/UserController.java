@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -21,11 +23,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    private static String INIT_KEY = "DSFsfNW1f5615ds1fq623dfkj48wqKDDF55IJ";
+
     /**
      * 사용자 생성 요청
      */
     @PostMapping("/users")
-    public ResponseEntity<?> create(@RequestBody User resource) throws URISyntaxException {
+    public ResponseEntity<?> create(@RequestBody User resource) throws URISyntaxException, UnsupportedEncodingException, MessagingException {
         //todo 500에러 발생 추가 구현 필요...
         // 해당 이메일을 사용하는 User가 존재하는 경우
         if (userService.findUserByEmail(resource.getEmail()) != null) {
@@ -129,6 +133,13 @@ public class UserController {
         Claims claims = (Claims) authentication.getPrincipal();
 
         Long id = claims.get("userId", Long.class);
+    /**
+     * 사용자 이메일 인증 요청
+     */
+    @GetMapping("/users/registerConfirm")
+    public ResponseEntity<?> confirm(@RequestParam("uid")Long userId, @RequestParam("email")String email,
+                                     @RequestParam("verificationKey")String verificationKey) {
+        User user = userService.findUserById(userId);
 
         userService.updateUserAbilities(id, contentsAbilityDTO);
 
@@ -138,6 +149,14 @@ public class UserController {
     @GetMapping("/users/abilities")
     public ResponseEntity<?> findUserAbilities(Authentication authentication) {
         Claims claims = (Claims) authentication.getPrincipal();
+        if(verificationKey.equals(user.getVerificationKey())) { // authKey가 같은 경우 -> 응답코드 201
+            userService.verification(userId, INIT_KEY); // 사용자 인증
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else if(INIT_KEY.equals(user.getVerificationKey())) { // 이미 인증을 한 경우 -> 응답코드 208
+            return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
+        } else { // 인증코드가 다른 경우 -> 응답코드 400
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         Long id = claims.get("userId", Long.class);
 

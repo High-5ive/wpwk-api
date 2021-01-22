@@ -4,11 +4,14 @@ import com.ssafy.wpwk.mappers.UserMapper;
 import com.ssafy.wpwk.model.ContentsAbilityDTO;
 import com.ssafy.wpwk.model.User;
 import com.ssafy.wpwk.model.UserAbilityDTO;
+import com.ssafy.wpwk.utils.VerificationKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Service
@@ -20,14 +23,23 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private MailService mailService;
+
     @Override
     /** 사용자 회원가입 */
-    public void insertUser(User user) {
+    public void insertUser(User user) throws UnsupportedEncodingException, MessagingException {
 
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
+        String verificationKey = VerificationKeyUtil.getKey(); // 인증키 발급
+        user.setVerificationKey(verificationKey);
+
         userMapper.insertUser(user);
+
+        // TODO: 인증메일 전송요청처리
+        mailService.sendAuthMail(user, verificationKey);
     }
 
     @Override
@@ -73,6 +85,11 @@ public class UserServiceImpl implements UserService {
     public void changePassword(Long id, String newPassword) {
         String encodedPassword = passwordEncoder.encode(newPassword);
         userMapper.changePassword(id, encodedPassword);
+    }
+
+    @Override
+    public void verification(Long id, String key) {
+        userMapper.verification(id, key);
     }
 
     @Override

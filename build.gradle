@@ -42,6 +42,9 @@ dependencies {
     runtime 'io.jsonwebtoken:jjwt-jackson:0.10.7'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    // email verification
+    compile 'org.springframework.boot:spring-boot-starter-mail'
+
     runtimeOnly 'mysql:mysql-connector-java'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
