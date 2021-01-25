@@ -16,7 +16,10 @@ public class JWTUtil {
 
     private Key key;
 
-    private long tokenValidMilisecond = 1000L * 60;
+    private long tokenValidMilisecond = 1000L * 60 * 60;
+
+    @Value("${jwt.token}")
+    private String secretKey;
 
     public JWTUtil(String key) {
         this.key = Keys.hmacShaKeyFor(key.getBytes());
