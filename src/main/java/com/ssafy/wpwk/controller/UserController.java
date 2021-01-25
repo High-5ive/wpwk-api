@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
+import java.util.Map;
 
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
@@ -71,7 +73,7 @@ public class UserController {
      */
     @ApiOperation(value = "아이디를 이용한 사용자 조회")
     @GetMapping("/users/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable("id") Long id)  {
+    public ResponseEntity<?> getUserById(@PathVariable("id") Long id) {
 
         User user = userService.findUserById(id);
         if (user == null) {
@@ -165,24 +167,51 @@ public class UserController {
         return new ResponseEntity<>(abilities, HttpStatus.OK);
     }
 
-
     /**
      * 사용자 이메일 인증 요청
      */
     @ApiOperation(value = "사용자 이메일 인증 요청")
-    @GetMapping("/users/registerConfirm")
+    @GetMapping("/users/confirm")
     public ResponseEntity<?> confirm(@RequestParam("uid") Long userId,
                                      @RequestParam("verificationKey") String verificationKey) {
         User user = userService.findUserById(userId);
 
         if (verificationKey.equals(user.getVerificationKey())) { // authKey가 같은 경우 -> 응답코드 201
             userService.verification(userId, INIT_KEY); // 사용자 인증
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.OK);
         } else if (INIT_KEY.equals(user.getVerificationKey())) { // 이미 인증을 한 경우 -> 응답코드 208
             return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
         } else { // 인증코드가 다른 경우 -> 응답코드 400
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    /**
+     * 사용자 비밀번호 찾기 이메일 인증 요청
+     */
+    @ApiOperation(value = "사용자 비밀번호 찾기를 위한 이메일 인증 요청")
+    @PostMapping("/users/findPassword")
+    public ResponseEntity<?> findPasswordConfirm(@RequestBody Map<String, Object> map) throws UnsupportedEncodingException, MessagingException {
+        String email = (String) map.get("email");
+        User user = userService.findUserByEmail(email);
+
+        if (user == null) { //회원가입한 회원의 email이 아닌경우 NO_CONTENT 응답
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            //사용자의 업데이트 시간 수정
+            setUpdate(user);
+            //사용자 verificationKey값 변경 및 email인증 요청
+            userService.findPasswordConfirm(user);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+    }
+
+    /**
+     * 사용자 정보 업데이트시 공통 호출 메서드
+     */
+    public void setUpdate(User user) {
+        user.setUpdatedBy("server1");
+        user.setUpdatedAt(LocalDateTime.now());
     }
 }

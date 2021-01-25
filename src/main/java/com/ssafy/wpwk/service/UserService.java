@@ -21,14 +21,14 @@ public interface UserService {
     User findUserByEmail(String email);
 
     /**
-     * 사용자 로그인
-     */
-    User login(String email, String password);
-
-    /**
      * 아이디를 이용한 사용자 조회
      */
     User findUserById(Long userId);
+
+    /**
+     * 사용자 로그인
+     */
+    User login(String email, String password);
 
     /**
      * 사용자 목록 전체 조회
@@ -60,4 +60,8 @@ public interface UserService {
      */
     AbilityResponseDTO findUserAbilitiesById(Long id);
 
+    /**
+     * 사용자 비밀번호 변경을 위한 사용자 이메일 인증
+     */
+    void findPasswordConfirm(User user) throws UnsupportedEncodingException, MessagingException;
 }

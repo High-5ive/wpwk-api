@@ -75,4 +75,12 @@
         FROM user
         WHERE id = #{id}
     </select>
+
+    <update id="updateKey" parameterType="com.ssafy.wpwk.model.User">
+        UPDATE user
+        SET verification_key = #{verificationKey},
+            updated_by = #{updatedBy},
+            updated_at = #{updatedAt}
+        WHERE id = #{id}
+    </update>
 </mapper>

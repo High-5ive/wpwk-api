@@ -64,5 +64,8 @@ public interface UserMapper {
      */
     AbilityResponseDTO findUserAbilitiesById(Long id);
 
-
+    /**
+     * 사용자 인증키 언데이트
+     */
+    void updateKey(User user);
 }

@@ -126,4 +126,18 @@ public class UserServiceImpl implements UserService {
         return userMapper.findUserAbilitiesById(id);
     }
 
+
+    /**
+     * 사용자 비밀번호 변경을 위한 사용자 이메일 인증
+     */
+    @Override
+    public void findPasswordConfirm(User user) throws UnsupportedEncodingException, MessagingException {
+        // 1.임의의 키 새롭게 발금
+        String tempKey= VerificationKeyUtil.getKey();
+        // 2.요청한 유저의 verificationKey 값을 임의로 변경
+        user.setVerificationKey(tempKey);
+        userMapper.updateKey(user);
+        // 3.요청한 회원의 이메일로 임의의 키값을 전송
+        mailService.sendResetPasswordMail(user);
+    }
 }
