@@ -1,7 +1,6 @@
 package com.ssafy.wpwk.controller;
 
 import com.ssafy.wpwk.model.*;
-import com.ssafy.wpwk.proxy.ValidAuthentication;
 import com.ssafy.wpwk.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
