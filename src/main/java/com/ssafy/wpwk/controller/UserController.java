@@ -100,6 +100,10 @@ public class UserController {
     public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO,
                                             Authentication authentication) {
 
+        if(authentication == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         Claims claims = (Claims) authentication.getPrincipal();
 
         String email = claims.get("email", String.class);
