@@ -97,9 +97,10 @@ public class UserServiceImpl implements UserService {
      * 사용자 비밀번호 변경
      */
     @Override
-    public void changePassword(Long id, String newPassword) {
-        String encodedPassword = passwordEncoder.encode(newPassword);
-        userMapper.changePassword(id, encodedPassword);
+    public void changePassword(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        userMapper.changePassword(user);
     }
 
     /**
