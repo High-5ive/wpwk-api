@@ -37,9 +37,11 @@
         WHERE id = #{id}
     </update>
 
-    <update id="changePassword" parameterType="map">
+    <update id="changePassword" parameterType="com.ssafy.wpwk.model.User">
         UPDATE user
-        SET password = #{newPassword}
+        SET password = #{password},
+            updated_by = #{updatedBy},
+            updated_at = #{updatedAt}
         WHERE id = #{id}
     </update>
 

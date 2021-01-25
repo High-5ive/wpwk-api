@@ -47,7 +47,7 @@ public interface UserMapper {
     /**
      * 사용자 비밀번호 변경
      */
-    void changePassword(@Param("id") Long id, @Param("newPassword") String newPassword);
+    void changePassword(User user);
 
     /**
      * 사용자 이메일 인증

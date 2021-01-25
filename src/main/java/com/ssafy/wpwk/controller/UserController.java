@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
@@ -81,8 +82,10 @@ public class UserController {
         User findUser = User.builder().email(user.getEmail())
                 .password(user.getPassword())
                 .nickname(user.getNickname())
-                .createdBy("server1")
-                .updatedBy("server1")
+                .createdBy(user.getCreatedBy())
+                .createdAt(user.getCreatedAt())
+                .updatedBy(user.getUpdatedBy())
+                .updatedAt(user.getUpdatedAt())
                 .build();
 
         return new ResponseEntity<>(findUser, HttpStatus.OK);
@@ -117,7 +120,9 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.CONFLICT); // 현재 비밀번호와 새 비밀번호가 일치한 경우 -> 409 CONFLICT
         }
         // 3-2. 새 비밀번호와 현재 비밀번호가 일치하지 않는 경우 -> 새 비밀번호 변경 처리 후 OK리턴
-        userService.changePassword(user.getId(), newPassword);
+        user.setPassword(newPassword);
+        setUpdate(user);
+        userService.changePassword(user);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -165,7 +170,6 @@ public class UserController {
         return new ResponseEntity<>(abilities, HttpStatus.OK);
     }
 
-
     /**
      * 사용자 이메일 인증 요청
      */
@@ -183,6 +187,34 @@ public class UserController {
         } else { // 인증코드가 다른 경우 -> 응답코드 400
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
 
+    /**
+     * 사용자 비밀번호 변경 요청 (비밀번호를 잊어버린 경우)
+     */
+    @ApiOperation(value = "사용자 비밀번호 변경 요청(비밀번호를 잊어버린 경우)")
+    @PutMapping("/users/changePassword2")
+    public ResponseEntity<?> changePassword2(@RequestBody LoginRequestDTO resource) {
+        // 1. 해당 이메일로 사용자 검색
+        User user = userService.findUserByEmail(resource.getEmail());
+
+        if(user == null) { // 해당 사용자가 없는 경우
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        // 2. 해당 사용자의 비밀번호 변경
+        user.setPassword(resource.getPassword());
+        setUpdate(user);
+        userService.changePassword(user);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * 사용자 정보 업데이트시 공통 호출 메서드
+     */
+    public void setUpdate(User user) {
+        user.setUpdatedBy("server1");
+        user.setUpdatedAt(LocalDateTime.now());
     }
 }
