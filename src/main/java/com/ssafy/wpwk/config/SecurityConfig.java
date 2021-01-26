@@ -21,6 +21,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${jwt.token}")
     private String secretKey;
 
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -29,6 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin().disable()
                 .cors().disable()
                 .csrf().disable()
+//                .authorizeRequests()
+//                .antMatchers("/users/**").hasAuthority("ROLE_USER")
+//                .anyRequest().authenticated().and()
                 .headers().frameOptions().disable()
                 .and()
                 .addFilter(filter)

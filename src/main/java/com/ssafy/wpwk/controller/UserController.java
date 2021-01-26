@@ -3,6 +3,7 @@ package com.ssafy.wpwk.controller;
 import com.ssafy.wpwk.model.*;
 import com.ssafy.wpwk.service.UserService;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +35,8 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity<?> create(@RequestBody User resource) {
         //todo 500에러 발생 추가 구현 필요...
-        // 해당 이메일을 사용하는 User가 존재하는 경우
+        //해당 이메일을 사용하는 User가 존재하는 경우
+
         if (userService.findUserByEmail(resource.getEmail()) != null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
@@ -160,9 +162,10 @@ public class UserController {
     @GetMapping("/users/abilities")
     public ResponseEntity<?> findUserAbilities(Authentication authentication) {
         Claims claims = (Claims) authentication.getPrincipal();
+        System.out.println(authentication.toString());
 
         Long id = claims.get("userId", Long.class);
-        System.out.println(id);
+
         AbilityResponseDTO abilities = userService.findUserAbilitiesById(id);
         System.out.println(abilities);
         if (abilities == null) {
@@ -199,7 +202,7 @@ public class UserController {
         // 1. 해당 이메일로 사용자 검색
         User user = userService.findUserByEmail(resource.getEmail());
 
-        if(user == null) { // 해당 사용자가 없는 경우
+        if (user == null) { // 해당 사용자가 없는 경우
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
@@ -210,7 +213,6 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
 
     /**
