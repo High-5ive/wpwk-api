@@ -102,6 +102,10 @@ public class UserController {
     public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO,
                                             Authentication authentication) {
 
+        if(isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         Claims claims = (Claims) authentication.getPrincipal();
 
         String email = claims.get("email", String.class);
@@ -136,6 +140,11 @@ public class UserController {
     @ApiOperation(value = "사용자 회원 탈퇴(비활성화)")
     @DeleteMapping("/users")
     public ResponseEntity<?> deactivate(Authentication authentication) {
+
+        if(isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         Claims claims = (Claims) authentication.getPrincipal();
 
         Long id = claims.get("userId", Long.class);
@@ -149,6 +158,10 @@ public class UserController {
     public ResponseEntity<?> updateUser(@RequestBody AbilityRequestDTO abilityDTO,
                                         Authentication authentication) {
 
+        if(isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         Claims claims = (Claims) authentication.getPrincipal();
 
         Long id = claims.get("userId", Long.class);
@@ -161,13 +174,16 @@ public class UserController {
     @ApiOperation(value = "사용자 역량 정보 조회")
     @GetMapping("/users/abilities")
     public ResponseEntity<?> findUserAbilities(Authentication authentication) {
+
+        if(isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         Claims claims = (Claims) authentication.getPrincipal();
         System.out.println(authentication.toString());
 
         Long id = claims.get("userId", Long.class);
-
         AbilityResponseDTO abilities = userService.findUserAbilitiesById(id);
-        System.out.println(abilities);
         if (abilities == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -241,5 +257,9 @@ public class UserController {
     public void setUpdate(User user) {
         user.setUpdatedBy("server1");
         user.setUpdatedAt(LocalDateTime.now());
+    }
+
+    public boolean isInValidAuthentication(Authentication authentication) {
+        return authentication == null ? true : false;
     }
 }
