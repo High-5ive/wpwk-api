@@ -32,7 +32,6 @@ public class JWTUtil {
                 .claim("userId", userId)
                 .claim("email", email)
                 .claim("nickname", nickname)
-
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + tokenValidMilisecond))
                 .signWith(key, SignatureAlgorithm.HS256)
