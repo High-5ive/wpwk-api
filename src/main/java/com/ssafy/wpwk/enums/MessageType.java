@@ -1,5 +1,8 @@
 package com.ssafy.wpwk.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum MessageType {
 
     ADMIN_MESSAGE("admin_message"),

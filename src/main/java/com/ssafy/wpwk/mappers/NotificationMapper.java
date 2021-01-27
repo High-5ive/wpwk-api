@@ -30,7 +30,7 @@ public interface NotificationMapper {
     /**
      * 공지사항 브로드캐스팅
      */
-    void broadCast(@Param("notification")Notification notification,
+    void broadcast(@Param("notification")Notification notification,
                    @Param("userList")List<User> users);
 
     /**

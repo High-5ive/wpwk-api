@@ -38,6 +38,10 @@ public interface UserMapper {
      */
     List<User> findAll();
 
+    /**
+     * 활성화된 사용자 정보 조회(관리자 제외)
+     */
+    List<User> findAllByNormalUser();
 
     /**
      * 탈퇴를 요청한 유저의 상태값을 변경

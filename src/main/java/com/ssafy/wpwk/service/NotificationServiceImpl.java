@@ -1,7 +1,10 @@
 package com.ssafy.wpwk.service;
 
 import com.ssafy.wpwk.mappers.NotificationMapper;
+import com.ssafy.wpwk.mappers.UserMapper;
 import com.ssafy.wpwk.model.Notification;
+import com.ssafy.wpwk.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,14 +12,18 @@ import java.util.List;
 @Service
 public class NotificationServiceImpl implements NotificationService{
 
+    @Autowired
     private NotificationMapper notificationMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * 공지사항 전체 조회
      */
     @Override
     public List<Notification> findAll() {
-        return null;
+        return notificationMapper.findAll();
     }
 
     /**
@@ -24,7 +31,7 @@ public class NotificationServiceImpl implements NotificationService{
      */
     @Override
     public List<Notification> findAllByUserId(Long userId) {
-        return null;
+        return notificationMapper.findAllByUserId(userId);
     }
 
     /**
@@ -32,15 +39,20 @@ public class NotificationServiceImpl implements NotificationService{
      */
     @Override
     public List<Notification> findAllByUserIdAndNotRead(Long userId) {
-        return null;
+        return notificationMapper.findAllByUserIdAndNotRead(userId);
     }
 
     /**
      * 공지사항 브로드캐스팅
      */
     @Override
-    public void broadCast() {
+    public void broadcast(Notification notification) {
 
+        // 1. 활성화된 회원 목록 가져옴
+        List<User> userList = userMapper.findAllByNormalUser();
+
+        // 2. 회원목록과 notification 정보 전달
+        notificationMapper.broadcast(notification, userList);
     }
 
     /**
@@ -48,7 +60,7 @@ public class NotificationServiceImpl implements NotificationService{
      */
     @Override
     public void createNotification(Notification notification) {
-
+        notificationMapper.createNotification(notification);
     }
 
     /**

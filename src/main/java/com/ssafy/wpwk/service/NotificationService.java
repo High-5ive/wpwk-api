@@ -23,7 +23,7 @@ public interface NotificationService {
     /**
      * 공지사항 브로드캐스팅
      */
-    void broadCast();
+    void broadcast(Notification notification);
 
     /**
      * 공지사항 특정 수신자에게 작성

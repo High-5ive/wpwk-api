@@ -14,7 +14,7 @@
         SELECT id, to_user_id, from_user_id, message_type,
                message, created_at, is_read, read_at
         FROM notification
-        WHERE id = #{user.userId}
+        WHERE to_user_id = #{userId}
     </select>
 
     <!-- 사용자별 확인하지 않은 공지사항 전체 조회 -->
@@ -22,8 +22,8 @@
         SELECT id, to_user_id, from_user_id, message_type,
                message, created_at
         FROM notification
-        WHERE id = #{user.id}
-        AND is_read = 0
+        WHERE to_user_id = #{userId}
+        AND read_at IS NULL
     </select>
 
     <!-- 공지사항 특정 수신자에게 작성 -->
@@ -32,16 +32,16 @@
         INSERT INTO notification (to_user_id, from_user_id, message_type,
                               message, created_by)
         VALUES(#{toUser.id}, #{fromUser.id}, #{messageType},
-               #{message}, #{createdAt}, #{createdBy})
+               #{message}, #{createdBy})
     </insert>
 
     <!-- 공지사항 브로드 캐스팅 -->
-    <insert id="broadCast" parameterType="map">
+    <insert id="broadcast" parameterType="map">
         INSERT INTO notification (to_user_id, from_user_id, message_type,
                                 message, created_by)
         VALUES
         <foreach collection="userList" item="user" separator=" , ">
-            (#{user.id}, #{notification.fromUser.id}, #{notification.message_type},
+            (#{user.id}, #{notification.fromUser.id}, #{notification.messageType},
             #{notification.message}, #{notification.createdBy})
         </foreach>
     </insert>
