@@ -39,9 +39,9 @@ public interface NotificationMapper {
     void createNotification(Notification notification);
 
     /**
-     * 공지사항 삭제
+     * 사용자별 공지사항 삭제
      */
-    int delete(Long id);
+    int deleteByUserId(Long userId);
 
     /**
      * 공지사항 확인처리(수정)

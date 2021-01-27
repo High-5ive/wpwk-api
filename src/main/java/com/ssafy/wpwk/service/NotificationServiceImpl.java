@@ -64,18 +64,18 @@ public class NotificationServiceImpl implements NotificationService{
     }
 
     /**
-     * 공지사항 삭제
+     * 사용자별 공지사항 삭제
      */
     @Override
-    public int delete(Long id) {
-        return 0;
+    public int deleteByUserId(Long userId) {
+        return notificationMapper.deleteByUserId(userId);
     }
 
     /**
      * 공지사항 확인처리(수정)
      */
     @Override
-    public void confirm(Long id) {
-
+    public void confirm(Long userId) {
+        notificationMapper.confirm(userId);
     }
 }

@@ -33,7 +33,7 @@ public interface NotificationService {
     /**
      * 공지사항 삭제
      */
-    int delete(Long id);
+    int deleteByUserId(Long id);
 
     /**
      * 공지사항 확인처리(수정)

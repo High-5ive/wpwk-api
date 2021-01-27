@@ -46,17 +46,22 @@
         </foreach>
     </insert>
 
-    <!--데이터 수정 -->
+    <!-- 공지사항 읽음 처리 -->
     <update id="confirm" parameterType="com.ssafy.wpwk.model.Notification">
         UPDATE notification
-        SET is_read = 1,
-            read_at = NOW()
+        SET read_at = NOW()
         WHERE to_user_id = #{userId}
-        AND is_read = 0
+        AND read_at IS NULL
     </update>
 
+    <!-- 사용자별 공지사항 삭제 -->
+    <delete id="deleteByUserId">
+        DELETE FROM notification
+        WHERE to_user_id = #{userId}
+    </delete>
+
     <!-- 공지사항 삭제 -->
-    <delete id="delete">
+    <delete id="deleteById">
         DELETE FROM notification
         WHERE id = #{id}
     </delete>

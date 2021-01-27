@@ -56,12 +56,8 @@ public class NotificationController {
             Authentication authentication
     ) {
 
-        if(isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        Claims claims = (Claims) authentication.getPrincipal();
-        Long userId = claims.get("userId", Long.class);
+        Long userId = getUserId(authentication);
+        if(userId == null) {  return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
 
         List<Notification> notificationList = notificationService.findAllByUserIdAndNotRead(userId);
 
@@ -78,13 +74,8 @@ public class NotificationController {
             Authentication authentication
     ) {
 
-        // 인증 토큰 유효 체크
-        if(isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        Claims claims = (Claims) authentication.getPrincipal();
-        Long userId = claims.get("userId", Long.class);
+        Long userId = getUserId(authentication);
+        if(userId == null) {  return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         
         User user = userService.findUserById(userId);
 
@@ -113,13 +104,8 @@ public class NotificationController {
             Authentication authentication
     ) {
 
-        // 인증 토큰 유효 체크
-        if(isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        Claims claims = (Claims) authentication.getPrincipal();
-        Long userId = claims.get("userId", Long.class);
+        Long userId = getUserId(authentication);
+        if(userId == null) {  return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
 
         User user = userService.findUserById(userId);
 
@@ -142,9 +128,45 @@ public class NotificationController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     
-    // 6. 공지사항 확인처리(수정)
+    // 6. 공지사항 확인처리
+    @ApiOperation(value = "공지사항 확인처리")
+    @PutMapping("/notifications/confirm")
+    public ResponseEntity<?> confirm(
+            Authentication authentication
+    ) {
+
+        Long userId = getUserId(authentication);
+        if(userId == null) {  return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+
+        notificationService.confirm(userId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
     
-    // 7. 공지사항 삭제
+    // 7. 사용자별 공지사항 삭제
+    @ApiOperation(value = "사용자별 공지사항 삭제")
+    @DeleteMapping("/notifications")
+    public ResponseEntity<?> removeByUser(Authentication authentication) {
 
+        Long userId = getUserId(authentication);
 
+        if(userId == null) {  return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+
+        notificationService.deleteByUserId(userId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * authentication token으로 userId를 찾는 과정
+     * */
+    public Long getUserId(Authentication authentication) {
+        // 인증 토큰 유효 체크
+        if(isInValidAuthentication(authentication)) {
+            return null;
+        }
+
+        Claims claims = (Claims) authentication.getPrincipal();
+        Long userId = claims.get("userId", Long.class);
+
+        return userId;
+    }
 }
