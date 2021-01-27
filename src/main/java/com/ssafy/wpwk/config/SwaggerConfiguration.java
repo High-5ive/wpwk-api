@@ -39,7 +39,7 @@ public class SwaggerConfiguration {
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("SSAFY API")
+        return new ApiInfoBuilder().title("WPWK API")
                 .description("<h3>With Parents With Kids </h3>Swagger를 이용한 WPWK API")
                 .contact(new Contact("SSAFY", "https://edu.ssafy.com", "ssafy@ssafy.com")).license("SSAFY License")
                 .licenseUrl("https://www.ssafy.com/ksp/jsp/swp/etc/swpPrivacy.jsp").version("1.0").build();

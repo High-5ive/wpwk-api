@@ -4,8 +4,8 @@
 
     <!-- 컨텐츠 삽입 -->
     <insert id = "create" useGeneratedKeys="true" keyProperty="id" parameterType="com.ssafy.wpwk.model.Contents">
-        INSERT INTO contents (title, spend_time, created_by, updated_by)
-        VALUES(#{title}, #{spendTime}, #{createdBy}, #{updatedBy})
+        INSERT INTO contents (title, spend_time, created_by, updated_by,user_id)
+        VALUES(#{title}, #{spendTime}, #{createdBy}, #{updatedBy},#{user.id})
     </insert>
 
     <!--컨텐츠 전체 조회 -->

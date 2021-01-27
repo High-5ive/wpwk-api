@@ -1,15 +1,19 @@
 package com.ssafy.wpwk.controller;
 
 import com.ssafy.wpwk.model.ContentsComment;
+import com.ssafy.wpwk.model.User;
 import com.ssafy.wpwk.service.ContentsCommentServiceImpl;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "{*}", maxAge = 6000)
@@ -18,28 +22,39 @@ public class ContentsCommentController {
     @Autowired
     private ContentsCommentServiceImpl commentService;
 
+
+
     @ApiOperation(value = "컨텐츠의 모든 댓글 조회")
-    @GetMapping("/comment/{contentsId}")
-    public ResponseEntity<List<ContentsComment>> allComments(@PathVariable Long contentsId) {
+    @GetMapping("/contentsComments/{contentsId}")
+    public ResponseEntity<?> allComments(@PathVariable Long contentsId) {
         List<ContentsComment> commentList;
         try {
-
             commentList = commentService.allComments(contentsId);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(commentList, HttpStatus.OK);
     }
 
     @ApiOperation(value = "컨텐츠 댓글 등록")
-    @PostMapping("/comment")
-    public ResponseEntity<Void> addComment(@RequestBody ContentsComment comment) {
+    @PostMapping("/contentsComments")
+    public ResponseEntity<?> addComment(@RequestBody ContentsComment comment, Authentication authentication) {
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         try {
-            //회원인지 검증 필요함
-            // comment.user.nickname ? jwt.claim.get(nickname)
-            // commentService.addComment(comment);
+            Claims claims = (Claims) authentication.getPrincipal();
+
+            Long userId = claims.get("userId", Long.class);
+            User user = User.builder()
+                    .id(userId).build();
+            comment.setUser(user);
+
+            setUpdate(comment);
+
+            commentService.addComment(comment);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -49,14 +64,20 @@ public class ContentsCommentController {
     }
 
     @ApiOperation(value = "컨텐츠 댓글 수정")
-    @PutMapping("/comment/{contentsId}")
-    public ResponseEntity<Void> updateComment(@PathVariable Long contentsId, @RequestBody ContentsComment comment) {
+    @PutMapping("/contentsComments{commentId}")
+    public ResponseEntity<?> updateComment(@PathVariable("commentId") Long commentId, @RequestBody Map<String, Object> map, Authentication authentication) {
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         try {
-            //회원인지 검증 필요함
-            // comment.user.nickname ? jwt.claim.get(nickname)
-            //commentService.updateComment(comment);
-            comment.setUpdatedAt(LocalDateTime.now());
+            String newComment = (String) map.get("comment");
+            ContentsComment contentsComment = ContentsComment.builder()
+                    .id(commentId)
+                    .comment(newComment).build();
+
+            setUpdate(contentsComment);
+            commentService.updateComment(contentsComment);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -66,19 +87,35 @@ public class ContentsCommentController {
     }
 
     @ApiOperation(value = "컨텐츠 댓글 삭제")
-    @DeleteMapping("/comment/{contentsId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long contentsId, @RequestBody Long commentId) {
+    @DeleteMapping("/contentsComments/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId, Authentication authentication) {
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         try {
-            //회원인지 검증 필요함
-            // comment.user.nickname ? jwt.claim.get(nickname)
-            //3개의 매개변수 들어가야함
-            //
-            //commentService.deleteComment(contentsId,commentId,userid);
+            Claims claims = (Claims) authentication.getPrincipal();
 
+            Long userId = claims.get("userId", Long.class);
+            commentService.deleteComment( commentId,userId);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * 사용자 정보 업데이트시 공통 호출 메서드
+     */
+    public void setUpdate(ContentsComment comment) {
+        comment.setUpdatedBy("server1");
+        comment.setCreatedBy("server1");
+        comment.setUpdatedAt(LocalDateTime.now());
+    }
+
+    public boolean isInValidAuthentication(Authentication authentication) {
+        return authentication == null ? true : false;
+    }
+
+
 }

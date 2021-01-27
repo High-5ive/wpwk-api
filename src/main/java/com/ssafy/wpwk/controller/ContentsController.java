@@ -1,11 +1,15 @@
 package com.ssafy.wpwk.controller;
 
 import com.ssafy.wpwk.model.Contents;
+import com.ssafy.wpwk.model.User;
 import com.ssafy.wpwk.service.ContentsServiceImpl;
+import com.ssafy.wpwk.service.UserServiceImpl;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -19,17 +23,30 @@ public class ContentsController {
     @Autowired
     private ContentsServiceImpl contentsService;
 
+    @Autowired
+    private UserServiceImpl userService;
+
+
+
     @ApiOperation(value = "새로운 컨텐츠 제작(등록)")
     @PostMapping("/contents")
-    public ResponseEntity<?> create(@RequestBody Contents resource) {
+    public ResponseEntity<?> create(@RequestBody Contents resource, Authentication authentication) {
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Claims claims = (Claims) authentication.getPrincipal();
+        Long userId = claims.get("userId", Long.class);
+        User user = userService.findUserById(userId);
 
         Contents contents = Contents.builder()
-                                    .title(resource.getTitle())
-                                    .spendTime(resource.getSpendTime())
-                                    .createdBy("server1")
-                                    .contentsItem(resource.getContentsItem())
-                                    .updatedBy("server1")
-                                    .build();
+                .title(resource.getTitle())
+                .spendTime(resource.getSpendTime())
+                .user(user)
+                .createdBy("server1")
+                .contentsItem(resource.getContentsItem())
+                .updatedBy("server1")
+                .build();
 
         try {
             contentsService.create(contents);
@@ -50,7 +67,7 @@ public class ContentsController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        if(contents==null){
+        if (contents == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(contents, HttpStatus.OK);
@@ -89,7 +106,7 @@ public class ContentsController {
         if (contentsList == null)
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         else
-        return new ResponseEntity<>(contentsList, HttpStatus.OK);
+            return new ResponseEntity<>(contentsList, HttpStatus.OK);
     }
 
     @ApiOperation(value = "컨텐츠 수정")
@@ -120,4 +137,7 @@ public class ContentsController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    public boolean isInValidAuthentication(Authentication authentication) {
+        return authentication == null ? true : false;
+    }
 }

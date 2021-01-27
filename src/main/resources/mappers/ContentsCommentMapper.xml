@@ -2,28 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.wpwk.mappers.ContentsCommentMapper">
 
+
+    <resultMap id ="User" type="com.ssafy.wpwk.model.User">
+        <result column="id" property="id"/>
+        <result column="nickname" property="nickname"/>
+    </resultMap>
+
+    <resultMap id="ContentsComment" type="com.ssafy.wpwk.model.ContentsComment">
+        <result column="id" property="id"/>
+        <result column="comment" property="comment"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <collection property="user" resultMap="User"/>
+    </resultMap>
+
     <insert id="addComment" parameterType="com.ssafy.wpwk.model.ContentsComment">
-        INSERT INTO contents_comment (comment,create_by,update_by,user_id)
-        VALUES (#{comment},#{createBy},#{updateBy} #{user.id})
+        INSERT INTO contents_comment (comment,created_by,updated_by,contents_id,user_id)
+        VALUES (#{comment},#{createdBy},#{updatedBy},#{contentsId}, #{userId})
     </insert>
 
-    <select id="allComments" resultType="com.ssafy.wpwk.model.ContentsComment">
-        SELECT *
-        FROM contents_comment
+    <select id="allComments" resultType="com.ssafy.wpwk.model.ContentsComment"  resultMap="ContentsComment">
+        SELECT u.id,u.nickname,c.contents_id,c.comment,c.created_at,c.updated_at
+        FROM contents_comment c JOIN user u
+        ON c.user_id = u.id
+        WHERE contents_id = #{id}
     </select>
 
     <update id="updateComment" parameterType="com.ssafy.wpwk.model.ContentsComment">
         UPDATE contents_comment SET
             comment = #{comment},
-            user_id = #{user.id},
-            updated_at = #{updateAt},
-            updated_by = #{updateBy}
-        WHERE id = #{id}
+            updated_at = #{updatedAt},
+            updated_by = #{updatedBy}
+        WHERE id = #{id} and user_id =#{userId}
     </update>
 
-    <delete id="deleteComment" parameterType="hashmap" >
+    <delete id="deleteComment">
         DELETE FROM contents_comment
-        where id = #{id} and contents_id =#{contentsId} and user_id=#{userId}
+        where id = #{id} and user_id = #{userId}
     </delete>
 
 </mapper>

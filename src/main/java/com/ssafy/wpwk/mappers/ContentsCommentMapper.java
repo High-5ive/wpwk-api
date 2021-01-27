@@ -1,14 +1,14 @@
 package com.ssafy.wpwk.mappers;
 
 import com.ssafy.wpwk.model.ContentsComment;
-import org.mapstruct.Mapper;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 @Mapper
-
 public interface ContentsCommentMapper {
 
     /**
@@ -19,7 +19,7 @@ public interface ContentsCommentMapper {
     /**
      * 컨텐츠 댓글 전체조회
      */
-    List<ContentsComment> allComments(Long contentsId) throws Exception;
+    List<ContentsComment> allComments(@Param("id") Long contentsId) throws Exception;
 
     /**
      * 컨텐츠 댓글 수정
@@ -29,7 +29,7 @@ public interface ContentsCommentMapper {
     /**
      * 컨텐츠 댓글 삭제
      */
-    void deleteComment(Long contentsId) throws Exception;
+    void deleteComment(@Param("id") Long id,@Param("userId") Long userId) throws Exception;
 
 
 }

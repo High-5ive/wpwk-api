@@ -4,7 +4,7 @@
 
     <!-- 컨텐츠 아이템 삽입 -->
     <insert id = "createByContentsId" parameterType="Map">
-        INSERT INTO contents_item (youtube_id, image_address, video_address, description, page_no, contents_id)
+            INSERT INTO contents_item (youtube_id, image_address, video_address, description, page_no, contents_id)
         VALUES
         <foreach collection="itemList" item="item" separator=" , ">
             (#{item.youtubeId}, #{item.imageAddress}, #{item.videoAddress},

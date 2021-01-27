@@ -9,20 +9,20 @@ public interface ContentsCommentService {
     /**
      * 컨텐츠 댓글 전체조회
      */
-    List<ContentsComment> allComments(Long contentsId);
+    List<ContentsComment> allComments(Long contentsId) throws Exception;
 
     /**
      * 컨텐츠 댓글 생성
      */
-    void addComment(ContentsComment comment);
+    void addComment(ContentsComment comment) throws Exception;
 
     /**
      * 컨텐츠 댓글 수정
      */
-    void updateComment(ContentsComment comment);
+    void updateComment(ContentsComment comment) throws Exception;
 
     /**
      * 컨텐츠 댓글 삭제
      */
-    void deleteComment(ContentsComment comment);
+    void deleteComment(Long commentId, Long userId) throws Exception;
 }

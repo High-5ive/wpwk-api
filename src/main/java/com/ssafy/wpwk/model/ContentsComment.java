@@ -15,7 +15,7 @@ public class ContentsComment {
     /*
      * 댓글의 id
      */
-    private String id;
+    private Long id;
 
     /**
      * 댓글 작성한 회원의 id
@@ -25,7 +25,7 @@ public class ContentsComment {
     /**
      * 컨텐츠 id
      * */
-    private Contents contents;
+    private Long contentsId;
 
     /**
      * 컨텐츠 댓글
