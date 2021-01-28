@@ -114,11 +114,9 @@ public class NotificationController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // UNAUTHORIZED 401 권한이 없음을 명시
         }
 
-        User targetUser = User.builder().id(targetId).build();
-
         Notification notification = Notification.builder()
                 .fromUser(user)
-                .toUser(targetUser)
+                .toUserId(targetId)
                 .message(resource.getMessage())
                 .messageType(MessageType.ADMIN_MESSAGE)
                 .createdBy("server1")

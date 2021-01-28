@@ -20,7 +20,7 @@ public class Notification {
     /**
      * 수신자
      * */
-    private User toUser;
+    private Long toUserId;
 
     /**
      * 송신자
