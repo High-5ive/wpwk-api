@@ -14,17 +14,24 @@ import java.util.List;
 public interface ContentsReportMapper {
 
     /**
-     *  모든 신고 정보 조회
+     * ID를 이용한 신고 정보 조회
+     */
+    ContentsReport findContentsReportById(@Param("id") Long id);
+
+    /**
+     * 모든 신고 정보 조회
      */
     List<ContentsReport> allReports();
 
     /**
-     *  신고 정보 추가
+     * 신고 정보 추가
      */
-    void addReport(@Param("reportRequestDTO") ReportRequsetDTO reportRequsetDTO,@Param("userId") Long userId);
+    void addReport(@Param("reportRequestDTO") ReportRequsetDTO reportRequsetDTO, @Param("userId") Long userId);
 
     /**
-     *  신고 처리 및 상태 수정
+     * 신고 처리 및 상태 수정
      */
-    void updateStatus(@Param("id") Long id,@Param("status") String status);
+    void updateStatus(@Param("id") Long id, @Param("status") String status);
+
+
 }

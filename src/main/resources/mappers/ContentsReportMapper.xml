@@ -3,7 +3,7 @@
 <mapper namespace="com.ssafy.wpwk.mappers.ContentsReportMapper">
 
     <resultMap id ="User" type="com.ssafy.wpwk.model.User">
-        <result column="id" property="id"/>
+        <result column="user_id" property="id"/>
         <result column="nickname" property="nickname"/>
     </resultMap>
 
@@ -13,7 +13,7 @@
     </resultMap>
 
     <resultMap id="ContentsReport" type="com.ssafy.wpwk.model.ContentsReport">
-        <result column="contents_report_id" property="id"/>
+        <result column="id" property="id"/>
         <result column="comment" property="comment"/>
         <result column="created_at" property="createdAt"/>
         <result column="status" property="status"/>
@@ -22,13 +22,20 @@
     </resultMap>
 
     <select id="allReports" resultMap="ContentsReport" resultType="com.ssafy.wpwk.model.ContentsReport">
-        SELECT c2.contents_report_id ,c2.contents_id, c2.title, u.id, u.nickname,c2.comment,c2.status, c2.created_at,c2.processed_at
+        SELECT c2.id ,c2.contents_id, c2.title, c2.user_id, u.nickname,c2.comment,c2.status, c2.created_at,c2.processed_at
         FROM user u join(
-            SELECT cr.id as "contents_report_id" ,c.id as "contents_id", cr.comment, c.title, cr.user_id, cr.status, cr.created_at,cr.processed_at
+            SELECT cr.id ,c.id as "contents_id", cr.comment, c.title, cr.user_id, cr.status, cr.created_at,cr.processed_at
             FROM contents_report cr join contents c
             where cr.contents_id =  c.id
         ) c2
         WHERE u.id = c2.user_id
+    </select>
+
+    <select id="findContentsReportById" resultMap="ContentsReport" resultType="com.ssafy.wpwk.model.ContentsReport">
+        SELECT *
+        FROM contents_report cr join contents c
+        ON cr.contents_id = c.id
+        WHERE cr.id = #{id}
     </select>
 
     <insert id="addReport" parameterType="map">
