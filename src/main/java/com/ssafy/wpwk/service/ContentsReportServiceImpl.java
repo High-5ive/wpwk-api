@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ContentsReportServiceImpl implements ContentsReportService{
+public class ContentsReportServiceImpl implements ContentsReportService {
 
     @Autowired
     private ContentsReportMapper contentsReportMapper;
 
     /**
-     *  모든 신고 정보 조회
+     * 모든 신고 정보 조회
      */
     @Override
     public List<ContentsReport> allReports() {
@@ -23,7 +23,7 @@ public class ContentsReportServiceImpl implements ContentsReportService{
     }
 
     /**
-     *  신고 정보 추가
+     * 신고 정보 추가
      */
     @Override
     public void addReport(ReportRequsetDTO reportRequsetDTO, Long userId) {
@@ -31,10 +31,16 @@ public class ContentsReportServiceImpl implements ContentsReportService{
     }
 
     /**
-     *  신고 처리 및 상태 수정
+     * 신고 처리 및 상태 수정
      */
     @Override
     public void updateStatus(Long id, String status) {
+        ContentsReport contentsReport = contentsReportMapper.findContentsReportById(id);
+        Long contentsId = contentsReport.getContents().getId();
+        String contentsTitle = contentsReport.getContents().getTitle();
+        Long targetUserId = contentsReport.getUser().getId();
+        System.out.println(contentsTitle+","+contentsId +","+targetUserId);
+
         contentsReportMapper.updateStatus(id, status);
     }
 }

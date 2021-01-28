@@ -87,6 +87,7 @@ public class ContentsReportController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         String status = (String) map.get("status");
+
         contentsReportService.updateStatus(id,status);
 
 
