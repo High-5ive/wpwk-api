@@ -31,6 +31,11 @@ public interface NotificationService {
     void createNotification(Notification notification);
 
     /**
+     * 경고 메시지 전송
+     */
+    void createWarningNotification(Long userId, Long contentsId);
+
+    /**
      * 공지사항 삭제
      */
     int deleteByUserId(Long id);

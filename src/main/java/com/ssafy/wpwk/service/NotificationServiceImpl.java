@@ -1,5 +1,6 @@
 package com.ssafy.wpwk.service;
 
+import com.ssafy.wpwk.enums.MessageType;
 import com.ssafy.wpwk.mappers.NotificationMapper;
 import com.ssafy.wpwk.mappers.UserMapper;
 import com.ssafy.wpwk.model.Notification;
@@ -63,6 +64,19 @@ public class NotificationServiceImpl implements NotificationService{
         notificationMapper.createNotification(notification);
     }
 
+    @Override
+    public void createWarningNotification() {
+
+        Notification notification = Notification.builder()
+                                                .fromUser()
+                                                .toUserId()
+                                                .messageType(MessageType.ADMIN_MESSAGE)
+                                                .message(makeWarnMessage(title))
+                                                .createdBy("server1")
+                                                .build();
+        createNotification(notification);
+    }
+
     /**
      * 사용자별 공지사항 삭제
      */
@@ -77,5 +91,13 @@ public class NotificationServiceImpl implements NotificationService{
     @Override
     public void confirm(Long userId) {
         notificationMapper.confirm(userId);
+    }
+
+    public String makeWarnMessage(String title) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(title)
+          .append("에 부적절한 내용이 포함되어 있어 확인 바랍니다.");
+
+        return sb.toString();
     }
 }
