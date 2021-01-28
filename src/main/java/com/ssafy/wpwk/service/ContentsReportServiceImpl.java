@@ -14,6 +14,12 @@ public class ContentsReportServiceImpl implements ContentsReportService {
     @Autowired
     private ContentsReportMapper contentsReportMapper;
 
+    @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
+    private ContentsService contentsService;
+
     /**
      * 모든 신고 정보 조회
      */
@@ -34,12 +40,16 @@ public class ContentsReportServiceImpl implements ContentsReportService {
      * 신고 처리 및 상태 수정
      */
     @Override
-    public void updateStatus(Long id, String status) {
+    public void updateStatus(Long id, String status, Long adminId) throws Exception {
         ContentsReport contentsReport = contentsReportMapper.findContentsReportById(id);
         Long contentsId = contentsReport.getContents().getId();
         String contentsTitle = contentsReport.getContents().getTitle();
-        Long targetUserId = contentsReport.getUser().getId();
-        System.out.println(contentsTitle+","+contentsId +","+targetUserId);
+
+        // 신고 대상자 아이디 가져오기
+        Long targetUserId = contentsService.findContentsById(contentsId).getUser().getId();
+
+        // 신고 처리 메시지 전송
+        notificationService.createReportNotification(targetUserId, contentsId, contentsTitle, status, adminId);
 
         contentsReportMapper.updateStatus(id, status);
     }

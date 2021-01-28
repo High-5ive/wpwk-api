@@ -20,5 +20,5 @@ public interface ContentsReportService {
     /**
      *  신고 처리 및 상태 수정
      */
-    void updateStatus(Long id, String status);
+    void updateStatus(Long id, String status, Long adminId) throws Exception;
 }

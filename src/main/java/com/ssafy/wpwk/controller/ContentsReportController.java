@@ -75,7 +75,7 @@ public class ContentsReportController {
     @ApiOperation(value = "컨텐츠 신고 처리")
     @PutMapping("/contentsReport/{id}")
     public ResponseEntity<?> contentsReportUpdate(@PathVariable("id") Long id, @RequestBody Map<String, Object> map,
-                                                  Authentication authentication) {
+                                                  Authentication authentication) throws Exception {
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -88,7 +88,7 @@ public class ContentsReportController {
         }
         String status = (String) map.get("status");
 
-        contentsReportService.updateStatus(id,status);
+        contentsReportService.updateStatus(id, status, admin.getId());
 
 
         return new ResponseEntity<>(HttpStatus.OK);

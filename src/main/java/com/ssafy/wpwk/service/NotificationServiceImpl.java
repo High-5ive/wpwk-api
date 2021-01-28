@@ -65,17 +65,22 @@ public class NotificationServiceImpl implements NotificationService{
     }
 
     @Override
-    public void createWarningNotification() {
+    public void createReportNotification(Long targetUserId, Long contentsId,
+                                         String contentsTitle, String status, Long adminId) {
+
+        User admin = User.builder().id(adminId).build();
 
         Notification notification = Notification.builder()
-                                                .fromUser()
-                                                .toUserId()
-                                                .messageType(MessageType.WARN)
-                                                .message(makeWarnMessage(title))
-                                                .createdBy("server1")
-                                                .build();
+                .fromUser(admin)
+                .messageType(MessageType.WARN)
+                .message(makeWarnMessage(contentsTitle, status))
+                .createdBy("server1")
+                .toUserId(targetUserId)
+                .build();
+
         createNotification(notification);
     }
+
 
     /**
      * 사용자별 공지사항 삭제
@@ -93,10 +98,18 @@ public class NotificationServiceImpl implements NotificationService{
         notificationMapper.confirm(userId);
     }
 
-    public String makeWarnMessage(String title) {
+    public String makeWarnMessage(String title, String status) {
         StringBuilder sb = new StringBuilder();
-        sb.append(title)
-          .append("에 부적절한 내용이 포함되어 있어 확인 바랍니다.");
+        sb.append(title);
+
+        switch (status){
+            case "WARN": // 경고처리
+                sb.append("에 부적절한 내용이 포함되어 있어 확인 바랍니다.");
+                break;
+            case "DELETE": // 삭제처리
+                sb.append("에 부적절한 내용이 포함되어 있어 삭제되었습니다.");
+                break;
+        }
 
         return sb.toString();
     }

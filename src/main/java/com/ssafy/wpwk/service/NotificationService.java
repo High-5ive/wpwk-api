@@ -33,7 +33,8 @@ public interface NotificationService {
     /**
      * 경고 메시지 전송
      */
-    void createWarningNotification(Long userId, Long contentsId);
+    void createReportNotification(Long targetUserId, Long contentsId,
+                                  String contentsTitle, String status, Long adminId);
 
     /**
      * 공지사항 삭제
