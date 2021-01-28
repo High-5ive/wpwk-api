@@ -70,7 +70,7 @@ public class NotificationServiceImpl implements NotificationService{
         Notification notification = Notification.builder()
                                                 .fromUser()
                                                 .toUserId()
-                                                .messageType(MessageType.ADMIN_MESSAGE)
+                                                .messageType(MessageType.WARN)
                                                 .message(makeWarnMessage(title))
                                                 .createdBy("server1")
                                                 .build();
