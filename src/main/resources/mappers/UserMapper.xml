@@ -31,6 +31,13 @@
         FROM user
     </select>
 
+    <select id="findAllByNormalUser" resultType="com.ssafy.wpwk.model.User">
+        SELECT *
+        FROM user
+        WHERE status = 1
+    </select>
+
+
     <update id="deactivateUser">
         UPDATE user
         SET status = 0

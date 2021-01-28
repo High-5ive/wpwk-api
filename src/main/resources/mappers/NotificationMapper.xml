@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.wpwk.mappers.NotificationMapper">
+
+    <resultMap id="fromUser" type="com.ssafy.wpwk.model.User">
+        <result column="from_user_id" property="id"/>
+        <result column="from_user_nickname" property="nickname"/>
+    </resultMap>
+
+    <resultMap id="notificationMap" type="com.ssafy.wpwk.model.Notification">
+        <result column="id" property="id"/>
+        <result column="to_user_id" property="toUserId"/>
+        <result column="message_type" property="messageType"/>
+        <result column="message" property="message"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="read_at" property="readAt"/>
+        <collection property="fromUser" resultMap="fromUser"/>
+    </resultMap>
+
+    <!--공지사항 전체 조회 -->
+    <select id="findAll" resultMap="notificationMap">
+        SELECT id, to_user_id, from_user_id, message_type,
+               message, created_at, created_by, read_at
+        FROM notification
+    </select>
+
+    <!-- 사용자별 공지사항 전체 조회 -->
+    <select id="findAllByUserId" resultMap="notificationMap">
+        SELECT n.id as id,
+               n.to_user_id as to_user_id,
+               u.id as from_user_id,
+               u.nickname as from_user_nickname,
+            n.message_type as message_type,
+               n.message as message,
+               n.created_at as created_at
+        FROM notification n, user u
+        WHERE n.from_user_id = u.id
+        AND n.to_user_id = #{userId}
+    </select>
+
+    <!-- 사용자별 확인하지 않은 공지사항 전체 조회 -->
+    <select id="findAllByUserIdAndNotRead" resultMap="notificationMap">
+        SELECT n.id as id,
+               n.to_user_id as to_user_id,
+               u.id as from_user_id,
+               u.nickname as from_user_nickname,
+               n.message_type as message_type,
+               n.message as message,
+               n.created_at as created_at
+        FROM notification n, user u
+        WHERE n.from_user_id = u.id
+        AND n.to_user_id = #{userId}
+        AND n.read_at IS NULL
+    </select>
+
+    <!-- 공지사항 특정 수신자에게 작성 -->
+    <insert id = "createNotification" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.ssafy.wpwk.model.Notification">
+        INSERT INTO notification (to_user_id, from_user_id, message_type,
+                              message, created_by)
+        VALUES(#{toUserId}, #{fromUser.id}, #{messageType},
+               #{message}, #{createdBy})
+    </insert>
+
+    <!-- 공지사항 브로드 캐스팅 -->
+    <insert id="broadcast" parameterType="map">
+        INSERT INTO notification (to_user_id, from_user_id, message_type,
+                                message, created_by)
+        VALUES
+        <foreach collection="userList" item="user" separator=" , ">
+            (#{user.id}, #{notification.fromUser.id}, #{notification.messageType},
+            #{notification.message}, #{notification.createdBy})
+        </foreach>
+    </insert>
+
+    <!-- 공지사항 읽음 처리 -->
+    <update id="confirm" parameterType="com.ssafy.wpwk.model.Notification">
+        UPDATE notification
+        SET read_at = NOW()
+        WHERE to_user_id = #{userId}
+        AND read_at IS NULL
+    </update>
+
+    <!-- 사용자별 공지사항 삭제 -->
+    <delete id="deleteByUserId">
+        DELETE FROM notification
+        WHERE to_user_id = #{userId}
+    </delete>
+
+    <!-- 공지사항 삭제 -->
+    <delete id="deleteById">
+        DELETE FROM notification
+        WHERE id = #{id}
+    </delete>
+</mapper>
