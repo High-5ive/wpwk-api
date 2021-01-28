@@ -5,14 +5,14 @@
     <!--공지사항 전체 조회 -->
     <select id="findAll" resultType="com.ssafy.wpwk.model.Notification">
         SELECT id, to_user_id, from_user_id, message_type,
-               message, created_at, created_by, is_read, read_at
+               message, created_at, created_by, read_at
         FROM notification
     </select>
 
     <!-- 사용자별 공지사항 전체 조회 -->
     <select id="findAllByUserId" resultType="com.ssafy.wpwk.model.Notification">
         SELECT id, to_user_id, from_user_id, message_type,
-               message, created_at, is_read, read_at
+               message, created_at, read_at
         FROM notification
         WHERE to_user_id = #{userId}
     </select>
