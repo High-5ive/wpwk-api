@@ -29,4 +29,12 @@ public class ContentsReportServiceImpl implements ContentsReportService{
     public void addReport(ReportRequsetDTO reportRequsetDTO, Long userId) {
         contentsReportMapper.addReport(reportRequsetDTO, userId);
     }
+
+    /**
+     *  신고 처리 및 상태 수정
+     */
+    @Override
+    public void updateStatus(Long id, String status) {
+        contentsReportMapper.updateStatus(id, status);
+    }
 }

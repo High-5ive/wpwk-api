@@ -41,4 +41,15 @@ public class ContentsReport {
      * */
     private String createdBy;
 
+    /**
+     * 컨텐츠 신고 처리 현황
+     * */
+    private String status;
+
+    /**
+     * 컨텐츠 신고 처리 일자
+     * */
+    private LocalDateTime processedAt;
+
+
 }

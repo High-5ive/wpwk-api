@@ -17,5 +17,8 @@ public interface ContentsReportService {
      */
     void addReport(ReportRequsetDTO reportRequsetDTO, Long userId);
 
-
+    /**
+     *  신고 처리 및 상태 수정
+     */
+    void updateStatus(Long id, String status);
 }

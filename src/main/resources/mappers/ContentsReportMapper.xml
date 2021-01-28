@@ -8,31 +8,41 @@
     </resultMap>
 
     <resultMap id="Contents" type="com.ssafy.wpwk.model.Contents">
-        <result column="id" property="id"/>
+        <result column="contents_id" property="id"/>
         <result column="title" property="title"/>
     </resultMap>
 
     <resultMap id="ContentsReport" type="com.ssafy.wpwk.model.ContentsReport">
-        <result column="id" property="id"/>
+        <result column="contents_report_id" property="id"/>
         <result column="comment" property="comment"/>
         <result column="created_at" property="createdAt"/>
+        <result column="status" property="status"/>
         <collection property="user" resultMap="User"/>
         <collection property="contents" resultMap="Contents"/>
     </resultMap>
 
-
     <select id="allReports" resultMap="ContentsReport" resultType="com.ssafy.wpwk.model.ContentsReport">
-        SELECT c2.id ,c2.title,u.id ,u.nickname ,c2.created_at
+        SELECT c2.contents_report_id ,c2.contents_id, c2.title, u.id, u.nickname,c2.comment,c2.status, c2.created_at,c2.processed_at
         FROM user u join(
-            SELECT c.id,c.title,cr.user_id,cr.created_at
+            SELECT cr.id as "contents_report_id" ,c.id as "contents_id", cr.comment, c.title, cr.user_id, cr.status, cr.created_at,cr.processed_at
             FROM contents_report cr join contents c
-            where cr.contents_id=  c.id
+            where cr.contents_id =  c.id
         ) c2
-        WHERE u.id = c2.user_id;
+        WHERE u.id = c2.user_id
     </select>
 
     <insert id="addReport" parameterType="map">
-        INSERT INTO contents_report (contents_id,user_id,comment)
-        VALUES (#{reportRequestDTO.contentsId},#{userId},#{reportRequestDTO.comment})
+        INSERT INTO contents_report (contents_id,user_id,comment,created_by)
+        VALUES (#{reportRequestDTO.contentsId},#{userId},#{reportRequestDTO.comment},"server1")
     </insert>
+
+    <update id="updateStatus" parameterType="map">
+        UPDATE contents_report
+        SET status = #{status},
+            processed_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+
 </mapper>
+
