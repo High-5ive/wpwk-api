@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.wpwk.mappers.TagMapper">
 
+    <!-- 해시태그 추가시 입력한 단어를 통해 제시어 제공 -->
     <select id="getTagListByWord" parameterType="String" resultType="com.ssafy.wpwk.model.Tag">
         SELECT id, name, count
         FROM tags
@@ -10,6 +11,7 @@
         LIMIT 15;
     </select>
 
+    <!-- 해당 컨텐츠 태그리스트 가져오기 -->
     <select id="getTagListByContentsId" parameterType="Long" resultType="com.ssafy.wpwk.model.Tag">
         SELECT t.id, t.name
         FROM contents_tag ct, tags t
@@ -17,5 +19,26 @@
         AND ct.tags_id = t.id
     </select>
 
+    <!-- 컨텐츠에 태그 생성하기 -->
+    <insert id="createTag" useGeneratedKeys="true" keyProperty="id" parameterType="com.ssafy.wpwk.model.Tag">
+        INSERT INTO tags (name)
+        VALUES (#{name})
+    </insert>
 
+    <!-- 컨텐츠에 태그 사용횟수 +1 -->
+    <update id="updateTagCount" parameterType="Long">
+        UPDATE tags SET
+        count = count+1
+        WHERE id = #{id}
+    </update>
+
+    <!-- 컨텐츠 아이디와 태그 아이디 연관관계 추가 -->
+    <!-- 공지사항 브로드 캐스팅 -->
+    <insert id="createContentsTag" parameterType="map">
+        INSERT INTO contents_tag (contents_id, tags_id)
+        VALUES
+        <foreach collection="tagIdList" item="tagId" separator=" , ">
+            (#{contentsId}, #{tagId})
+        </foreach>
+    </insert>
 </mapper>

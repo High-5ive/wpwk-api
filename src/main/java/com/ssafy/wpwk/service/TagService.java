@@ -12,7 +12,12 @@ public interface TagService {
     List<Tag> getTagListByWord(String word);
     
     /***
-     * 해당 컨텐츠 태그리스트 가져오기
+     * 컨텐츠 아이디를 이용한 태그리스트 가져오기
      */
     List<Tag> getTagListByContentsId(Long contentsId);
+
+    /***
+     * 컨텐츠에 태그 생성하기
+     */
+    void createTags(Long contentsId, List<String> tags);
 }
