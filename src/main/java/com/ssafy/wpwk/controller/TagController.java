@@ -19,7 +19,7 @@ public class TagController {
     
     // 해시태그 추가시 제시어 제공
     @ApiOperation(value = "해시태그 추가시 입력한 단어를 통해 제시어 제공")
-    @GetMapping("/tags/{word}")
+    @GetMapping("/tags/suggest/{word}")
     public ResponseEntity<?> suggest(@PathVariable("word") String word) {
 
         List<Tag> tagList = tagService.getTagListByWord(word);
@@ -55,5 +55,4 @@ public class TagController {
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
 }
