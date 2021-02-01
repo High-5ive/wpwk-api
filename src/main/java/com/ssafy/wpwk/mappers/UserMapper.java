@@ -5,6 +5,7 @@ import com.ssafy.wpwk.model.AbilityResponseDTO;
 import com.ssafy.wpwk.model.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -72,4 +73,44 @@ public interface UserMapper {
      * 사용자 인증키 언데이트
      */
     void updateKey(User user);
+
+    /**
+     * 사용자 팔로우 요청
+     */
+    void updateFollowed(@Param("id") Long id);
+
+    /**
+     * 사용자 팔로잉 요청
+     */
+    void updateFollowing(@Param("id") Long id);
+
+    /**
+     * 사용자 팔로잉 팔로우 정보 생성
+     */
+    void insertFollow(@Param("toUserId") Long toUserId, @Param("fromUserId") Long fromUserId);
+
+    /**
+     * 사용자 팔로워 or 팔로잉 리스트 정보 조회
+     */
+    List<User> findFollowListById(@Param("userId") Long id, @Param("option") String option);
+
+    /**
+     * 사용자 언팔로우 요청
+     */
+    void unFollowed(@Param("id") Long toUserId);
+
+    /**
+     * 사용자 언팔로잉 요청
+     */
+    void unFollowing(@Param("id") Long fromUserId);
+
+    /**
+     * 사용자 팔로잉 정보 삭제
+     */
+    void deleteFollow(@Param("toUserId") Long toUserId,@Param("fromUserId") Long fromUserId);
+
+    /**
+     * 사용자 팔로워 or 팔로잉유저 조회
+     */
+    User findFollowById(@Param("toUserId") Long toUserId,@Param("fromUserId") Long fromUserId);
 }

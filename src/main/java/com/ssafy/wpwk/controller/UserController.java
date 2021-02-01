@@ -4,6 +4,7 @@ import com.ssafy.wpwk.model.*;
 import com.ssafy.wpwk.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -75,14 +78,24 @@ public class UserController {
      */
     @ApiOperation(value = "아이디를 이용한 사용자 조회")
     @GetMapping("/users/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getUserById(@PathVariable("id") Long id, Authentication authentication) {
 
         User user = userService.findUserById(id);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+        Claims claims = (Claims) authentication.getPrincipal();
+        Long userId = claims.get("userId", Long.class);
+
+        User isFollowUser = userService.findFollowById(id, userId);
+
+        boolean isFollowed = false;
+        if (isFollowUser != null) {
+            isFollowed = true;
+        }
 
         User findUser = User.builder().email(user.getEmail())
+                .id(user.getId())
                 .password(user.getPassword())
                 .nickname(user.getNickname())
                 .createdBy(user.getCreatedBy())
@@ -90,8 +103,10 @@ public class UserController {
                 .updatedBy(user.getUpdatedBy())
                 .updatedAt(user.getUpdatedAt())
                 .build();
-
-        return new ResponseEntity<>(findUser, HttpStatus.OK);
+        Map<String, Object> map = new HashMap<>();
+        map.put("findUser", findUser);
+        map.put("isFollowed", isFollowed);
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
     /**
@@ -102,7 +117,7 @@ public class UserController {
     public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO,
                                             Authentication authentication) {
 
-        if(isInValidAuthentication(authentication)) {
+        if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -141,7 +156,7 @@ public class UserController {
     @DeleteMapping("/users")
     public ResponseEntity<?> deactivate(Authentication authentication) {
 
-        if(isInValidAuthentication(authentication)) {
+        if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -158,7 +173,7 @@ public class UserController {
     public ResponseEntity<?> updateUser(@RequestBody AbilityRequestDTO abilityDTO,
                                         Authentication authentication) {
 
-        if(isInValidAuthentication(authentication)) {
+        if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -175,12 +190,11 @@ public class UserController {
     @GetMapping("/users/abilities")
     public ResponseEntity<?> findUserAbilities(Authentication authentication) {
 
-        if(isInValidAuthentication(authentication)) {
+        if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();
-        System.out.println(authentication.toString());
 
         Long id = claims.get("userId", Long.class);
         AbilityResponseDTO abilities = userService.findUserAbilitiesById(id);
@@ -249,6 +263,45 @@ public class UserController {
             userService.findPasswordConfirm(user);
             return new ResponseEntity<>(HttpStatus.OK);
         }
+    }
+
+    /**
+     * 사용자 팔로잉 요청
+     */
+    @ApiOperation(value = "사용자 팔로잉 요청")
+    @PostMapping("/users/following")
+    public ResponseEntity<?> requestFollowing(@RequestBody Map<String, Object> map, Authentication authentication) {
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        //팔로우 신청당하는 사용자의 ID
+        Long toUserId = Long.parseLong((String) map.get("toUserId"));
+        //팔로우 신청한 사용자의 ID
+        Long fromUserId = Long.parseLong((String) map.get("fromUserId"));
+        if (userService.requestFollowing(toUserId, fromUserId))
+            return new ResponseEntity<>(HttpStatus.OK);
+        else {
+            //팔로잉을 이미 한경우 다시 팔로잉 신청 할 경우 언팔로잉이 된다.
+            return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
+        }
+    }
+
+    /**
+     * 사용자 팔로워 or 팔로잉 리스트 정보 조회
+     */
+    @ApiOperation(value = "사용자 팔로우&팔로워 리스트 정보 조회")
+    @GetMapping("/users/follow")
+    public ResponseEntity<?> findFollowerListById(@RequestBody Map<String, Object> map, Authentication authentication) {
+        List<User> followerList;
+        Claims claims = (Claims) authentication.getPrincipal();
+
+        Long id = claims.get("userId", Long.class);
+
+        String option = (String) map.get("option");
+        followerList = userService.findFollowListById(id, option);
+        return new ResponseEntity<>(followerList, HttpStatus.OK);
     }
 
     /**
