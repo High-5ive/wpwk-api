@@ -27,7 +27,7 @@ public class ContentsServiceImpl implements ContentsService {
         contentsMapper.create(contents);
         // 2. 컨텐츠 아이템 정보 추가
         try {
-            contentsItemMapper.createByContentsId(contents.getId(), contents.getContentsItem());
+            contentsItemMapper.createByContentsId(contents.getId(), contents.getContentsItemList());
         } catch (Exception e) {
             e.printStackTrace();
         }

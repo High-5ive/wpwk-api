@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.ssafy.wpwk.utils.ExceptionUtil.isInValidAuthentication;
+
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
 public class ContentsController {
@@ -25,8 +27,6 @@ public class ContentsController {
 
     @Autowired
     private UserServiceImpl userService;
-
-
 
     @ApiOperation(value = "새로운 컨텐츠 제작(등록)")
     @PostMapping("/contents")
@@ -44,7 +44,7 @@ public class ContentsController {
                 .spendTime(resource.getSpendTime())
                 .user(user)
                 .createdBy("server1")
-                .contentsItem(resource.getContentsItem())
+                .contentsItemList(resource.getContentsItemList())
                 .updatedBy("server1")
                 .build();
 
@@ -135,9 +135,5 @@ public class ContentsController {
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public boolean isInValidAuthentication(Authentication authentication) {
-        return authentication == null ? true : false;
     }
 }
