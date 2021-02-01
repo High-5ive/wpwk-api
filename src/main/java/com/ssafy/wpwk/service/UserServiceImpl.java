@@ -3,6 +3,7 @@ package com.ssafy.wpwk.service;
 import com.ssafy.wpwk.mappers.UserMapper;
 import com.ssafy.wpwk.model.AbilityRequestDTO;
 import com.ssafy.wpwk.model.AbilityResponseDTO;
+import com.ssafy.wpwk.model.Follow;
 import com.ssafy.wpwk.model.User;
 import com.ssafy.wpwk.utils.VerificationKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,11 +135,49 @@ public class UserServiceImpl implements UserService {
     @Override
     public void findPasswordConfirm(User user) throws UnsupportedEncodingException, MessagingException {
         // 1.임의의 키 새롭게 발금
-        String tempKey= VerificationKeyUtil.getKey();
+        String tempKey = VerificationKeyUtil.getKey();
         // 2.요청한 유저의 verificationKey 값을 임의로 변경
         user.setVerificationKey(tempKey);
         userMapper.updateKey(user);
         // 3.요청한 회원의 이메일로 임의의 키값을 전송
         mailService.sendResetPasswordMail(user);
     }
+
+    /**
+     * 사용자 팔로잉 요청
+     */
+    @Override
+    public boolean requestFollowing(Long toUserId, Long fromUserId) {
+        User user;
+
+        user = userMapper.findFollowById(toUserId, fromUserId);
+        //처음으로 팔로잉 하는 사람이라면 팔로잉 승인
+        if (user == null) {
+            userMapper.updateFollowed(toUserId);
+            userMapper.updateFollowing(fromUserId);
+            userMapper.insertFollow(toUserId, fromUserId);
+            return true;
+        }
+        //팔로잉 하려고 하는 사람이 이미 팔로잉을 한 경우라면 팔로잉 해제
+        else {
+            userMapper.unFollowed(toUserId);
+            userMapper.unFollowing(fromUserId);
+            userMapper.deleteFollow(toUserId, fromUserId);
+            return false;
+        }
+    }
+
+    /**
+     * 사용자 팔로워 or 팔로잉 리스트 정보 조회
+     */
+    @Override
+    public List<User> findFollowListById(Long id, String option) {
+        return userMapper.findFollowListById(id, option);
+    }
+
+    @Override
+    public User findFollowById(Long toUserId, Long fromUserId) {
+        return userMapper.findFollowById(toUserId,fromUserId);
+    }
 }
+

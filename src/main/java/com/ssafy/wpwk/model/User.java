@@ -31,6 +31,16 @@ public class User {
     private String nickname;
 
     /**
+     * 회원의 팔로잉 수
+     * */
+    private Long following;
+
+    /**
+     * 회원의 팔로우 수
+     * */
+    private Long followed;
+
+    /**
      * 회원 상태(0:비활성화 / 1:활성화(일반고객) / 2:관리자)
      * */
     private int status;

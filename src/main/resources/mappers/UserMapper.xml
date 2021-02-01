@@ -10,7 +10,7 @@
     </select>
 
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.ssafy.wpwk.model.User">
-        INSERT INTO user ( email, password, nickname, verification_key, created_by, updated_by)
+        INSERT INTO user (email, password, nickname, verification_key, created_by, updated_by)
         VALUES (#{email}, #{password}, #{nickname}, #{verificationKey}, #{createdBy}, #{updatedBy})
     </insert>
 
@@ -39,7 +39,7 @@
 
     <update id="changePassword" parameterType="com.ssafy.wpwk.model.User">
         UPDATE user
-        SET password = #{password},
+        SET password   = #{password},
             updated_by = #{updatedBy},
             updated_at = #{updatedAt}
         WHERE id = #{id}
@@ -47,7 +47,8 @@
 
     <update id="verification" parameterType="Map">
         UPDATE user
-        SET verification_key = #{key}, status = 1
+        SET verification_key = #{key},
+            status           = 1
         WHERE id = #{id}
     </update>
 
@@ -81,8 +82,78 @@
     <update id="updateKey" parameterType="com.ssafy.wpwk.model.User">
         UPDATE user
         SET verification_key = #{verificationKey},
-            updated_by = #{updatedBy},
-            updated_at = #{updatedAt}
+            updated_by       = #{updatedBy},
+            updated_at       = #{updatedAt}
         WHERE id = #{id}
     </update>
+
+    <update id="updateFollowed" >
+        UPDATE user
+        SET followed = followed + 1
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateFollowing" >
+        UPDATE user
+        SET following  = following +1
+        WHERE id =#{id}
+    </update>
+
+    <update id="unFollowed" >
+        UPDATE user
+        SET followed = followed -1
+        WHERE id = #{id}
+    </update>
+
+    <update id="unFollowing" >
+        UPDATE user
+        SET following  = following -1
+        WHERE id =#{id}
+    </update>
+
+    <delete id="deleteFollow" parameterType="map">
+        DELETE FROM follow
+        WHERE from_user_id = #{fromUserId} and to_user_id = #{toUserId}
+    </delete>
+
+
+    <insert id="insertFollow" parameterType="map">
+        INSERT INTO follow (to_user_id, from_user_id, created_by)
+        VALUES (#{toUserId}, #{fromUserId}, "server1")
+    </insert>
+
+    <select id="findFollowById" parameterType="map" resultType="com.ssafy.wpwk.model.User">
+        SELECT u.id,
+               u.email,
+               u.nickname,
+               u.following,
+               u.followed
+        FROM user u join (
+            select *
+            from follow
+            WHERE from_user_id = #{fromUserId}
+              and to_user_id = #{toUserId}
+            ) f
+        WHERE u.id = f.to_user_id
+    </select>
+
+    <select id="findFollowListById" parameterType="map" resultType="com.ssafy.wpwk.model.User">
+        SELECT u.id,
+               u.email,
+               u.nickname,
+               u.following,
+               u.followed
+        FROM user u join
+        <choose>
+        <when test='option.equals("followed")'>
+            ( select from_user_id from follow where to_user_id = #{userId}) f
+            WHERE f.from_user_id = u.id
+        </when>
+        <otherwise>
+            ( select to_user_id from follow where from_user_id =#{userId}) f
+            WHERE f.to_user_id = u.id
+        </otherwise>
+        </choose>
+    </select>
+
 </mapper>
