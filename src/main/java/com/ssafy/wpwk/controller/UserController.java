@@ -3,8 +3,6 @@ package com.ssafy.wpwk.controller;
 import com.ssafy.wpwk.model.*;
 import com.ssafy.wpwk.service.UserService;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -269,17 +267,20 @@ public class UserController {
      * 사용자 팔로잉 요청
      */
     @ApiOperation(value = "사용자 팔로잉 요청")
-    @PostMapping("/users/following")
-    public ResponseEntity<?> requestFollowing(@RequestBody Map<String, Object> map, Authentication authentication) {
+    @PostMapping("/users/following/{id}")
+    public ResponseEntity<?> requestFollowing(@PathVariable("id")Long id, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         //팔로우 신청당하는 사용자의 ID
-        Long toUserId = Long.parseLong((String) map.get("toUserId"));
+        Long toUserId =id;
+        Claims claims = (Claims) authentication.getPrincipal();
+
         //팔로우 신청한 사용자의 ID
-        Long fromUserId = Long.parseLong((String) map.get("fromUserId"));
+        Long fromUserId = claims.get("userId", Long.class);
+
         if (userService.requestFollowing(toUserId, fromUserId))
             return new ResponseEntity<>(HttpStatus.OK);
         else {
