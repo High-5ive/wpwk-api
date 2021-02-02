@@ -55,6 +55,18 @@
         AND c.id = #{id}
     </select>
 
+    <!-- 컨텐츠 검색 이용한 조회 -->
+    <select id="findContentsByTagName" resultMap="Contents">
+        SELECT DISTINCT c.id, c.user_id, c.title,
+               c.spend_time, c.likes, c.views,
+               c.created_at, c.updated_at, u.nickname
+        FROM contents c
+        JOIN contents_tag ct ON c.id = ct.contents_id
+        JOIN tags t ON ct.tags_id = t.id
+        JOIN user u ON c.user_id = u.id
+        WHERE t.name LIKE CONCAT('%', #{tag}, '%')
+    </select>
+
     <!-- 컨텐츠 검색 이용한 조회 (추가 수정 필요) -->
     <select id="findContentsByKeyword" resultType="com.ssafy.wpwk.model.Contents" parameterType="hashmap">
         SELECT c.id,

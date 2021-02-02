@@ -2,7 +2,9 @@ package com.ssafy.wpwk.service;
 
 import com.ssafy.wpwk.mappers.ContentsItemMapper;
 import com.ssafy.wpwk.mappers.ContentsMapper;
+import com.ssafy.wpwk.mappers.TagMapper;
 import com.ssafy.wpwk.model.Contents;
+import com.ssafy.wpwk.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,9 @@ public class ContentsServiceImpl implements ContentsService {
     @Autowired
     ContentsItemMapper contentsItemMapper;
 
+    @Autowired
+    TagMapper tagMapper;
+
     /**
      * 컨텐츠 생성
      */
@@ -27,7 +32,7 @@ public class ContentsServiceImpl implements ContentsService {
         contentsMapper.create(contents);
         // 2. 컨텐츠 아이템 정보 추가
         try {
-            contentsItemMapper.createByContentsId(contents.getId(), contents.getContentsItem());
+            contentsItemMapper.createByContentsId(contents.getId(), contents.getContentsItemList());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -38,7 +43,11 @@ public class ContentsServiceImpl implements ContentsService {
      */
     @Override
     public Contents findContentsById(Long contentsId) throws Exception {
-        return contentsMapper.findContentsById(contentsId);
+        Contents contents = contentsMapper.findContentsById(contentsId);
+        List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
+        contents.setTagList(tagList);
+
+        return contents;
     }
 
     /**
@@ -46,6 +55,16 @@ public class ContentsServiceImpl implements ContentsService {
      */
     @Override
     public List<Contents> findContentsByKeyword(HashMap<String, String> map) throws Exception {
+
+        if(map.get("option").equals("tagName")) {
+            List<Contents> contentsList = contentsMapper.findContentsByTagName(map.get("keyword"));
+
+            for(Contents contents : contentsList) {
+                List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
+                contents.setTagList(tagList);
+            }
+            return  contentsList;
+        }
         return contentsMapper.findContentsByKeyword(map);
     }
 

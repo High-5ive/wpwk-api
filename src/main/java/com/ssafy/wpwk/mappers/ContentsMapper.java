@@ -32,6 +32,11 @@ public interface ContentsMapper {
     Contents findContentsById(Long id) throws Exception;
 
     /**
+     * ID를 이용한 컨텐츠 조회
+     */
+    List<Contents> findContentsByTagName(String tag) throws Exception;
+
+    /**
      * 컨텐츠 수정
      */
     void update(Contents contents) throws Exception;

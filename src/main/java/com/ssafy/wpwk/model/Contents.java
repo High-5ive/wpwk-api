@@ -66,5 +66,10 @@ public class Contents {
     /**
      * 컨텐츠 아이템
      * */
-    private List<ContentsItem> contentsItem;
+    private List<ContentsItem> contentsItemList;
+
+    /**
+     * 컨텐츠 해시태그 리스트
+     * */
+    private List<Tag> tagList;
 }
