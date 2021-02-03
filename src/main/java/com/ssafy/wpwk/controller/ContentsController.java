@@ -35,6 +35,7 @@ public class ContentsController {
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         Claims claims = (Claims) authentication.getPrincipal();
         Long userId = claims.get("userId", Long.class);
         User user = userService.findUserById(userId);
@@ -54,7 +55,7 @@ public class ContentsController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(contents.getId(),HttpStatus.OK);
     }
 
     @ApiOperation(value = "회원이 클릭한 컨텐츠 제공", response = Contents.class)
