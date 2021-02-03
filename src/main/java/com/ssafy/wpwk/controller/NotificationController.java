@@ -48,7 +48,6 @@ public class NotificationController {
                 new ResponseEntity<>(notificationList, HttpStatus.OK);
     }
 
-
     // 3. 사용자별 확인하지 않은 공지사항 전체 조회
     @ApiOperation(value = "사용자별 확인하지 않은 공지사항 전체 조회")
     @GetMapping("/notifications/main")

@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+import static com.ssafy.wpwk.utils.ExceptionUtil.isInValidAuthentication;
+
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
 public class ContentsReportController {
@@ -71,7 +73,6 @@ public class ContentsReportController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
     @ApiOperation(value = "컨텐츠 신고 처리")
     @PutMapping("/contentsReport/{id}")
     public ResponseEntity<?> contentsReportUpdate(@PathVariable("id") Long id, @RequestBody Map<String, Object> map,
@@ -93,10 +94,4 @@ public class ContentsReportController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
-    public boolean isInValidAuthentication(Authentication authentication) {
-        return authentication == null ? true : false;
-    }
-
 }

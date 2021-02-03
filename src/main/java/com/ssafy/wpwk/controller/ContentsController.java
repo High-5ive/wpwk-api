@@ -55,7 +55,7 @@ public class ContentsController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(contents.getId(),HttpStatus.OK);
+        return new ResponseEntity<>(contents.getId(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "회원이 클릭한 컨텐츠 제공", response = Contents.class)
@@ -123,7 +123,6 @@ public class ContentsController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
     @ApiOperation(value = "컨텐츠 삭제")
     @DeleteMapping("/contents/{id}")

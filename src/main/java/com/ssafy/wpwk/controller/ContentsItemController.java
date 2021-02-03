@@ -20,7 +20,7 @@ public class ContentsItemController {
     @ApiOperation(value = "페이지별 컨텐츠 아이템 정보 가져오기")
     @GetMapping("/contentsItem/{id}/{pageNo}")
     public ResponseEntity<?> readByPage(@PathVariable("id") Long id,
-                                                   @PathVariable("pageNo") int pageNo) {
+                                        @PathVariable("pageNo") int pageNo) {
 
         ContentsItem contentsItem;
 
@@ -31,7 +31,7 @@ public class ContentsItemController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if(contentsItem == null) {
+        if (contentsItem == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 해당 아이템이 없기때문에 NO CONTENT 전닫
         }
         return new ResponseEntity<>(contentsItem, HttpStatus.OK);
@@ -40,9 +40,9 @@ public class ContentsItemController {
     @ApiOperation(value = "컨텐츠 아이템 수정")
     @PutMapping("/contentsItem/{contentsId}")
     public ResponseEntity<Void> update(@PathVariable("contentsId") Long contentsId,
-            @RequestBody List<ContentsItem> contentsItemList) {
+                                       @RequestBody List<ContentsItem> contentsItemList) {
 
-        for(ContentsItem item : contentsItemList) {
+        for (ContentsItem item : contentsItemList) {
             System.out.println(item.getDescription());
         }
         try {
@@ -53,5 +53,4 @@ public class ContentsItemController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

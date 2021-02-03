@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import static com.ssafy.wpwk.utils.ExceptionUtil.isInValidAuthentication;
+
 @RestController
 @CrossOrigin(origins = "{*}", maxAge = 6000)
 public class ContentsCommentController {
@@ -112,10 +114,4 @@ public class ContentsCommentController {
         comment.setCreatedBy("server1");
         comment.setUpdatedAt(LocalDateTime.now());
     }
-
-    public boolean isInValidAuthentication(Authentication authentication) {
-        return authentication == null ? true : false;
-    }
-
-
 }

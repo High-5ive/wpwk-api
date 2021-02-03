@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.ssafy.wpwk.utils.ExceptionUtil.isInValidAuthentication;
+
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
@@ -94,7 +96,6 @@ public class UserController {
 
         User findUser = User.builder().email(user.getEmail())
                 .id(user.getId())
-                .password(user.getPassword())
                 .nickname(user.getNickname())
                 .createdBy(user.getCreatedBy())
                 .createdAt(user.getCreatedAt())
@@ -242,7 +243,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
     /**
      * 사용자 비밀번호 찾기 이메일 인증 요청
      */
@@ -268,14 +268,14 @@ public class UserController {
      */
     @ApiOperation(value = "사용자 팔로잉 요청")
     @PostMapping("/users/following/{id}")
-    public ResponseEntity<?> requestFollowing(@PathVariable("id")Long id, Authentication authentication) {
+    public ResponseEntity<?> requestFollowing(@PathVariable("id") Long id, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         //팔로우 신청당하는 사용자의 ID
-        Long toUserId =id;
+        Long toUserId = id;
         Claims claims = (Claims) authentication.getPrincipal();
 
         //팔로우 신청한 사용자의 ID
@@ -313,7 +313,4 @@ public class UserController {
         user.setUpdatedAt(LocalDateTime.now());
     }
 
-    public boolean isInValidAuthentication(Authentication authentication) {
-        return authentication == null ? true : false;
-    }
 }

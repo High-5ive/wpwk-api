@@ -5,14 +5,13 @@ import com.ssafy.wpwk.model.LoginResponseDTO;
 import com.ssafy.wpwk.model.User;
 import com.ssafy.wpwk.service.UserService;
 import com.ssafy.wpwk.utils.JWTUtil;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
@@ -48,5 +47,25 @@ public class LoginController {
         LoginResponseDTO loginResponseDTO = LoginResponseDTO.builder().accessToken(accessToken).build();
 
         return new ResponseEntity<>(loginResponseDTO, HttpStatus.CREATED);
+    }
+
+    /** 로그인한 유저정보 요청 */
+    @ApiOperation(value = "로그인한 유저정보 요청")
+    @GetMapping("/loginUser/{id}")
+    public ResponseEntity<?> loginUser(@PathVariable("id") Long id, Authentication authentication) {
+
+        Claims claims = (Claims) authentication.getPrincipal();
+
+        Long userId = claims.get("userId", Long.class);
+        if(id != userId) { return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); }
+
+        User user = userService.findUserById(userId);
+        User loginUser = User.builder()
+                .id(user.getId())
+                .nickname(user.getNickname())
+                .email(user.getEmail())
+                .build();
+
+        return new ResponseEntity<>(loginUser, HttpStatus.OK);
     }
 }
