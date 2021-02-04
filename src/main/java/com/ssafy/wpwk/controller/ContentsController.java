@@ -44,7 +44,7 @@ public class ContentsController {
                 .title(resource.getTitle())
                 .spendTime(resource.getSpendTime())
                 .ability(resource.getAbility())
-                .id(userId)
+                .userId(userId)
                 .createdBy("server1")
                 .contentsItemList(resource.getContentsItemList())
                 .updatedBy("server1")
