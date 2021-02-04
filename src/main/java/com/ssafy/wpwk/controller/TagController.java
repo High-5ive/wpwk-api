@@ -16,14 +16,18 @@ public class TagController {
 
     @Autowired
     private TagService tagService;
-    
+
     // 해시태그 추가시 제시어 제공
     @ApiOperation(value = "해시태그 추가시 입력한 단어를 통해 제시어 제공")
-    @GetMapping("/tags/suggest/{word}")
-    public ResponseEntity<?> suggest(@PathVariable("word") String word) {
+    @PostMapping("/tags/search")
+    public ResponseEntity<?> search(@RequestBody String word) {
 
+        System.out.println(word);
+
+        // String word = (String) resource.get("tag");
         List<Tag> tagList = tagService.getTagListByWord(word);
 
+        System.out.println(tagList.size());
         return new ResponseEntity<>(tagList, HttpStatus.OK);
     }
 
