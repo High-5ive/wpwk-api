@@ -20,6 +20,16 @@ public class ContentsItem {
     private String youtubeId;
 
     /**
+     * 컨텐츠 유튜브 썸네일
+     * */
+    private String youtubeThumbnail;
+
+    /**
+     * 컨텐츠 유튜브 제목
+     * */
+    private String youtubeTitle;
+
+    /**
      * 컨텐츠 이미지 주소
      * */
     private String imageAddress;

@@ -4,17 +4,21 @@
 
     <!-- 컨텐츠 아이템 삽입 -->
     <insert id = "createByContentsId" parameterType="Map">
-            INSERT INTO contents_item (youtube_id, image_address, video_address, description, page_no, contents_id)
+            INSERT INTO contents_item (youtube_id, youtube_title, youtube_thumnail,
+                                       image_address, video_address,
+                                       description, page_no, contents_id)
         VALUES
         <foreach collection="itemList" item="item" separator=" , ">
-            (#{item.youtubeId}, #{item.imageAddress}, #{item.videoAddress},
+            (#{item.youtubeId}, #{item.youtubeTitle}, #{item.youtubeThumbnail},
+             #{item.imageAddress}, #{item.videoAddress},
             #{item.description}, #{item.pageNo}, #{contentsId})
         </foreach>
     </insert>
 
     <!-- 컨텐츠 아이디와 페이지 번호를 이용한 컨텐츠 아이템 조회 -->
     <select id="findByContentsIdAndPageNo" resultType="com.ssafy.wpwk.model.ContentsItem" parameterType="Map">
-        SELECT id, youtube_id, image_address, video_address, description, page_no, contents_id
+        SELECT id, youtube_id, youtube_title, youtube_thumbnail,
+               image_address, video_address, description, page_no, contents_id
         FROM contents_item
         WHERE contents_id = #{contentsId}
           AND page_no = #{pageNo}
@@ -22,7 +26,9 @@
 
     <!-- 컨텐츠 아이디를 이용한 컨텐츠 아이템 조회 -->
     <select id="findByContentsId" resultType="com.ssafy.wpwk.model.ContentsItem">
-        SELECT id, youtube_id, image_address, video_address, description, page_no, contents_id
+        SELECT id, youtube_id, youtube_title, youtube_thumbnail,
+               image_address, video_address,
+               description, page_no, contents_id
         FROM contents_item
         WHERE contents_id = #{contentsId}
         ORDER BY page_no ASC
