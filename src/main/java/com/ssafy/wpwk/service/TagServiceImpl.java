@@ -33,10 +33,10 @@ public class TagServiceImpl implements TagService{
         // 1. 주어진 태그들 분석 (이미 존재하는 태그인지 아닌지)
         for(String tag : tags) {
             Long tagId;
-            if(tag.charAt(0) == ':') { // 이미 존재하는 태그인 경우
+            if(tag.charAt(0) == ':') { // 이미 존재하는 태그인 경우 -> 태그 사용 수 +1
                 tagId = Long.parseLong(tag.substring(1));
                 tagMapper.updateTagCount(tagId);
-            } else { // 새로 생성해야하는 태그인 경우
+            } else { // 새로 생성해야하는 태그인 경우 -> 태그 데이터 추가
                 Tag newTag = Tag.builder().name(tag).build();
                 tagMapper.createTag(newTag);
                 tagId = newTag.getId();
@@ -45,6 +45,9 @@ public class TagServiceImpl implements TagService{
             tagIdList.add(tagId);
         }
 
-        tagMapper.createContentsTag(contentsId, tagIdList);
+        // 태그가 있는 경우
+        if(tagIdList.size() != 0) {
+            tagMapper.createContentsTag(contentsId, tagIdList);
+        }
     }
 }
