@@ -62,14 +62,14 @@
     <!--    유저의 역량 지표 업데이트-->
     <update id="updateUserAbilities" parameterType="map">
         UPDATE user
-        SET ability1 = ability1 + #{abilityRequestDTO.abilities[0]},
-            ability2 = ability2 + #{abilityRequestDTO.abilities[1]},
-            ability3 = ability3 + #{abilityRequestDTO.abilities[2]},
-            ability4 = ability4 + #{abilityRequestDTO.abilities[3]},
-            ability5 = ability5 + #{abilityRequestDTO.abilities[4]},
-            ability6 = ability6 + #{abilityRequestDTO.abilities[5]},
-            ability7 = ability7 + #{abilityRequestDTO.abilities[6]},
-            ability8 = ability8 + #{abilityRequestDTO.abilities[7]}
+        SET ability1 = ability1 + #{userAbility.abilities[0]},
+            ability2 = ability2 + #{userAbility.abilities[1]},
+            ability3 = ability3 + #{userAbility.abilities[2]},
+            ability4 = ability4 + #{userAbility.abilities[3]},
+            ability5 = ability5 + #{userAbility.abilities[4]},
+            ability6 = ability6 + #{userAbility.abilities[5]},
+            ability7 = ability7 + #{userAbility.abilities[6]},
+            ability8 = ability8 + #{userAbility.abilities[7]}
         WHERE id = #{id}
     </update>
 

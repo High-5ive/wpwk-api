@@ -1,5 +1,6 @@
 package com.ssafy.wpwk.controller;
 
+import com.ssafy.wpwk.model.AbilityRequestDTO;
 import com.ssafy.wpwk.model.Contents;
 import com.ssafy.wpwk.model.User;
 import com.ssafy.wpwk.service.ContentsServiceImpl;
@@ -133,6 +134,24 @@ public class ContentsController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "컨텐츠 역량 정보 업데이트")
+    @PutMapping("/contents/abilities")
+    public ResponseEntity<?> updateUser(@RequestBody AbilityRequestDTO resource,
+                                        Authentication authentication) {
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Claims claims = (Claims) authentication.getPrincipal();
+
+        Long id = claims.get("userId", Long.class);
+        System.out.println(resource);
+        contentsService.updateContentsAbilities(id, resource);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

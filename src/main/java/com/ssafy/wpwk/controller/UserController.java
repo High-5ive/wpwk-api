@@ -45,7 +45,6 @@ public class UserController {
         }
 
         User user = User.builder().email(resource.getEmail())
-                .password(resource.getPassword())
                 .nickname(resource.getNickname())
                 .createdBy("server1")
                 .updatedBy("server1")

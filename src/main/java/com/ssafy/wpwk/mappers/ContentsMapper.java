@@ -1,7 +1,9 @@
 package com.ssafy.wpwk.mappers;
 
+import com.ssafy.wpwk.model.AbilityRequestDTO;
 import com.ssafy.wpwk.model.Contents;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -45,4 +47,9 @@ public interface ContentsMapper {
      * 컨텐츠 삭제
      */
     void delete(Long id) throws Exception;
+
+    /**
+     * 컨텐츠 역량 수정
+     */
+    void updateAbilities(@Param("id") Long id, @Param("contentsAbility") AbilityRequestDTO abilityRequestDTO);
 }

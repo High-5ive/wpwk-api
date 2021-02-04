@@ -103,6 +103,20 @@
         WHERE id = #{id}
     </update>
 
+    <!-- 컨텐츠 역량 수정 -->
+    <update id="updateAbilities" parameterType="map">
+        UPDATE contents
+        SET ability1 = #{contentsAbility.abilities[0]},
+            ability2 = #{contentsAbility.abilities[1]},
+            ability3 = #{contentsAbility.abilities[2]},
+            ability4 = #{contentsAbility.abilities[3]},
+            ability5 = #{contentsAbility.abilities[4]},
+            ability6 = #{contentsAbility.abilities[5]},
+            ability7 = #{contentsAbility.abilities[6]},
+            ability8 = #{contentsAbility.abilities[7]}
+        WHERE id = #{id}
+    </update>
+
     <!-- 데이터 삭제 -->
     <delete id="delete">
         DELETE FROM contents

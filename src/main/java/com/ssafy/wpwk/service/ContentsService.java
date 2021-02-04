@@ -1,5 +1,6 @@
 package com.ssafy.wpwk.service;
 
+import com.ssafy.wpwk.model.AbilityRequestDTO;
 import com.ssafy.wpwk.model.Contents;
 
 import java.util.HashMap;
@@ -15,7 +16,7 @@ public interface ContentsService {
     /**
      * ID를 이용한 컨텐츠 조회
      */
-    Contents findContentsById(Long contentsId) throws Exception;
+    Contents findContentsById(Long id) throws Exception;
 
     /**
      * 키워드를 이용한 컨텐츠 조회
@@ -35,5 +36,10 @@ public interface ContentsService {
     /**
      * 컨텐츠 삭제
      */
-    void delete(Long contentsId) throws Exception;
+    void delete(Long id) throws Exception;
+
+    /**
+     * 컨텐츠 역량 업데이트
+     */
+    void updateContentsAbilities(Long id, AbilityRequestDTO abilities);
 }

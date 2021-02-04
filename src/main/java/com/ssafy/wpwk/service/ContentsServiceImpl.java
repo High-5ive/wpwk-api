@@ -3,6 +3,7 @@ package com.ssafy.wpwk.service;
 import com.ssafy.wpwk.mappers.ContentsItemMapper;
 import com.ssafy.wpwk.mappers.ContentsMapper;
 import com.ssafy.wpwk.mappers.TagMapper;
+import com.ssafy.wpwk.model.AbilityRequestDTO;
 import com.ssafy.wpwk.model.Contents;
 import com.ssafy.wpwk.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +43,8 @@ public class ContentsServiceImpl implements ContentsService {
      * ID를 이용한 컨텐츠 조회
      */
     @Override
-    public Contents findContentsById(Long contentsId) throws Exception {
-        Contents contents = contentsMapper.findContentsById(contentsId);
+    public Contents findContentsById(Long id) throws Exception {
+        Contents contents = contentsMapper.findContentsById(id);
         List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
         contents.setTagList(tagList);
 
@@ -88,8 +89,16 @@ public class ContentsServiceImpl implements ContentsService {
      * 컨텐츠 삭제
      */
     @Override
-    public void delete(Long contentsId) throws Exception {
-        contentsMapper.delete(contentsId);
+    public void delete(Long id) throws Exception {
+        contentsMapper.delete(id);
+    }
+
+    /**
+     * 컨텐츠 역량 수정
+     */
+    @Override
+    public void updateContentsAbilities(Long id, AbilityRequestDTO abilities) {
+        contentsMapper.updateAbilities(id, abilities);
     }
 
 }

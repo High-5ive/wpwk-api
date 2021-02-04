@@ -62,7 +62,7 @@ public interface UserMapper {
     /**
      * 사용자의 역량 정보 업데이트
      */
-    void updateUserAbilities(@Param("id") Long id, @Param("abilityRequestDTO") AbilityRequestDTO abilityDTO);
+    void updateUserAbilities(@Param("id") Long id, @Param("userAbility") AbilityRequestDTO abilityDTO);
 
     /**
      * ID를 이용한 사용자 역량 정보 조회
