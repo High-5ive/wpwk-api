@@ -17,6 +17,7 @@
                c.spend_time,
                c.likes,
                c.views,
+               c.ability,
                c.created_at,
                c.created_by,
                u.id as user_id,
@@ -32,6 +33,7 @@
                c.spend_time,
                c.likes,
                c.views,
+               c.ability,
                c.created_at,
                c.created_by,
                u.id as user_id,
@@ -44,7 +46,7 @@
     <!-- 컨텐츠 검색 이용한 조회 -->
     <select id="findContentsByTagName" resultType="com.ssafy.wpwk.model.Contents">
         SELECT DISTINCT c.id, c.user_id, c.title,
-               c.spend_time, c.likes, c.views,
+               c.spend_time, c.likes, c.views, c.ability,
                c.created_at, c.updated_at, u.nickname
         FROM contents c
         JOIN contents_tag ct ON c.id = ct.contents_id
