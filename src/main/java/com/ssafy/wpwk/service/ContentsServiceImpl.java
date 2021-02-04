@@ -92,13 +92,4 @@ public class ContentsServiceImpl implements ContentsService {
     public void delete(Long id) throws Exception {
         contentsMapper.delete(id);
     }
-
-    /**
-     * 컨텐츠 역량 수정
-     */
-    @Override
-    public void updateContentsAbilities(Long id, AbilityRequestDTO abilities) {
-        contentsMapper.updateAbilities(id, abilities);
-    }
-
 }

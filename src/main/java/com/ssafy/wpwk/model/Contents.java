@@ -21,7 +21,12 @@ public class Contents {
     /**
      * 컨텐츠 제작자 id
      * */
-    private User user;
+    private Long userId;
+
+    /**
+     * 컨텐츠 제작자 닉네임
+     * */
+    private String nickname;
 
     /**
      * 컨텐츠 제목
@@ -42,6 +47,11 @@ public class Contents {
      * 컨텐츠 조회수
      * */
     private int views;
+
+    /**
+     * 컨텐츠 역량
+     * */
+    private String ability;
 
     /**
      * 컨텐츠 생성일자

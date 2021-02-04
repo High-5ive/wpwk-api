@@ -37,9 +37,4 @@ public interface ContentsService {
      * 컨텐츠 삭제
      */
     void delete(Long id) throws Exception;
-
-    /**
-     * 컨텐츠 역량 업데이트
-     */
-    void updateContentsAbilities(Long id, AbilityRequestDTO abilities);
 }

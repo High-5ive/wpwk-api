@@ -46,7 +46,7 @@ public class ContentsReportServiceImpl implements ContentsReportService {
         String contentsTitle = contentsReport.getContents().getTitle();
 
         // 신고 대상자 아이디 가져오기
-        Long targetUserId = contentsService.findContentsById(contentsId).getUser().getId();
+        Long targetUserId = contentsService.findContentsById(contentsId).getUserId();
 
         // 신고 처리 메시지 전송
         notificationService.createReportNotification(targetUserId, contentsId, contentsTitle, status, adminId);

@@ -39,12 +39,12 @@ public class ContentsController {
 
         Claims claims = (Claims) authentication.getPrincipal();
         Long userId = claims.get("userId", Long.class);
-        User user = userService.findUserById(userId);
 
         Contents contents = Contents.builder()
                 .title(resource.getTitle())
                 .spendTime(resource.getSpendTime())
-                .user(user)
+                .ability(resource.getAbility())
+                .id(userId)
                 .createdBy("server1")
                 .contentsItemList(resource.getContentsItemList())
                 .updatedBy("server1")
@@ -134,24 +134,6 @@ public class ContentsController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "컨텐츠 역량 정보 업데이트")
-    @PutMapping("/contents/abilities")
-    public ResponseEntity<?> updateUser(@RequestBody AbilityRequestDTO resource,
-                                        Authentication authentication) {
-
-        if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        Claims claims = (Claims) authentication.getPrincipal();
-
-        Long id = claims.get("userId", Long.class);
-        System.out.println(resource);
-        contentsService.updateContentsAbilities(id, resource);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
