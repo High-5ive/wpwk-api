@@ -74,7 +74,13 @@ public class ContentsServiceImpl implements ContentsService {
      */
     @Override
     public List<Contents> findAllContents() throws Exception {
-        return contentsMapper.findAllContents();
+        List<Contents> contentsList = contentsMapper.findAllContents();
+        for(Contents contents : contentsList) {
+            List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
+            contents.setTagList(tagList);
+        }
+
+        return contentsList;
     }
 
     /**

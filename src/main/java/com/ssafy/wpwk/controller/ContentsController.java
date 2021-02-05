@@ -26,9 +26,6 @@ public class ContentsController {
     @Autowired
     private ContentsServiceImpl contentsService;
 
-    @Autowired
-    private UserServiceImpl userService;
-
     @ApiOperation(value = "새로운 컨텐츠 제작(등록)")
     @PostMapping("/contents")
     public ResponseEntity<?> create(@RequestBody Contents resource, Authentication authentication) {

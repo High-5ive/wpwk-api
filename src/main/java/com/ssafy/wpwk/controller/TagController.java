@@ -22,12 +22,7 @@ public class TagController {
     @PostMapping("/tags/search")
     public ResponseEntity<?> search(@RequestBody String word) {
 
-        System.out.println(word);
-
-        // String word = (String) resource.get("tag");
         List<Tag> tagList = tagService.getTagListByWord(word);
-
-        System.out.println(tagList.size());
         return new ResponseEntity<>(tagList, HttpStatus.OK);
     }
 
