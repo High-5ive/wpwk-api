@@ -5,6 +5,7 @@ import com.ssafy.wpwk.mappers.ContentsMapper;
 import com.ssafy.wpwk.mappers.TagMapper;
 import com.ssafy.wpwk.model.AbilityRequestDTO;
 import com.ssafy.wpwk.model.Contents;
+import com.ssafy.wpwk.model.ContentsItem;
 import com.ssafy.wpwk.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,12 @@ public class ContentsServiceImpl implements ContentsService {
     @Override
     public void create(Contents contents) throws Exception {
         // 1. 컨텐츠 정보추가
+        // 1-1. 컨텐츠 아이템 첫 번째 페이지에 유튜브 썸네일이 있는 경우 -> 컨텐츠 썸네일에 활용
+        String thumb = contents.getContentsItemList().get(0).getYoutubeThumbnail();
+        if(thumb == null) {
+            thumb = contents.getContentsItemList().get(0).getImageAddress();
+        }
+        contents.setThumb(thumb);
         contentsMapper.create(contents);
         // 2. 컨텐츠 아이템 정보 추가
         try {

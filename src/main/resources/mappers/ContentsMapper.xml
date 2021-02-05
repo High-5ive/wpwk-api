@@ -4,10 +4,10 @@
 
     <!-- 컨텐츠 삽입 -->
     <insert id = "create" useGeneratedKeys="true" keyProperty="id" parameterType="com.ssafy.wpwk.model.Contents">
-        INSERT INTO contents (title, spend_time, ability,
+        INSERT INTO contents (title, spend_time, ability, thumb,
                               created_by, updated_by, user_id)
-        VALUES(#{title}, #{spendTime}, #{ability},
-               #{createdBy},#{updatedBy}, #{userId})
+        VALUES(#{title}, #{spendTime}, #{ability}, #{thumb},
+               #{createdBy}, #{updatedBy}, #{userId})
     </insert>
 
     <!--컨텐츠 전체 조회 -->
@@ -18,12 +18,14 @@
                c.likes,
                c.views,
                c.ability,
+               c.thumb,
                c.created_at,
                c.created_by,
                u.id as user_id,
                u.nickname
         FROM contents c, user u
         WHERE c.user_id = u.id
+        ORDER BY c.id DESC
     </select>
 
     <!-- 컨텐츠 검색 이용한 조회 -->
@@ -34,6 +36,7 @@
                c.likes,
                c.views,
                c.ability,
+               c.thumb,
                c.created_at,
                c.created_by,
                u.id as user_id,
@@ -41,18 +44,20 @@
         FROM contents c, user u
         WHERE c.user_id = u.id
         AND c.id = #{id}
+        ORDER BY c.id DESC
     </select>
 
     <!-- 컨텐츠 검색 이용한 조회 -->
     <select id="findContentsByTagName" resultType="com.ssafy.wpwk.model.Contents">
         SELECT DISTINCT c.id, c.user_id, c.title,
-               c.spend_time, c.likes, c.views, c.ability,
+               c.spend_time, c.likes, c.views, c.ability, c.thumb,
                c.created_at, c.updated_at, u.nickname
         FROM contents c
         JOIN contents_tag ct ON c.id = ct.contents_id
         JOIN tags t ON ct.tags_id = t.id
         JOIN user u ON c.user_id = u.id
         WHERE t.name LIKE CONCAT('%', #{tag}, '%')
+        ORDER BY c.id DESC
     </select>
 
     <!-- 컨텐츠 검색 이용한 조회 (추가 수정 필요) -->

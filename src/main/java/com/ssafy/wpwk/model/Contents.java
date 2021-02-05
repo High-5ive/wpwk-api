@@ -54,6 +54,11 @@ public class Contents {
     private String ability;
 
     /**
+     * 컨텐츠 썸네일
+     * */
+    private String thumb;
+    
+    /**
      * 컨텐츠 생성일자
      * */
     private LocalDateTime createdAt;
