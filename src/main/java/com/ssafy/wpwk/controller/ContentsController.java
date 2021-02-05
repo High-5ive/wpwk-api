@@ -108,6 +108,22 @@ public class ContentsController {
             return new ResponseEntity<>(contentsList, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "페이지별 컨텐츠 리스트 제공", response = List.class)
+    @GetMapping("/contents/page/{page}")
+    public ResponseEntity<?> findAllContentsByPage(@PathVariable("page") int page) {
+        List<Contents> contentsList;
+        try {
+            contentsList = contentsService.findAllContentsByPage(page);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (contentsList == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        else
+            return new ResponseEntity<>(contentsList, HttpStatus.OK);
+    }
+
     @ApiOperation(value = "컨텐츠 수정")
     @PutMapping("/contents")
     public ResponseEntity<?> update(@RequestBody Contents contents) {

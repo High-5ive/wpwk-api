@@ -29,6 +29,11 @@ public interface ContentsService {
     List<Contents> findAllContents() throws Exception;
 
     /**
+     * 페이지별 컨텐츠 조회
+     */
+    List<Contents> findAllContentsByPage(int page) throws Exception;
+
+    /**
      * 컨텐츠 수정
      */
     void update(Contents contents) throws Exception;

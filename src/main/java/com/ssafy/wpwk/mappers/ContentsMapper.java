@@ -29,6 +29,11 @@ public interface ContentsMapper {
     List<Contents> findAllContents() throws Exception;
 
     /**
+     * 컨텐츠 페이지별 조회
+     */
+    List<Contents> findAllContentsByPage(int offset) throws Exception;
+
+    /**
      * ID를 이용한 컨텐츠 조회
      */
     Contents findContentsById(Long id) throws Exception;

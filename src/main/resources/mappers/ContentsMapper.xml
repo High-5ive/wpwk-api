@@ -28,6 +28,25 @@
         ORDER BY c.id DESC
     </select>
 
+    <!--컨텐츠 전체 조회 -->
+    <select id="findAllContentsByPage" resultType="com.ssafy.wpwk.model.Contents">
+        SELECT c.id,
+               c.title,
+               c.spend_time,
+               c.likes,
+               c.views,
+               c.ability,
+               c.thumb,
+               c.created_at,
+               c.created_by,
+               u.id as user_id,
+               u.nickname
+        FROM contents c, user u
+        WHERE c.user_id = u.id
+        ORDER BY c.id DESC
+        LIMIT 10 OFFSET #{offset}
+    </select>
+
     <!-- 컨텐츠 검색 이용한 조회 -->
     <select id="findContentsById" resultType="com.ssafy.wpwk.model.Contents">
         SELECT c.id,

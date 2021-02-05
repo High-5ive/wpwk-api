@@ -25,6 +25,8 @@ public class ContentsServiceImpl implements ContentsService {
     @Autowired
     TagMapper tagMapper;
 
+    static final int CNT_PAGE = 10;
+
     /**
      * 컨텐츠 생성
      */
@@ -82,6 +84,22 @@ public class ContentsServiceImpl implements ContentsService {
     @Override
     public List<Contents> findAllContents() throws Exception {
         List<Contents> contentsList = contentsMapper.findAllContents();
+        for(Contents contents : contentsList) {
+            List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
+            contents.setTagList(tagList);
+        }
+
+        return contentsList;
+    }
+
+    /**
+     * 페이지별 컨텐츠 조회
+     */
+    @Override
+    public List<Contents> findAllContentsByPage(int page) throws Exception {
+
+        int offset = (page-1) * CNT_PAGE;
+        List<Contents> contentsList = contentsMapper.findAllContentsByPage(offset);
         for(Contents contents : contentsList) {
             List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
             contents.setTagList(tagList);
