@@ -20,7 +20,7 @@
                b.created_at,
                b.created_by,
                u.id as user_id,
-               u.nickname
+               u.nickname as writer
         FROM board b, user u
         WHERE b.user_id = u.id
         ORDER BY b.id DESC
@@ -44,7 +44,7 @@
     </select>
 
     <!-- 아이디를 이용한 게시글 조회 -->
-    <select id="findById" resultType="com.ssafy.wpwk.model.Contents">
+    <select id="findById" resultType="com.ssafy.wpwk.model.Board">
         SELECT b.id,
                b.content,
                b.category,
@@ -53,14 +53,14 @@
                b.created_at,
                b.created_by,
                u.id as user_id,
-               u.nickname
+               u.nickname as writer
         FROM board b, user u
         WHERE b.user_id = u.id
         AND b.id = #{id}
     </select>
 
     <!-- 카테고리를 이용한 게시글 조회 -->
-    <select id="findByCategory" resultType="com.ssafy.wpwk.model.Contents">
+    <select id="findByCategory" resultType="com.ssafy.wpwk.model.Board">
         SELECT b.id,
                b.content,
                b.category,
@@ -69,14 +69,14 @@
                b.created_at,
                b.created_by,
                u.id as user_id,
-               u.nickname
+               u.nickname as writer
         FROM board b, user u
         WHERE b.user_id = u.id
         AND b.category = #{category}
     </select>
 
     <!--데이터 수정 -->
-    <update id="update" parameterType="com.ssafy.wpwk.model.Contents">
+    <update id="update" parameterType="com.ssafy.wpwk.model.Board">
         UPDATE board SET
                            content = #{content},
                            category = #{category},
