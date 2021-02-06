@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.wpwk.mappers.BoardMapper">
+
+    <!-- 게시글 삽입 -->
+    <insert id = "create" useGeneratedKeys="true" keyProperty="id" parameterType="com.ssafy.wpwk.model.Board">
+        INSERT INTO board (user_id, content, category,
+                            created_by, updated_by)
+        VALUES(#{userId}, #{content}, #{category},
+               #{createdBy}, #{updatedBy})
+    </insert>
+
+    <!-- 게시글 전체 조회 -->
+    <select id="findAll" resultType="com.ssafy.wpwk.model.Board">
+        SELECT b.id,
+               b.content,
+               b.category,
+               b.likes,
+               b.views,
+               b.created_at,
+               b.created_by,
+               u.id as user_id,
+               u.nickname as writer
+        FROM board b, user u
+        WHERE b.user_id = u.id
+        ORDER BY b.id DESC
+    </select>
+
+    <!-- 페이지별 카테고리 조회 -->
+    <select id="findAllByOffset" resultType="com.ssafy.wpwk.model.Board">
+        SELECT b.id,
+               b.content,
+               b.category,
+               b.likes,
+               b.views,
+               b.created_at,
+               b.created_by,
+               u.id as user_id,
+               u.nickname
+        FROM board b, user u
+        WHERE b.user_id = u.id
+        ORDER BY b.id DESC
+        LIMIT 10 OFFSET #{offset}
+    </select>
+
+    <!-- 아이디를 이용한 게시글 조회 -->
+    <select id="findById" resultType="com.ssafy.wpwk.model.Board">
+        SELECT b.id,
+               b.content,
+               b.category,
+               b.likes,
+               b.views,
+               b.created_at,
+               b.created_by,
+               u.id as user_id,
+               u.nickname as writer
+        FROM board b, user u
+        WHERE b.user_id = u.id
+        AND b.id = #{id}
+    </select>
+
+    <!-- 카테고리를 이용한 게시글 조회 -->
+    <select id="findByCategory" resultType="com.ssafy.wpwk.model.Board">
+        SELECT b.id,
+               b.content,
+               b.category,
+               b.likes,
+               b.views,
+               b.created_at,
+               b.created_by,
+               u.id as user_id,
+               u.nickname as writer
+        FROM board b, user u
+        WHERE b.user_id = u.id
+        AND b.category = #{category}
+    </select>
+
+    <!--데이터 수정 -->
+    <update id="update" parameterType="com.ssafy.wpwk.model.Board">
+        UPDATE board SET
+                           content = #{content},
+                           category = #{category},
+                           updated_at = #{updatedAt},
+                           updated_by = #{updatedBy}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 게시글 좋아요 수 증가 / 감소 -->
+    <update id="updateLikes" parameterType="map">
+        UPDATE board SET
+        likes = likes + #{likes}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 게시글 조회수 증가 -->
+    <update id="increaseViews">
+        UPDATE board SET
+        views = views + 1
+        WHERE id = #{id}
+    </update>
+
+    <!-- 게시글 삭제 -->
+    <delete id="delete">
+        DELETE FROM board
+        WHERE id = #{id}
+    </delete>
+</mapper>
