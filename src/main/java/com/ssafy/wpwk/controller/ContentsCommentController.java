@@ -24,8 +24,6 @@ public class ContentsCommentController {
     @Autowired
     private ContentsCommentServiceImpl commentService;
 
-
-
     @ApiOperation(value = "컨텐츠의 모든 댓글 조회")
     @GetMapping("/contentsComments/{contentsId}")
     public ResponseEntity<?> allComments(@PathVariable Long contentsId) {

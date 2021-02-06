@@ -45,6 +45,14 @@ public class BoardServiceImpl implements BoardService{
     }
 
     /*
+     * 카테고리를 이용한 게시글 상세조회
+     */
+    @Override
+    public Board findByCategory(String category) throws  Exception {
+        return boardMapper.findByCategory(category);
+    }
+
+    /*
      * 게시글 수정
      */
     @Override

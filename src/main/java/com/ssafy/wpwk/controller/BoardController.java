@@ -17,7 +17,6 @@ public class BoardController {
     @Autowired
     private BoardServiceImpl boardService;
 
-
     @ApiOperation(value = "게시글 생성")
     @PostMapping("/board")
     public ResponseEntity<?> createBoard(@RequestBody Board board) {
@@ -69,6 +68,20 @@ public class BoardController {
         return new ResponseEntity<>(board, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "카테고리별 게시글 조회")
+    @GetMapping("/board/{category}")
+    public ResponseEntity<?> findBoardByCategory(@PathVariable("category") String category) {
+        Board board;
+        try {
+            board = boardService.findByCategory(category);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(board, HttpStatus.OK);
+
+    }
+
     @ApiOperation(value = "게시글 수정")
     @PutMapping("/board")
     public ResponseEntity<?> updateBoard(@RequestBody Board board) {
@@ -83,7 +96,7 @@ public class BoardController {
 
     @ApiOperation(value = "게시글 삭제")
     @DeleteMapping("/board/{id}")
-    public ResponseEntity<?> deleteBoard(@PathVariable("id") Long id){
+    public ResponseEntity<?> deleteBoard(@PathVariable("id") Long id) {
         try {
             boardService.delete(id);
         } catch (Exception e) {

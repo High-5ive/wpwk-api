@@ -29,12 +29,18 @@ public interface BoardService {
     Board findById(Long id) throws Exception;
 
     /*
+     * 카테고리를 이용한 게시글 상세조회
+     */
+    Board findByCategory(String category) throws Exception;
+    /*
      * 게시글 수정
      */
-    void update(Board board) throws Exception;
 
+    void update(Board board) throws Exception;
     /*
      * 게시글 삭제
      */
+
     void delete(Long id) throws Exception;
+
 }
