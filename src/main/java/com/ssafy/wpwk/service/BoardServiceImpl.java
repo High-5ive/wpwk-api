@@ -2,13 +2,14 @@ package com.ssafy.wpwk.service;
 
 import com.ssafy.wpwk.model.Board;
 import com.ssafy.wpwk.model.Contents;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class BoardServiceImpl implements BoardService{
+public class BoardServiceImpl implements BoardService {
     @Autowired
     private BoardMapper boardMapper;
 
@@ -48,7 +49,7 @@ public class BoardServiceImpl implements BoardService{
      * 카테고리를 이용한 게시글 상세조회
      */
     @Override
-    public Board findByCategory(String category) throws  Exception {
+    public Board findByCategory(String category) throws Exception {
         return boardMapper.findByCategory(category);
     }
 
@@ -67,4 +68,16 @@ public class BoardServiceImpl implements BoardService{
     public void delete(Long id) throws Exception {
         boardMapper.delete(id);
     }
+
+    /*
+     * 게시글 좋아요 증가&감소
+     */
+    @Override
+    public void updateLikes(Long id, int likes) throws Exception {
+        boardMapper.updateLikes(id, likes);
+        //Todo
+        // id유저가 어떤 게시글에 대해서 좋아요를 했는지 기록이 필요함...
+    }
+
+
 }

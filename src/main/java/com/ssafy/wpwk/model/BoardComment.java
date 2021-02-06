@@ -21,7 +21,7 @@ public class BoardComment {
     /**
      * 댓글 작성한 회원의 nickname
      * */
-    private String userNickname;
+    private String writer;
 
     /**
      * 댓글 작성한 회원의 id

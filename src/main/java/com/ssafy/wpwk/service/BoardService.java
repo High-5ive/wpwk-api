@@ -2,6 +2,7 @@ package com.ssafy.wpwk.service;
 
 import com.ssafy.wpwk.model.Board;
 import com.ssafy.wpwk.model.Contents;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -37,10 +38,15 @@ public interface BoardService {
      */
 
     void update(Board board) throws Exception;
+
     /*
      * 게시글 삭제
      */
-
     void delete(Long id) throws Exception;
+
+    /*
+     * 게시글 좋아요 증가&감소
+     */
+    void updateLikes(@Param("id") Long id, @Param("likes") int likes) throws Exception;
 
 }

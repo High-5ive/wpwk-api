@@ -9,9 +9,9 @@ import java.util.List;
 
 @Service
 public class BoardCommentServiceImpl implements BoardCommentService {
+
     @Autowired
     private BoardCommentMapper boardCommentMapper;
-
 
     /*
      * 게시글 댓글 등록
@@ -25,7 +25,7 @@ public class BoardCommentServiceImpl implements BoardCommentService {
      * 게시글 댓글 전체조회
      */
     @Override
-    public List<BoardComment> allBoardComments(Long boardId) throws Exception {
+    public List<BoardComment> allBoardComments() throws Exception {
         return null;
     }
 
@@ -44,4 +44,6 @@ public class BoardCommentServiceImpl implements BoardCommentService {
     public void deleteComment(Long boardId, Long userId) throws Exception {
 
     }
+
+
 }

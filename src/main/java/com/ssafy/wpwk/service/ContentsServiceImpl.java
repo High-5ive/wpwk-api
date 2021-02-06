@@ -17,13 +17,13 @@ import java.util.List;
 public class ContentsServiceImpl implements ContentsService {
 
     @Autowired
-    ContentsMapper contentsMapper;
+    private ContentsMapper contentsMapper;
 
     @Autowired
-    ContentsItemMapper contentsItemMapper;
+    private ContentsItemMapper contentsItemMapper;
 
     @Autowired
-    TagMapper tagMapper;
+    private TagMapper tagMapper;
 
     static final int CNT_PAGE = 10;
 
@@ -35,7 +35,7 @@ public class ContentsServiceImpl implements ContentsService {
         // 1. 컨텐츠 정보추가
         // 1-1. 컨텐츠 아이템 첫 번째 페이지에 유튜브 썸네일이 있는 경우 -> 컨텐츠 썸네일에 활용
         String thumb = contents.getContentsItemList().get(0).getYoutubeThumbnail();
-        if(thumb == null) {
+        if (thumb == null) {
             thumb = contents.getContentsItemList().get(0).getImageAddress();
         }
         contents.setThumb(thumb);
@@ -66,14 +66,14 @@ public class ContentsServiceImpl implements ContentsService {
     @Override
     public List<Contents> findContentsByKeyword(HashMap<String, String> map) throws Exception {
 
-        if(map.get("option").equals("tagName")) {
+        if (map.get("option").equals("tagName")) {
             List<Contents> contentsList = contentsMapper.findContentsByTagName(map.get("keyword"));
 
-            for(Contents contents : contentsList) {
+            for (Contents contents : contentsList) {
                 List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
                 contents.setTagList(tagList);
             }
-            return  contentsList;
+            return contentsList;
         }
         return contentsMapper.findContentsByKeyword(map);
     }
@@ -84,7 +84,7 @@ public class ContentsServiceImpl implements ContentsService {
     @Override
     public List<Contents> findAllContents() throws Exception {
         List<Contents> contentsList = contentsMapper.findAllContents();
-        for(Contents contents : contentsList) {
+        for (Contents contents : contentsList) {
             List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
             contents.setTagList(tagList);
         }
@@ -98,9 +98,9 @@ public class ContentsServiceImpl implements ContentsService {
     @Override
     public List<Contents> findAllContentsByPage(int page) throws Exception {
 
-        int offset = (page-1) * CNT_PAGE;
+        int offset = (page - 1) * CNT_PAGE;
         List<Contents> contentsList = contentsMapper.findAllContentsByPage(offset);
-        for(Contents contents : contentsList) {
+        for (Contents contents : contentsList) {
             List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
             contents.setTagList(tagList);
         }
@@ -123,4 +123,7 @@ public class ContentsServiceImpl implements ContentsService {
     public void delete(Long id) throws Exception {
         contentsMapper.delete(id);
     }
+
+
+
 }
