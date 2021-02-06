@@ -36,7 +36,7 @@
                b.created_at,
                b.created_by,
                u.id as user_id,
-               u.nickname
+               u.nickname as writer
         FROM board b, user u
         WHERE b.user_id = u.id
         ORDER BY b.id DESC
@@ -60,7 +60,7 @@
     </select>
 
     <!-- 카테고리를 이용한 게시글 조회 -->
-    <select id="findByCategory" resultType="com.ssafy.wpwk.model.Board">
+    <select id="findByCategory" parameterType="map" resultType="com.ssafy.wpwk.model.Board">
         SELECT b.id,
                b.content,
                b.category,
@@ -73,6 +73,8 @@
         FROM board b, user u
         WHERE b.user_id = u.id
         AND b.category = #{category}
+        ORDER BY b.id DESC
+        LIMIT 10 OFFSET #{offset}
     </select>
 
     <!--데이터 수정 -->
@@ -80,9 +82,10 @@
         UPDATE board SET
                            content = #{content},
                            category = #{category},
-                           updated_at = #{updatedAt},
-                           updated_by = #{updatedBy}
+                           updated_at = NOW(),
+                           updated_by = "server1"
         WHERE id = #{id}
+        AND user_id = #{userId}
     </update>
 
     <!-- 게시글 좋아요 수 증가 / 감소 -->
@@ -100,8 +103,9 @@
     </update>
 
     <!-- 게시글 삭제 -->
-    <delete id="delete">
+    <delete id="delete" parameterType="map">
         DELETE FROM board
         WHERE id = #{id}
+        AND user_id = #{userId}
     </delete>
 </mapper>

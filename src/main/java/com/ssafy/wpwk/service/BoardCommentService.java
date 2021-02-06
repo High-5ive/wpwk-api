@@ -18,6 +18,11 @@ public interface BoardCommentService {
     List<BoardComment> allBoardComments() throws Exception;
 
     /**
+     * 게시글 ID를 이용한 게시글 댓글 조회
+     */
+    List<BoardComment> findByBoardIdAndOffset(Long boardId, int offset) throws Exception;
+
+    /**
      * 게시글 댓글 수정
      */
     void updateComment(BoardComment boardComment) throws Exception;
@@ -26,6 +31,4 @@ public interface BoardCommentService {
      * 게시글 댓글 삭제
      */
     void deleteComment(Long boardId, Long userId) throws Exception;
-
-
 }

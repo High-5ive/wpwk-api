@@ -6,8 +6,8 @@
     <insert id = "create" useGeneratedKeys="true" keyProperty="id" parameterType="com.ssafy.wpwk.model.BoardComment">
         INSERT INTO board_comment (user_id, board_id, comment,
                                    created_by, updated_by)
-        VALUES(#{userId}, #{boardId}, #{content},
-               #{createdBy}, #{updatedBy})
+        VALUES(#{userId}, #{boardId}, #{comment},
+               "server1", "server1")
     </insert>
 
 
@@ -27,7 +27,7 @@
     </select>
 
     <!-- 게시글에서 페이지별 게시글 댓글 조회 -->
-    <select id="findAllByBoardIdAndOffset" resultType="com.ssafy.wpwk.model.BoardComment">
+    <select id="findByBoardIdAndOffset" parameterType="map" resultType="com.ssafy.wpwk.model.BoardComment">
         SELECT bc.id,
                bc.comment,
                bc.created_at,
@@ -46,15 +46,17 @@
     <!--게시글 댓글 수정 -->
     <update id="update" parameterType="com.ssafy.wpwk.model.BoardComment">
         UPDATE board_comment SET
-                           content = #{content},
-                           updated_at = #{updatedAt},
-                           updated_by = #{updatedBy}
+                           comment = #{comment},
+                           updated_at = NOW(),
+                           updated_by = "server1"
         WHERE id = #{id}
+        AND user_id = #{userId}
     </update>
 
     <!-- 게시글 댓글 삭제 -->
-    <delete id="delete">
+    <delete id="delete" parameterType="map">
         DELETE FROM board_comment
         WHERE id = #{id}
+        AND user_id = #{userId}
     </delete>
 </mapper>

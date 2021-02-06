@@ -4,7 +4,6 @@ import com.ssafy.wpwk.model.Board;
 import com.ssafy.wpwk.service.BoardServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.aop.AfterReturningAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +23,25 @@ public class BoardController {
     private BoardServiceImpl boardService;
 
     @ApiOperation(value = "게시글 생성")
-    @PostMapping("/board")
-    public ResponseEntity<?> createBoard(@RequestBody Board board, Authentication authentication) {
+    @PostMapping("/boards")
+    public ResponseEntity<?> createBoard(@RequestBody Board resource, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        Claims claims = (Claims) authentication.getPrincipal();
+        Long userId = claims.get("userId", Long.class);
+        String writer = claims.get("nickname", String.class);
+
+        Board board = Board.builder()
+                .userId(userId)
+                .writer(writer)
+                .category(resource.getCategory())
+                .content(resource.getContent())
+                .createdBy("server1")
+                .updatedBy("server1")
+                .build();
 
         try {
             boardService.create(board);
@@ -38,11 +50,11 @@ public class BoardController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "게시글 전체 조회")
-    @GetMapping("/board")
+    @GetMapping("/boards")
     public ResponseEntity<?> findAllBoard() {
         List<Board> boardList;
         try {
@@ -55,11 +67,12 @@ public class BoardController {
     }
 
     @ApiOperation(value = "페이지별 게시글 조회")
-    @GetMapping("/board/page/{page}")
+    @GetMapping("/boards/page/{page}")
     public ResponseEntity<?> findAllByOffset(@PathVariable("page") int page) {
+        int offset = (page-1)*10;
         List<Board> boardList;
         try {
-            boardList = boardService.findAllByOffset(page);
+            boardList = boardService.findAllByOffset(offset);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -68,7 +81,7 @@ public class BoardController {
     }
 
     @ApiOperation(value = "ID를 이용한 게시글 상세 조회")
-    @GetMapping("/board/{id}")
+    @GetMapping("/boards/{id}")
     public ResponseEntity<?> findBoardById(@PathVariable("id") Long id, Authentication authentication) {
 
         Board board;
@@ -87,25 +100,32 @@ public class BoardController {
     }
 
     @ApiOperation(value = "카테고리별 게시글 조회")
-    @GetMapping("/board/{category}")
-    public ResponseEntity<?> findBoardByCategory(@PathVariable("category") String category) {
-        Board board;
+    @GetMapping("/boards/category/{category}/page/{page}")
+    public ResponseEntity<?> findBoardByCategory(@PathVariable("category") String category,
+                                                 @PathVariable("page") int page) {
+        int offset = (page-1)*10;
+        List<Board> boardList;
         try {
-            board = boardService.findByCategory(category);
+            boardList = boardService.findByCategory(category, offset);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(board, HttpStatus.OK);
+        return new ResponseEntity<>(boardList, HttpStatus.OK);
 
     }
 
     @ApiOperation(value = "게시글 수정")
-    @PutMapping("/board")
+    @PutMapping("/boards")
     public ResponseEntity<?> updateBoard(@RequestBody Board board, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        Claims claims = (Claims) authentication.getPrincipal();
+        Long userId = claims.get("userId", Long.class);
+        board.setUserId(userId);
+
         try {
             boardService.update(board);
         } catch (Exception e) {
@@ -116,13 +136,17 @@ public class BoardController {
     }
 
     @ApiOperation(value = "게시글 삭제")
-    @DeleteMapping("/board/{id}")
+    @DeleteMapping("/boards/{id}")
     public ResponseEntity<?> deleteBoard(@PathVariable("id") Long id, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        Claims claims = (Claims) authentication.getPrincipal();
+        Long userId = claims.get("userId", Long.class);
+
         try {
-            boardService.delete(id);
+            boardService.delete(id, userId);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -131,8 +155,9 @@ public class BoardController {
     }
 
     @ApiOperation(value = "게시글 좋아요(증가,감소)")
-    @PutMapping("/board/likes")
-    public ResponseEntity<?> likesUpdateBoard(@RequestBody Map<String, Object> map, Authentication authentication) {
+    @PutMapping("/boards/{id}/likes")
+    public ResponseEntity<?> likesUpdateBoard(@PathVariable("id") Long id,
+            @RequestBody Map<String, Object> map, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -141,9 +166,9 @@ public class BoardController {
         Claims claims = (Claims) authentication.getPrincipal();
 
         Long userId = claims.get("userId", Long.class);
-        int likes = (int) map.get("likes");
+        int likes = Integer.parseInt(map.get("likes").toString());
         try {
-            boardService.updateLikes(userId, likes);
+            boardService.updateLikes(id, userId, likes);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

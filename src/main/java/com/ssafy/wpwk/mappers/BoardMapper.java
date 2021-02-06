@@ -34,7 +34,7 @@ public interface BoardMapper {
     /**
      * 카테고리를 이용한 게시글 조회
      */
-    Board findByCategory(String category) throws Exception;
+    List<Board> findByCategory(@Param("category") String category, @Param("offset") int offset) throws Exception;
 
     /**
      * 게시글 수정
@@ -54,5 +54,5 @@ public interface BoardMapper {
     /**
      * 게시글 삭제
      */
-    void delete(Long id) throws Exception;
+    void delete(@Param("id")Long id, @Param("userId")Long userId) throws Exception;
 }

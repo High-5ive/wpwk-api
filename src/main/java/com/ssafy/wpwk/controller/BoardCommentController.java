@@ -23,25 +23,40 @@ public class BoardCommentController {
     private BoardCommentServiceImpl boardCommentService;
 
     @ApiOperation(value = "게시글 댓글 작성")
-    @PostMapping("/board/comment")
-    public ResponseEntity<?> addBoardComment(@RequestBody BoardComment comment, Authentication authentication) {
+    @PostMapping("/boardComments/{boardId}")
+    public ResponseEntity<?> addBoardComment(
+            @PathVariable("boardId") Long boardId,
+            @RequestBody BoardComment resource,
+            Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        Claims claims = (Claims) authentication.getPrincipal();
+        Long userId = claims.get("userId", Long.class);
+        String writer = claims.get("nickname", String.class);
+
+        BoardComment boardComment = BoardComment
+                .builder()
+                .comment(resource.getComment())
+                .boardId(boardId)
+                .userId(userId)
+                .writer(writer)
+                .build();
+
         try {
-            boardCommentService.addBoardComment(comment);
+            boardCommentService.addBoardComment(boardComment);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "게시글 댓글 전체 조회")
-    @GetMapping("/board")
-    public ResponseEntity<?> findALl() {
+    @GetMapping("/boardComments")
+    public ResponseEntity<?> findAll() {
         List<BoardComment> boardCommentList;
 
         try {
@@ -53,12 +68,35 @@ public class BoardCommentController {
         return new ResponseEntity<>(boardCommentList, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "게시글 ID를 이용한 게시글 댓글 조회")
+    @GetMapping("/boardComments/boards/{boardId}/page/{page}")
+    public ResponseEntity<?> findByBoardIdAndOffset(
+            @PathVariable("boardId") Long boardId,
+            @PathVariable("page") int page
+    ) {
+        int offset = (page-1) * 15;
+        List<BoardComment> boardCommentList;
+
+        try {
+            boardCommentList = boardCommentService.findByBoardIdAndOffset(boardId, offset);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(boardCommentList, HttpStatus.OK);
+    }
+
     @ApiOperation(value = "게시글 댓글 수정")
-    @PutMapping("/board")
+    @PutMapping("/boardComments")
     public ResponseEntity<?> updateBoardComment(@RequestBody BoardComment boardComment, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        Claims claims = (Claims) authentication.getPrincipal();
+        Long userId = claims.get("userId", Long.class);
+        boardComment.setUserId(userId);
+
         try {
             boardCommentService.updateComment(boardComment);
         } catch (Exception e) {
@@ -69,7 +107,7 @@ public class BoardCommentController {
     }
 
     @ApiOperation(value = "게시글 댓글 삭제")
-    @DeleteMapping("/board/{id}")
+    @DeleteMapping("/boardComments/{id}")
     public ResponseEntity<?> deleteBoardComment(@PathVariable("id") Long id, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

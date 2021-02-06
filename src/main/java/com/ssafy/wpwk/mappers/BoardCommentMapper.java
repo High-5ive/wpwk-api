@@ -1,6 +1,5 @@
 package com.ssafy.wpwk.mappers;
 
-import com.ssafy.wpwk.model.Board;
 import com.ssafy.wpwk.model.BoardComment;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -25,7 +24,7 @@ public interface BoardCommentMapper {
     /**
      * 게시글에서 페이지별 게시글 댓글 조회
      */
-    List<BoardComment> findAllByBoardIdAndOffset(
+    List<BoardComment> findByBoardIdAndOffset(
             @Param("boardId")Long boardId,
             @Param("offset")int offset) throws Exception;
 
@@ -37,5 +36,5 @@ public interface BoardCommentMapper {
     /**
      * 게시글 댓글 삭제
      */
-    void delete(Long id) throws Exception;
+    void delete(@Param("id")Long id, @Param("userId")Long userId) throws Exception;
 }
