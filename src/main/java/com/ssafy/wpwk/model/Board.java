@@ -27,6 +27,11 @@ public class Board {
     private String writer;
 
     /**
+     * 게시글 카테고리
+     * */
+    private String category;
+
+    /**
      * 게시글 좋아요 개수
      * */
     private int likes;
