@@ -46,6 +46,7 @@ public class UserController {
 
         User user = User.builder()
                 .email(resource.getEmail())
+                .password(resource.getPassword())
                 .nickname(resource.getNickname())
                 .status(0)
                 .build();
