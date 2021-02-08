@@ -61,7 +61,6 @@ public class KakaoLoginController {
             Gson gsonObj = new Gson();
             Map map = gsonObj.fromJson(data, Map.class);
             accsesToken = map.get("access_token").toString();
-            System.out.println(response.getBody());
 
             //  user 정보 가져오기
             RestTemplate rt2 = new RestTemplate();
@@ -89,7 +88,6 @@ public class KakaoLoginController {
             email = userInfoElement.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
 
             User user = userService.findUserByEmail(email);
-            System.out.println(user);
             if (user == null) {
                 user = User.builder()
                         .email(email)
