@@ -61,21 +61,19 @@ public class ContentsServiceImpl implements ContentsService {
     }
 
     /**
-     * 키워드를 이용한 컨텐츠 조회
+     * 키워드(태그,제목,제작자)가 포함된 컨텐츠 리스트 조회
      */
     @Override
-    public List<Contents> findContentsByKeyword(HashMap<String, String> map) throws Exception {
+    public List<Contents> findContentsByKeyword(String keyword) throws Exception {
 
-        if (map.get("option").equals("tagName")) {
-            List<Contents> contentsList = contentsMapper.findContentsByTagName(map.get("keyword"));
 
-            for (Contents contents : contentsList) {
-                List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
-                contents.setTagList(tagList);
-            }
-            return contentsList;
+        List<Contents> contentsList = contentsMapper.findContentsByKeyword(keyword);
+
+        for (Contents contents : contentsList) {
+            List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
+            contents.setTagList(tagList);
         }
-        return contentsMapper.findContentsByKeyword(map);
+        return contentsList;
     }
 
     /**
@@ -123,7 +121,6 @@ public class ContentsServiceImpl implements ContentsService {
     public void delete(Long id) throws Exception {
         contentsMapper.delete(id);
     }
-
 
 
 }

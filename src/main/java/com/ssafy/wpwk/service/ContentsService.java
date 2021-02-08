@@ -19,9 +19,9 @@ public interface ContentsService {
     Contents findContentsById(Long id) throws Exception;
 
     /**
-     * 키워드를 이용한 컨텐츠 조회
+     * 키워드(태그,제목,제작자)가 포함된 컨텐츠 리스트 조회
      */
-    List<Contents> findContentsByKeyword(HashMap<String, String> map) throws Exception;
+    List<Contents> findContentsByKeyword(String keyword) throws Exception;
 
     /**
      * 컨텐츠 전체 조회
