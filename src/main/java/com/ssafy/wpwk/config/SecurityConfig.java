@@ -21,8 +21,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${jwt.token}")
     private String secretKey;
 
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
