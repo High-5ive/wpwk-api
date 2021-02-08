@@ -1,8 +1,11 @@
 package com.ssafy.wpwk.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.ssafy.wpwk.model.User;
 import com.ssafy.wpwk.service.UserService;
+import com.ssafy.wpwk.utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
@@ -13,13 +16,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
 public class KakaoLoginController {
+
+    @Autowired
+    private JWTUtil jwtUtil;
 
     @Autowired
     private UserService userService;
@@ -29,7 +34,7 @@ public class KakaoLoginController {
 
     @GetMapping(value = "/kakao/{code}")
     public ResponseEntity<?> login(@PathVariable("code") String authorize_code) {
-        String accsesToken = "",email="",nickname="";
+        String accsesToken = "", email = "", nickname = "";
 
         try {
             RestTemplate rt = new RestTemplate();
@@ -73,35 +78,35 @@ public class KakaoLoginController {
                     kakaoProfileRequest,
                     String.class
             );
-            System.out.println(profileResponse.getBody());
-            data = response.getBody();
-            gsonObj = new Gson();
-            map = gsonObj.fromJson(data, Map.class);
-             email = map.get("email").toString();
-             nickname = map.get("nickname").toString();
-            User user = userService.findUserByEmail(email);
 
+            String kakaUserData = profileResponse.getBody();
+
+            JsonParser parser = new JsonParser();
+
+            JsonElement userInfoElement = parser.parse(kakaUserData);
+
+            nickname = userInfoElement.getAsJsonObject().get("kakao_account").getAsJsonObject().get("profile").getAsJsonObject().get("nickname").getAsString();
+            email = userInfoElement.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
+
+            User user = userService.findUserByEmail(email);
+            System.out.println(user);
             if (user == null) {
                 user = User.builder()
                         .email(email)
                         .password(INIT_PASSWORD)
                         .nickname(nickname)
                         .status(1)
-                        .provider("naver")
+                        .provider("kakao")
                         .build();
 
                 userService.insertUser(user);
             }
-
+            String jwtToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getNickname());
+            return new ResponseEntity<>(jwtToken, HttpStatus.OK);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        Map<String, String> res = new HashMap<>();
-        res.put("accessToken", accsesToken);
-        res.put("email", email);
-        res.put("nickname", nickname);
-
-        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }
