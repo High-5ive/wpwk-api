@@ -55,4 +55,10 @@ public interface BoardMapper {
      * 게시글 삭제
      */
     void delete(@Param("id")Long id, @Param("userId")Long userId) throws Exception;
+
+    /**
+     * 게시글 댓글수 증가
+     */
+    void updateCommentsCnt(@Param("id") Long id,@Param("cnt") int cnt) throws Exception;
+
 }

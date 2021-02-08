@@ -30,5 +30,5 @@ public interface BoardCommentService {
     /**
      * 게시글 댓글 삭제
      */
-    void deleteComment(Long boardId, Long userId) throws Exception;
+    void deleteComment(Long boardCommentId, Long userId, Long boardId) throws Exception;
 }

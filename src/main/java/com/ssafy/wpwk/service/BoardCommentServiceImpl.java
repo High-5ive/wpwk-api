@@ -2,6 +2,7 @@ package com.ssafy.wpwk.service;
 
 
 import com.ssafy.wpwk.mappers.BoardCommentMapper;
+import com.ssafy.wpwk.mappers.BoardMapper;
 import com.ssafy.wpwk.model.BoardComment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,15 @@ public class BoardCommentServiceImpl implements BoardCommentService {
     @Autowired
     private BoardCommentMapper boardCommentMapper;
 
+    @Autowired
+    private BoardMapper boardMapper;
     /**
      * 게시글 댓글 등록
      */
     @Override
     public void addBoardComment(BoardComment boardComment) throws Exception {
         boardCommentMapper.create(boardComment);
+        boardMapper.updateCommentsCnt(boardComment.getBoardId(),1);
     }
 
     /**
@@ -50,8 +54,9 @@ public class BoardCommentServiceImpl implements BoardCommentService {
      * 게시글 댓글 삭제
      */
     @Override
-    public void deleteComment(Long boardCommentId, Long userId) throws Exception {
+    public void deleteComment(Long boardCommentId, Long userId,Long boardId) throws Exception {
         boardCommentMapper.delete(boardCommentId, userId);
+        boardMapper.updateCommentsCnt(boardId,-1);
     }
 
 

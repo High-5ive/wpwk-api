@@ -73,7 +73,7 @@ public class ContentsController {
     }
 
     @ApiOperation(value = "키워드(태그,제목,제작자)가 포함된 컨텐츠 리스트 제공", response = List.class)
-    @GetMapping("/contents/{keyword}")
+    @GetMapping("/contents/keyword/{keyword}")
     public ResponseEntity<?> findContents(@PathVariable String keyword) {
         List<Contents> contentsList;
         try {

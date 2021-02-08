@@ -92,8 +92,8 @@
         u.nickname
         FROM contents c , user u
         WHERE nickname LIKE CONCAT('%',#{keyword},'%')
-        OR tag =LIKE CONCAT('%', #{keyword},'%')
-        OR title =LIKE CONCAT('%',#{keyword},'%')
+        OR tag LIKE CONCAT('%', #{keyword},'%')
+        OR title LIKE CONCAT('%',#{keyword},'%')
         ORDER BY id DESC;
     </select>
 

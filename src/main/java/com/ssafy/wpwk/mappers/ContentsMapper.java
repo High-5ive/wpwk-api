@@ -53,8 +53,4 @@ public interface ContentsMapper {
      */
     void delete(Long id) throws Exception;
 
-    /**
-     * 컨텐츠 역량 수정
-     */
-    void updateAbilities(@Param("id") Long id, @Param("contentsAbility") AbilityRequestDTO abilityRequestDTO);
 }

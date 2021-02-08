@@ -107,15 +107,15 @@ public class BoardCommentController {
     }
 
     @ApiOperation(value = "게시글 댓글 삭제")
-    @DeleteMapping("/boardComments/{id}")
-    public ResponseEntity<?> deleteBoardComment(@PathVariable("id") Long id, Authentication authentication) {
+    @DeleteMapping("/boardComments/{id}/boards/{boardId}")
+    public ResponseEntity<?> deleteBoardComment(@PathVariable("id") Long id, @PathVariable("boardId")Long boardId, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Claims claims = (Claims) authentication.getPrincipal();
         Long userId = claims.get("userId", Long.class);
         try {
-            boardCommentService.deleteComment(id, userId);
+            boardCommentService.deleteComment(id, userId,boardId);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -17,6 +17,7 @@
                b.category,
                b.likes,
                b.views,
+               b.comments,
                b.created_at,
                b.created_by,
                u.id as user_id,
@@ -33,6 +34,7 @@
                b.category,
                b.likes,
                b.views,
+               b.comments,
                b.created_at,
                b.created_by,
                u.id as user_id,
@@ -50,6 +52,7 @@
                b.category,
                b.likes,
                b.views,
+               b.comments,
                b.created_at,
                b.created_by,
                u.id as user_id,
@@ -66,6 +69,7 @@
                b.category,
                b.likes,
                b.views,
+               b.comments,
                b.created_at,
                b.created_by,
                u.id as user_id,
@@ -99,6 +103,13 @@
     <update id="increaseViews">
         UPDATE board SET
         views = views + 1
+        WHERE id = #{id}
+    </update>
+
+    <!-- 게시글 댓글수 증가 / 감소-->
+    <update id="updateCommentsCnt">
+        UPDATE board SET
+            comments = comments + #{cnt}
         WHERE id = #{id}
     </update>
 

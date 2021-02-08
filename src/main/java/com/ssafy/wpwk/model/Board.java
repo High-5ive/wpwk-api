@@ -47,6 +47,11 @@ public class Board {
     private int views;
 
     /**
+     * 게시글 댓글수
+     * */
+    private int comments;
+
+    /**
      * 게시글 생성일자
      * */
     private LocalDateTime createdAt;
