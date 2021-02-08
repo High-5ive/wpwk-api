@@ -72,15 +72,13 @@ public class ContentsController {
         return new ResponseEntity<>(contents, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "키워드(태그,제목,제작자)로 검색한 컨텐츠 리스트 제공", response = List.class)
-    @GetMapping("/contents/{option}/{keyword}")
-    public ResponseEntity<?> findContents(@PathVariable String option, @PathVariable String keyword) {
+    @ApiOperation(value = "키워드(태그,제목,제작자)가 포함된 컨텐츠 리스트 제공", response = List.class)
+    @GetMapping("/contents/{keyword}")
+    public ResponseEntity<?> findContents(@PathVariable String keyword) {
         List<Contents> contentsList;
-        HashMap<String, String> map = new HashMap<>();
         try {
-            map.put("option", option); // option : title, keyword : 보육
-            map.put("keyword", keyword); // option : title, keyword : 보육
-            contentsList = contentsService.findContentsByKeyword(map);
+
+            contentsList = contentsService.findContentsByKeyword(keyword);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
