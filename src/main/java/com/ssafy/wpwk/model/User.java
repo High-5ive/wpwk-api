@@ -51,6 +51,12 @@ public class User {
     private String verificationKey;
 
     /**
+     * 제공 소셜
+     * */
+    private String provider;
+
+
+    /**
      * 회원 생성일자
      * */
     private LocalDateTime createdAt;

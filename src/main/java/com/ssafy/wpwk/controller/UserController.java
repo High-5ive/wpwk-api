@@ -44,10 +44,11 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-        User user = User.builder().email(resource.getEmail())
+        User user = User.builder()
+                .email(resource.getEmail())
+                .password(resource.getPassword())
                 .nickname(resource.getNickname())
-                .createdBy("server1")
-                .updatedBy("server1")
+                .status(0)
                 .build();
 
         try {

@@ -10,8 +10,12 @@
     </select>
 
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.ssafy.wpwk.model.User">
-        INSERT INTO user (email, password, nickname, verification_key, created_by, updated_by)
-        VALUES (#{email}, #{password}, #{nickname}, #{verificationKey}, #{createdBy}, #{updatedBy})
+        INSERT INTO user (email, password, nickname,
+                          status, verification_key,
+                          provider, created_by, updated_by)
+        VALUES (#{email}, #{password}, #{nickname},
+                #{status}, #{verificationKey},
+                #{provider}, "server1", "server1")
     </insert>
 
     <select id="findUserById" resultType="com.ssafy.wpwk.model.User">
