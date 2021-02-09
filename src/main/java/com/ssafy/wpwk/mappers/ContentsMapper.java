@@ -21,7 +21,7 @@ public interface ContentsMapper {
     /**
      * 키워드(태그,제목,제작자)가 포함된 컨텐츠 리스트 조회
      */
-    List<Contents> findContentsByKeyword(@Param("keyword") String keyword) throws Exception;
+    List<Contents> findContentsByKeyword(String keyword) throws Exception;
 
     /**
      * 컨텐츠 전체 조회
@@ -39,9 +39,10 @@ public interface ContentsMapper {
     Contents findContentsById(Long id) throws Exception;
 
     /**
-     * ID를 이용한 컨텐츠 조회
+     * 태그를 이용한 컨텐츠 조회
      */
-    List<Contents> findContentsByTagName(String tag) throws Exception;
+    List<Contents> findContentsByTag(@Param("tag")String tag,
+                                         @Param("offset")int offset) throws Exception;
 
     /**
      * 컨텐츠 수정

@@ -67,7 +67,7 @@
     </select>
 
     <!-- 컨텐츠 검색 이용한 조회 -->
-    <select id="findContentsByTagName" resultType="com.ssafy.wpwk.model.Contents">
+    <select id="findContentsByTag" resultType="com.ssafy.wpwk.model.Contents" parameterType="map">
         SELECT DISTINCT c.id, c.user_id, c.title,
                c.spend_time, c.likes, c.views, c.ability, c.thumb,
                c.created_at, c.updated_at, u.nickname
@@ -75,13 +75,14 @@
         JOIN contents_tag ct ON c.id = ct.contents_id
         JOIN tags t ON ct.tags_id = t.id
         JOIN user u ON c.user_id = u.id
-        WHERE t.name LIKE CONCAT('%', #{tag}, '%')
+        WHERE t.name = #{tag}
         ORDER BY c.id DESC
+        LIMIT 10 OFFSET #{offset}
     </select>
 
     <!-- 컨텐츠 검색 이용한 조회 (추가 수정 필요) -->
     <select id="findContentsByKeyword" resultType="com.ssafy.wpwk.model.Contents" >
-        SELECT c.id,
+        SELECT DISTINCT c.id,
         c.title,
         c.spend_time,
         c.likes,
@@ -90,9 +91,9 @@
         c.created_by,
         u.id as user_id,
         u.nickname
-        FROM contents c , user u
+        FROM contents c JOIN user u
+        ON c.user_id = u.id
         WHERE nickname LIKE CONCAT('%',#{keyword},'%')
-        OR tag LIKE CONCAT('%', #{keyword},'%')
         OR title LIKE CONCAT('%',#{keyword},'%')
         ORDER BY id DESC;
     </select>

@@ -1,10 +1,7 @@
 package com.ssafy.wpwk.controller;
 
-import com.ssafy.wpwk.model.AbilityRequestDTO;
 import com.ssafy.wpwk.model.Contents;
-import com.ssafy.wpwk.model.User;
 import com.ssafy.wpwk.service.ContentsServiceImpl;
-import com.ssafy.wpwk.service.UserServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.ssafy.wpwk.utils.ExceptionUtil.isInValidAuthentication;
@@ -79,6 +75,25 @@ public class ContentsController {
         try {
 
             contentsList = contentsService.findContentsByKeyword(keyword);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if (contentsList == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        else
+            return new ResponseEntity<>(contentsList, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "키워드(태그,제목,제작자)가 포함된 컨텐츠 리스트 제공", response = List.class)
+    @GetMapping("/contents/tags/{tag}/page/{page}")
+    public ResponseEntity<?> findContentsByTag(@PathVariable("tag") String tag,
+                                               @PathVariable("page") int page) {
+        List<Contents> contentsList;
+        try {
+
+            contentsList = contentsService.findContentsByTag(tag, page);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

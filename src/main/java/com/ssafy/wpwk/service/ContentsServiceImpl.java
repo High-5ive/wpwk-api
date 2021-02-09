@@ -3,14 +3,11 @@ package com.ssafy.wpwk.service;
 import com.ssafy.wpwk.mappers.ContentsItemMapper;
 import com.ssafy.wpwk.mappers.ContentsMapper;
 import com.ssafy.wpwk.mappers.TagMapper;
-import com.ssafy.wpwk.model.AbilityRequestDTO;
 import com.ssafy.wpwk.model.Contents;
-import com.ssafy.wpwk.model.ContentsItem;
 import com.ssafy.wpwk.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -73,6 +70,18 @@ public class ContentsServiceImpl implements ContentsService {
             List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
             contents.setTagList(tagList);
         }
+        return contentsList;
+    }
+
+    @Override
+    public List<Contents> findContentsByTag(String tag, int page) throws Exception {
+        int offset = (page - 1) * CNT_PAGE;
+        List<Contents> contentsList = contentsMapper.findContentsByTag(tag, offset);
+        for (Contents contents : contentsList) {
+            List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
+            contents.setTagList(tagList);
+        }
+
         return contentsList;
     }
 

@@ -24,6 +24,11 @@ public interface ContentsService {
     List<Contents> findContentsByKeyword(String keyword) throws Exception;
 
     /**
+     * 태그를 이용한 컨텐츠 조회
+     */
+    List<Contents> findContentsByTag(String tag, int page) throws Exception;
+
+    /**
      * 컨텐츠 전체 조회
      */
     List<Contents> findAllContents() throws Exception;
