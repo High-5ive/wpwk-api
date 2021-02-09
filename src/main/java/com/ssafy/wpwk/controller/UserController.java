@@ -52,7 +52,7 @@ public class UserController {
                 .build();
 
         try {
-            userService.insertUser(user);
+            userService.insertUser(user, true);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

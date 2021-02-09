@@ -14,7 +14,7 @@ public interface UserService {
     /**
      * 사용자 회원 가입
      */
-    void insertUser(User user) throws UnsupportedEncodingException, MessagingException;
+    void insertUser(User user, boolean isDefault) throws UnsupportedEncodingException, MessagingException;
 
     /**
      * 이메일을 이용한 사용자 조회

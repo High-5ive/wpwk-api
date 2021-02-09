@@ -97,7 +97,7 @@ public class KakaoLoginController {
                         .provider("kakao")
                         .build();
 
-                userService.insertUser(user);
+                userService.insertUser(user, false);
             }
             String jwtToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getNickname());
             return new ResponseEntity<>(jwtToken, HttpStatus.OK);

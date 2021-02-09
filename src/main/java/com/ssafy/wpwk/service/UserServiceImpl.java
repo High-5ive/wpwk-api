@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
      * 사용자 회원가입
      */
     @Override
-    public void insertUser(User user) throws UnsupportedEncodingException, MessagingException {
+    public void insertUser(User user, boolean isDefault) throws UnsupportedEncodingException, MessagingException {
 
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
@@ -41,7 +41,8 @@ public class UserServiceImpl implements UserService {
         userMapper.insertUser(user);
 
         // TODO: 인증메일 전송요청처리
-        mailService.sendAuthMail(user, verificationKey);
+        if(isDefault)
+            mailService.sendAuthMail(user, verificationKey);
     }
 
     /**

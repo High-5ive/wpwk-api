@@ -65,7 +65,7 @@ public class NaverLoginController {
                     .provider("naver")
                     .build();
 
-            userService.insertUser(user);
+            userService.insertUser(user, false);
         }
 
         System.out.println(user.getId());
