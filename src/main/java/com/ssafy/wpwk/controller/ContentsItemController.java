@@ -17,24 +17,23 @@ public class ContentsItemController {
     @Autowired
     ContentsItemServiceImpl contentsItemService;
 
-    @ApiOperation(value = "페이지별 컨텐츠 아이템 정보 가져오기")
-    @GetMapping("/contentsItem/{id}/{pageNo}")
-    public ResponseEntity<?> readByPage(@PathVariable("id") Long id,
-                                        @PathVariable("pageNo") int pageNo) {
+    @ApiOperation(value = "컨텐츠 아이템 정보 가져오기")
+    @GetMapping("/contentsItem/{id}")
+    public ResponseEntity<?> readByPage(@PathVariable("id") Long id) {
 
-        ContentsItem contentsItem;
+        List<ContentsItem> contentsItemList;
 
         try {
-            contentsItem = contentsItemService.findByContentsIdAndPageNo(id, pageNo);
+            contentsItemList = contentsItemService.findByContentsItemList(id);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if (contentsItem == null) {
+        if (contentsItemList == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 해당 아이템이 없기때문에 NO CONTENT 전닫
         }
-        return new ResponseEntity<>(contentsItem, HttpStatus.OK);
+        return new ResponseEntity<>(contentsItemList, HttpStatus.OK);
     }
 
     @ApiOperation(value = "컨텐츠 아이템 수정")

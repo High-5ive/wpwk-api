@@ -16,12 +16,11 @@
     </insert>
 
     <!-- 컨텐츠 아이디와 페이지 번호를 이용한 컨텐츠 아이템 조회 -->
-    <select id="findByContentsIdAndPageNo" resultType="com.ssafy.wpwk.model.ContentsItem" parameterType="Map">
+    <select id="findByContentsItemList" resultType="com.ssafy.wpwk.model.ContentsItem" >
         SELECT id, youtube_id, youtube_title, youtube_thumbnail,
                image_address, video_address, description, page_no, contents_id
         FROM contents_item
         WHERE contents_id = #{contentsId}
-          AND page_no = #{pageNo}
     </select>
 
     <!-- 컨텐츠 아이디를 이용한 컨텐츠 아이템 조회 -->

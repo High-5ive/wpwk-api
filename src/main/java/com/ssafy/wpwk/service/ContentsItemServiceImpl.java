@@ -17,8 +17,8 @@ public class ContentsItemServiceImpl implements ContentsItemService {
      * 페이지 번호와 컨텐츠 아이디를 통한 컨텐츠 아이템 조회
      */
     @Override
-    public ContentsItem findByContentsIdAndPageNo(Long contentsId, int pageNo) throws Exception {
-        return contentsItemMapper.findByContentsIdAndPageNo(contentsId, pageNo);
+    public List<ContentsItem> findByContentsItemList(Long contentsId) throws Exception {
+        return contentsItemMapper.findByContentsItemList(contentsId);
     }
 
     /**

@@ -7,9 +7,9 @@ import java.util.List;
 public interface ContentsItemService {
 
     /**
-     * 페이지 번호와 컨텐츠 아이디를 이용한 컨텐츠 아이템 조회
+     * 페컨텐츠 아이디를 이용한 컨텐츠 아이템 조회
      */
-    ContentsItem findByContentsIdAndPageNo(Long contentsId, int pageNo) throws Exception;
+    List<ContentsItem> findByContentsItemList(Long contentsId) throws Exception;
 
     /**
      * 컨텐츠 아이디를 이용한 컨텐츠 아이템 추가
