@@ -87,4 +87,10 @@ public class Contents {
      * 컨텐츠 해시태그 리스트
      * */
     private List<Tag> tagList;
+
+    /**
+     * 컨텐츠 즐겨찾기 여부
+     * */
+    private boolean isFavorite;
+
 }

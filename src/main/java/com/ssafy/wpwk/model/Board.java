@@ -70,4 +70,9 @@ public class Board {
      * 게시글 수정자
      * */
     private String updatedBy;
+
+    /**
+     * 게시글 좋아요 여부
+     * */
+    private boolean isLiked;
 }

@@ -21,17 +21,17 @@ public interface BoardService {
     /**
      * 페이지별 게시글 조회
      */
-    List<Board> findAllByOffset(int offset) throws Exception;
+    List<Board> findAllByOffset(int offset,Long userId) throws Exception;
 
     /**
      * ID를 이용한 게시글 상세조회
      */
-    Board findById(Long id) throws Exception;
+    Board findById(Long id,Long userId) throws Exception;
 
     /**
      * 카테고리를 이용한 게시글 상세조회
      */
-    List<Board> findByCategory(String category, int offset) throws Exception;
+    List<Board> findByCategory(String category, int offset,Long userId) throws Exception;
 
     /**
      * 게시글 수정

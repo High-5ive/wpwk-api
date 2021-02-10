@@ -32,24 +32,24 @@ public class BoardServiceImpl implements BoardService {
      * 페이지별 게시글 조회
      */
     @Override
-    public List<Board> findAllByOffset(int offset) throws Exception {
-        return boardMapper.findAllByOffset(offset);
+    public List<Board> findAllByOffset(int offset,Long userId) throws Exception {
+        return boardMapper.findAllByOffset(offset,userId);
     }
 
     /**
      * ID를 이용한 컨텐츠 상세조회
      */
     @Override
-    public Board findById(Long id) throws Exception {
-        return boardMapper.findById(id);
+    public Board findById(Long id,Long userId) throws Exception {
+        return boardMapper.findById(id,userId);
     }
 
     /**
      * 카테고리를 이용한 게시글 상세조회
      */
     @Override
-    public List<Board> findByCategory(String category, int offset) throws Exception {
-        return boardMapper.findByCategory(category, offset);
+    public List<Board> findByCategory(String category, int offset,Long userId) throws Exception {
+        return boardMapper.findByCategory(category, offset,userId);
     }
 
     /**

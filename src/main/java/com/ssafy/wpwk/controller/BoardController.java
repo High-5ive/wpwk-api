@@ -68,11 +68,18 @@ public class BoardController {
 
     @ApiOperation(value = "페이지별 게시글 조회")
     @GetMapping("/boards/page/{page}")
-    public ResponseEntity<?> findAllByOffset(@PathVariable("page") int page) {
+    public ResponseEntity<?> findAllByOffset(@PathVariable("page") int page,Authentication authentication) {
         int offset = (page-1)*10;
         List<Board> boardList;
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Claims claims = (Claims)authentication.getPrincipal();
+        Long userId = claims.get("userId", Long.class);
+
         try {
-            boardList = boardService.findAllByOffset(offset);
+            boardList = boardService.findAllByOffset(offset,userId);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -89,9 +96,10 @@ public class BoardController {
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
+        Claims claims = (Claims)authentication.getPrincipal();
+        Long userId = claims.get("userId", Long.class);
         try {
-            board = boardService.findById(id);
+            board = boardService.findById(id,userId);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -102,11 +110,16 @@ public class BoardController {
     @ApiOperation(value = "카테고리별 게시글 조회")
     @GetMapping("/boards/category/{category}/page/{page}")
     public ResponseEntity<?> findBoardByCategory(@PathVariable("category") String category,
-                                                 @PathVariable("page") int page) {
+                                                 @PathVariable("page") int page ,Authentication authentication) {
         int offset = (page-1)*10;
         List<Board> boardList;
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Claims claims = (Claims)authentication.getPrincipal();
+        Long userId = claims.get("userId", Long.class);
         try {
-            boardList = boardService.findByCategory(category, offset);
+            boardList = boardService.findByCategory(category, offset,userId);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

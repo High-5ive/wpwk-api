@@ -27,7 +27,7 @@
         ORDER BY b.id DESC
     </select>
 
-    <!-- 페이지별 카테고리 조회 -->
+    <!-- 페이지별 게시글 조회 -->
     <select id="findAllByOffset" resultType="com.ssafy.wpwk.model.Board">
         SELECT b.id,
                b.content,
@@ -38,9 +38,10 @@
                b.created_at,
                b.created_by,
                u.id as user_id,
-               u.nickname as writer
-        FROM board b, user u
-        WHERE b.user_id = u.id
+               u.nickname as writer,
+               CASE WHEN bl.id IS NULL THEN 'false' ELSE 'true' END as 'isLiked'
+        FROM board b join user u ON b.user_id = u.id
+        left join board_like bl ON b.id= bl.board_id and bl.user_id = #{userId}
         ORDER BY b.id DESC
         LIMIT 10 OFFSET #{offset}
     </select>
@@ -56,10 +57,11 @@
                b.created_at,
                b.created_by,
                u.id as user_id,
-               u.nickname as writer
-        FROM board b, user u
-        WHERE b.user_id = u.id
-        AND b.id = #{id}
+               u.nickname as writer,
+               CASE WHEN bl.id IS NULL THEN 'false' ELSE 'true' END as 'isLiked'
+        FROM board b join user u ON  b.user_id = u.id
+        left join board_like bl ON b.id= bl.board_id and bl.user_id = #{userId}
+        where b.id = #{id}
     </select>
 
     <!-- 카테고리를 이용한 게시글 조회 -->
@@ -73,10 +75,11 @@
                b.created_at,
                b.created_by,
                u.id as user_id,
-               u.nickname as writer
-        FROM board b, user u
-        WHERE b.user_id = u.id
-        AND b.category = #{category}
+               u.nickname as writer,
+               CASE WHEN bl.id IS NULL THEN 'false' ELSE 'true' END as 'isLiked'
+        FROM board b join user u ON b.user_id = u.id
+        left join board_like bl ON b.id= bl.board_id and bl.user_id = #{userId}
+        WHERE b.category = #{category}
         ORDER BY b.id DESC
         LIMIT 10 OFFSET #{offset}
     </select>

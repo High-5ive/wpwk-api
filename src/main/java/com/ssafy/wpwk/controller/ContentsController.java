@@ -69,12 +69,13 @@ public class ContentsController {
     }
 
     @ApiOperation(value = "키워드(태그,제목,제작자)가 포함된 컨텐츠 리스트 제공", response = List.class)
-    @GetMapping("/contents/keyword/{keyword}")
-    public ResponseEntity<?> findContents(@PathVariable String keyword) {
+    @GetMapping("/contents/keyword/{keyword}/page/{page}")
+    public ResponseEntity<?> findContents(@PathVariable("keyword") String keyword , @PathVariable("page") int page,Authentication authentication) {
         List<Contents> contentsList;
         try {
-
-            contentsList = contentsService.findContentsByKeyword(keyword);
+            Claims claims = (Claims) authentication.getPrincipal();
+            Long userId = claims.get("userId", Long.class);
+            contentsList = contentsService.findContentsByKeyword(keyword,page,userId);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -86,14 +87,15 @@ public class ContentsController {
             return new ResponseEntity<>(contentsList, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "키워드(태그,제목,제작자)가 포함된 컨텐츠 리스트 제공", response = List.class)
+    @ApiOperation(value = "태그가 포함된 컨텐츠 리스트 제공", response = List.class)
     @GetMapping("/contents/tags/{tag}/page/{page}")
     public ResponseEntity<?> findContentsByTag(@PathVariable("tag") String tag,
-                                               @PathVariable("page") int page) {
+                                               @PathVariable("page") int page ,Authentication authentication) {
         List<Contents> contentsList;
         try {
-
-            contentsList = contentsService.findContentsByTag(tag, page);
+            Claims claims = (Claims) authentication.getPrincipal();
+            Long userId = claims.get("userId", Long.class);
+            contentsList = contentsService.findContentsByTag(tag, page,userId);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -123,10 +125,12 @@ public class ContentsController {
 
     @ApiOperation(value = "페이지별 컨텐츠 리스트 제공", response = List.class)
     @GetMapping("/contents/page/{page}")
-    public ResponseEntity<?> findAllContentsByPage(@PathVariable("page") int page) {
+    public ResponseEntity<?> findAllContentsByPage(@PathVariable("page") int page,Authentication authentication) {
         List<Contents> contentsList;
         try {
-            contentsList = contentsService.findAllContentsByPage(page);
+            Claims claims = (Claims) authentication.getPrincipal();
+            Long userId = claims.get("userId", Long.class);
+            contentsList = contentsService.findAllContentsByPage(page,userId);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -163,7 +167,6 @@ public class ContentsController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
 
 }

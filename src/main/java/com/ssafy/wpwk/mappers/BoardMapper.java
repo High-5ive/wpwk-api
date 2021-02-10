@@ -24,17 +24,17 @@ public interface BoardMapper {
     /**
      * 페이지별 게시글 조회
      */
-    List<Board> findAllByOffset(int offset) throws Exception;
+    List<Board> findAllByOffset(@Param("offset") int offset,@Param("userId")Long userId) throws Exception;
 
     /**
      * ID를 이용한 게시글 상세조회
      */
-    Board findById(Long id) throws Exception;
+    Board findById(@Param("id") Long id,@Param("userId")Long userId) throws Exception;
 
     /**
      * 카테고리를 이용한 게시글 조회
      */
-    List<Board> findByCategory(@Param("category") String category, @Param("offset") int offset) throws Exception;
+    List<Board> findByCategory(@Param("category") String category, @Param("offset") int offset , @Param("userId")Long userId)  throws Exception;
 
     /**
      * 게시글 수정

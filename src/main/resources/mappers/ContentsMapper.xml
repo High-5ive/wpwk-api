@@ -28,7 +28,7 @@
         ORDER BY c.id DESC
     </select>
 
-    <!--컨텐츠 전체 조회 -->
+    <!--컨텐츠 페이지 별 조회 -->
     <select id="findAllContentsByPage" resultType="com.ssafy.wpwk.model.Contents">
         SELECT c.id,
                c.title,
@@ -40,9 +40,10 @@
                c.created_at,
                c.created_by,
                u.id as user_id,
-               u.nickname
-        FROM contents c, user u
-        WHERE c.user_id = u.id
+               u.nickname,
+               CASE WHEN fc.id IS NULL THEN 'false' ELSE 'true' END as 'favorite'
+        FROM contents c join user u ON c.user_id = u.id
+        LEFT JOIN favorite_contents fc ON c.id =fc.contents_id and fc.user_id =#{userId}
         ORDER BY c.id DESC
         LIMIT 10 OFFSET #{offset}
     </select>
@@ -66,21 +67,32 @@
         ORDER BY c.id DESC
     </select>
 
-    <!-- 컨텐츠 검색 이용한 조회 -->
+    <!-- 태그를 이용한 컨텐츠 조회 -->
     <select id="findContentsByTag" resultType="com.ssafy.wpwk.model.Contents" parameterType="map">
-        SELECT DISTINCT c.id, c.user_id, c.title,
-               c.spend_time, c.likes, c.views, c.ability, c.thumb,
-               c.created_at, c.updated_at, u.nickname
+        SELECT DISTINCT
+                c.id,
+                c.user_id,
+                c.title,
+                c.spend_time,
+                c.likes,
+                c.views,
+                c.ability,
+                c.thumb,
+                c.created_at,
+                c.updated_at,
+                u.nickname,
+               CASE WHEN fc.id IS NULL THEN 'false' ELSE 'true' END as 'favorite'
         FROM contents c
         JOIN contents_tag ct ON c.id = ct.contents_id
         JOIN tags t ON ct.tags_id = t.id
         JOIN user u ON c.user_id = u.id
+        LEFT JOIN favorite_contents fc ON c.id =fc.contents_id and fc.user_id =#{userId}
         WHERE t.name = #{tag}
         ORDER BY c.id DESC
         LIMIT 10 OFFSET #{offset}
     </select>
 
-    <!-- 컨텐츠 검색 이용한 조회 (추가 수정 필요) -->
+    <!-- 키워드(제작자 이름, 제목)을 이용한 컨텐트 조회-->
     <select id="findContentsByKeyword" resultType="com.ssafy.wpwk.model.Contents" >
         SELECT DISTINCT c.id,
         c.title,
@@ -90,12 +102,15 @@
         c.created_at,
         c.created_by,
         u.id as user_id,
-        u.nickname
+        u.nickname,
+        CASE WHEN fc.id IS NULL THEN 'false' ELSE 'true' END as 'favorite'
         FROM contents c JOIN user u
         ON c.user_id = u.id
+        LEFT JOIN favorite_contents fc ON c.id =fc.contents_id and fc.user_id =#{userId}
         WHERE nickname LIKE CONCAT('%',#{keyword},'%')
         OR title LIKE CONCAT('%',#{keyword},'%')
-        ORDER BY id DESC;
+        ORDER BY id DESC
+        LIMIT 10 OFFSET #{offset}
     </select>
 
     <!--데이터 수정 -->

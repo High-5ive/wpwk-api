@@ -1,12 +1,10 @@
 package com.ssafy.wpwk.mappers;
 
-import com.ssafy.wpwk.model.AbilityRequestDTO;
 import com.ssafy.wpwk.model.Contents;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Repository
@@ -21,7 +19,7 @@ public interface ContentsMapper {
     /**
      * 키워드(태그,제목,제작자)가 포함된 컨텐츠 리스트 조회
      */
-    List<Contents> findContentsByKeyword(String keyword) throws Exception;
+    List<Contents> findContentsByKeyword(@Param("keyword") String keyword, @Param("offset") int offset, @Param("userId") Long userId) throws Exception;
 
     /**
      * 컨텐츠 전체 조회
@@ -31,7 +29,7 @@ public interface ContentsMapper {
     /**
      * 컨텐츠 페이지별 조회
      */
-    List<Contents> findAllContentsByPage(int offset) throws Exception;
+    List<Contents> findAllContentsByPage(@Param("offset") int offset, @Param("userId") Long userId) throws Exception;
 
     /**
      * ID를 이용한 컨텐츠 조회
@@ -41,8 +39,8 @@ public interface ContentsMapper {
     /**
      * 태그를 이용한 컨텐츠 조회
      */
-    List<Contents> findContentsByTag(@Param("tag")String tag,
-                                         @Param("offset")int offset) throws Exception;
+    List<Contents> findContentsByTag(@Param("tag") String tag,
+                                     @Param("offset") int offset, @Param("userId") Long userId) throws Exception;
 
     /**
      * 컨텐츠 수정
