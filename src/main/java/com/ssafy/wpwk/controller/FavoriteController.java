@@ -25,7 +25,7 @@ public class FavoriteController {
     public ResponseEntity<?> addFavoriteContents(@RequestBody Map<String, Object> resource,
                                                  Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId", Long.class);
@@ -44,7 +44,7 @@ public class FavoriteController {
     @DeleteMapping("/contents/favorite/{id}")
     public ResponseEntity<?> deleteFavoriteContents(@PathVariable("id") Long id, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId", Long.class);

@@ -42,7 +42,7 @@ public class ContentsCommentController {
     @PostMapping("/contentsComments")
     public ResponseEntity<?> addComment(@RequestBody ContentsComment comment, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
             Claims claims = (Claims) authentication.getPrincipal();
@@ -67,7 +67,7 @@ public class ContentsCommentController {
     @PutMapping("/contentsComments{commentId}")
     public ResponseEntity<?> updateComment(@PathVariable("commentId") Long commentId, @RequestBody Map<String, Object> map, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         try {
@@ -90,7 +90,7 @@ public class ContentsCommentController {
     @DeleteMapping("/contentsComments/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long commentId, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
             Claims claims = (Claims) authentication.getPrincipal();

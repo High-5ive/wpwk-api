@@ -29,6 +29,11 @@ public class MyPageController {
     @ApiOperation(value = "사용자가 제작한 컨텐츠 리스트 조회", response = List.class)
     @GetMapping("/mypage/contents/page/{page}")
     public ResponseEntity<?> findMyContents(@PathVariable("page") int page, Authentication authentication) {
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         List<Contents> contentsList;
 
         try {
@@ -45,6 +50,11 @@ public class MyPageController {
     @ApiOperation(value = "사용자가 작성한 게시글 리스트 조회", response = List.class)
     @GetMapping("/mypage/board/page/{page}")
     public ResponseEntity<?> findMyBoard(@PathVariable("page") int page, Authentication authentication) {
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         List<Board> boardList;
 
         try {
@@ -61,6 +71,11 @@ public class MyPageController {
     @ApiOperation(value = "사용자의 즐겨찾기 컨텐츠 리스트 조회", response = List.class)
     @GetMapping("/mypage/favoriteContents/page/{page}")
     public ResponseEntity<?> findContentsByFavorite(@PathVariable("page") int page, Authentication authentication) {
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         List<Contents> contentsList;
 
         try {
@@ -77,6 +92,11 @@ public class MyPageController {
     @ApiOperation(value = "사용자가 댓글 단 게시글 리스트 조회", response = List.class)
     @GetMapping("/mypage/commentBoard/page/{page}")
     public ResponseEntity<?> findBoardsByComments(@PathVariable("page") int page, Authentication authentication) {
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         List<Board> boardList;
 
         try {

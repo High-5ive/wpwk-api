@@ -34,16 +34,19 @@ public class ContentsReportController {
     @ApiOperation(value = "관리자에게 온 모든 신고 정보 조회")
     @GetMapping("/contentsReport")
     public ResponseEntity<?> allReports(Authentication authentication) {
-        List<ContentsReport> contentsReportList;
+
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
+
+        List<ContentsReport> contentsReportList;
+
         Claims claims = (Claims) authentication.getPrincipal();
         //관리자인지 체크
         Long id = claims.get("userId", Long.class);
         User admin = userService.findUserById(id);
         if (admin.getStatus() != 2) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         try {
@@ -59,7 +62,7 @@ public class ContentsReportController {
     @PostMapping("/contentsReport")
     public ResponseEntity<?> contentsReport(@RequestBody ReportRequsetDTO reportRequsetDTO, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
             Claims claims = (Claims) authentication.getPrincipal();
@@ -78,7 +81,7 @@ public class ContentsReportController {
     public ResponseEntity<?> contentsReportUpdate(@PathVariable("id") Long id, @RequestBody Map<String, Object> map,
                                                   Authentication authentication) throws Exception {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Claims claims = (Claims) authentication.getPrincipal();
         //관리자인지 체크

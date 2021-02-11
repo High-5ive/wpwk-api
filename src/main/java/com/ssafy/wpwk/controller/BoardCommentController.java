@@ -30,7 +30,7 @@ public class BoardCommentController {
             Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();

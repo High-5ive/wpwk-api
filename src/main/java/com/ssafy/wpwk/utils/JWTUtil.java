@@ -16,7 +16,7 @@ public class JWTUtil {
 
     private Key key;
 
-    private long tokenValidMilisecond = 1000L * 60 *60;
+    private long tokenValidMilisecond = 1000L * 15;
 
     public JWTUtil(String key) {
         this.key = Keys.hmacShaKeyFor(key.getBytes());

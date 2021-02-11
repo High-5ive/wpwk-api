@@ -84,6 +84,11 @@ public class UserController {
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         Claims claims = (Claims) authentication.getPrincipal();
         Long userId = claims.get("userId", Long.class);
 
@@ -117,7 +122,7 @@ public class UserController {
                                             Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -156,7 +161,7 @@ public class UserController {
     public ResponseEntity<?> deactivate(Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -173,7 +178,7 @@ public class UserController {
                                         Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -190,7 +195,7 @@ public class UserController {
     public ResponseEntity<?> findUserAbilities(Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -271,7 +276,7 @@ public class UserController {
     public ResponseEntity<?> requestFollowing(@PathVariable("id") Long id, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         //팔로우 신청당하는 사용자의 ID
@@ -295,6 +300,11 @@ public class UserController {
     @ApiOperation(value = "사용자 팔로우&팔로워 리스트 정보 조회")
     @GetMapping("/users/follow")
     public ResponseEntity<?> findFollowerListById(@RequestBody Map<String, Object> map, Authentication authentication) {
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         List<User> followerList;
         Claims claims = (Claims) authentication.getPrincipal();
 

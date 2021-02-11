@@ -56,7 +56,7 @@ public class NotificationController {
     ) {
 
         Long userId = getUserId(authentication);
-        if(userId == null) {  return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        if(userId == null) {  return new ResponseEntity<>(HttpStatus.FORBIDDEN); }
 
         List<Notification> notificationList = notificationService.findAllByUserIdAndNotRead(userId);
 
@@ -74,7 +74,7 @@ public class NotificationController {
     ) {
 
         Long userId = getUserId(authentication);
-        if(userId == null) {  return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        if(userId == null) {  return new ResponseEntity<>(HttpStatus.FORBIDDEN); }
         
         User user = userService.findUserById(userId);
 
@@ -104,7 +104,7 @@ public class NotificationController {
     ) {
 
         Long userId = getUserId(authentication);
-        if(userId == null) {  return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        if(userId == null) {  return new ResponseEntity<>(HttpStatus.FORBIDDEN); }
 
         User user = userService.findUserById(userId);
 
@@ -132,8 +132,12 @@ public class NotificationController {
             Authentication authentication
     ) {
 
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         Long userId = getUserId(authentication);
-        if(userId == null) {  return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        if(userId == null) {  return new ResponseEntity<>(HttpStatus.FORBIDDEN); }
 
         notificationService.confirm(userId);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -146,7 +150,7 @@ public class NotificationController {
 
         Long userId = getUserId(authentication);
 
-        if(userId == null) {  return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        if(userId == null) {  return new ResponseEntity<>(HttpStatus.FORBIDDEN); }
 
         notificationService.deleteByUserId(userId);
         return new ResponseEntity<>(HttpStatus.OK);

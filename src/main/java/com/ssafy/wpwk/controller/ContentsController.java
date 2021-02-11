@@ -27,7 +27,7 @@ public class ContentsController {
     public ResponseEntity<?> create(@RequestBody Contents resource, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -71,7 +71,13 @@ public class ContentsController {
     @ApiOperation(value = "키워드(태그,제목,제작자)가 포함된 컨텐츠 리스트 제공", response = List.class)
     @GetMapping("/contents/keyword/{keyword}/page/{page}")
     public ResponseEntity<?> findContents(@PathVariable("keyword") String keyword, @PathVariable("page") int page, Authentication authentication) {
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         List<Contents> contentsList;
+
         try {
             Claims claims = (Claims) authentication.getPrincipal();
             Long userId = claims.get("userId", Long.class);
@@ -92,6 +98,11 @@ public class ContentsController {
     public ResponseEntity<?> findContentsByTag(@PathVariable("tag") String tag,
                                                @PathVariable("page") int page, Authentication authentication) {
         List<Contents> contentsList;
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         try {
             Claims claims = (Claims) authentication.getPrincipal();
             Long userId = claims.get("userId", Long.class);
@@ -126,7 +137,13 @@ public class ContentsController {
     @ApiOperation(value = "페이지별 컨텐츠 리스트 제공", response = List.class)
     @GetMapping("/contents/page/{page}")
     public ResponseEntity<?> findAllContentsByPage(@PathVariable("page") int page, Authentication authentication) {
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         List<Contents> contentsList;
+
         try {
             Claims claims = (Claims) authentication.getPrincipal();
             Long userId = claims.get("userId", Long.class);
@@ -144,7 +161,13 @@ public class ContentsController {
     @ApiOperation(value = "컨텐츠의 조회수 내림차순으로 리스트 제공", response = List.class)
     @GetMapping("/contents/views/page/{page}")
     public ResponseEntity<?> findContentsByViews(@PathVariable("page") int page, Authentication authentication) {
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         List<Contents> contentsList;
+
         try {
             Claims claims = (Claims) authentication.getPrincipal();
             Long userId = claims.get("userId", Long.class);
@@ -159,7 +182,13 @@ public class ContentsController {
     @ApiOperation(value = "컨텐츠의 좋아요수 내림차순으로 리스트 제공", response = List.class)
     @GetMapping("/contents/likes/page/{page}")
     public ResponseEntity<?> findContentsByLikes(@PathVariable("page") int page, Authentication authentication) {
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         List<Contents> contentsList;
+
         try {
             Claims claims = (Claims) authentication.getPrincipal();
             Long userId = claims.get("userId", Long.class);
