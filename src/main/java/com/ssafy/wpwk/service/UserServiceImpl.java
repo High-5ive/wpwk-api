@@ -118,6 +118,13 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void updateUserAbilities(Long id, AbilityRequestDTO abilityDTO) {
+        // 사용자의 특정 역량 정보가 100이상이라면 더 이상 역량을 증가시키지 않는다. Max <= 100
+        AbilityResponseDTO abilityResponseDTO = userMapper.findUserAbilitiesById(id);
+        for (int i = 0; i < abilityResponseDTO.getAbilities().length; i++) {
+            if (abilityResponseDTO.getAbilities()[i] >= 100) {
+                abilityDTO.getAbilities()[i] = 0;
+            }
+        }
         userMapper.updateUserAbilities(id, abilityDTO);
     }
 
