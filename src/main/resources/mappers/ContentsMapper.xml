@@ -113,6 +113,46 @@
         LIMIT 10 OFFSET #{offset}
     </select>
 
+    <!-- 조회수 내림차순으로 컨텐트 조회-->
+    <select id="findContentsByViews" parameterType="map" resultType="com.ssafy.wpwk.model.Contents">
+        SELECT c.id,
+               c.title,
+               c.spend_time,
+               c.likes,
+               c.views,
+               c.ability,
+               c.thumb,
+               c.created_at,
+               c.created_by,
+               u.id as user_id,
+               u.nickname,
+               CASE WHEN fc.id IS NULL THEN 'false' ELSE 'true' END as 'favorite'
+        FROM contents c join user u ON c.user_id = u.id
+        LEFT JOIN favorite_contents fc ON c.id =fc.contents_id and fc.user_id =#{userId}
+        ORDER BY c.views DESC, c.id DESC
+        LIMIT 10 OFFSET #{offset}
+    </select>
+
+    <!-- 좋아요수 내림차순으로 컨텐트 조회-->
+    <select id="findContentsByLikes" parameterType="map" resultType="com.ssafy.wpwk.model.Contents">
+        SELECT c.id,
+               c.title,
+               c.spend_time,
+               c.likes,
+               c.views,
+               c.ability,
+               c.thumb,
+               c.created_at,
+               c.created_by,
+               u.id as user_id,
+               u.nickname,
+               CASE WHEN fc.id IS NULL THEN 'false' ELSE 'true' END as 'favorite'
+        FROM contents c join user u ON c.user_id = u.id
+        LEFT JOIN favorite_contents fc ON c.id =fc.contents_id and fc.user_id =#{userId}
+        ORDER BY c.likes DESC, c.id DESC
+        LIMIT 10 OFFSET #{offset}
+    </select>
+
     <!--데이터 수정 -->
     <update id="update" parameterType="com.ssafy.wpwk.model.Contents">
         UPDATE contents SET

@@ -32,6 +32,16 @@ public interface ContentsMapper {
     List<Contents> findAllContentsByPage(@Param("offset") int offset, @Param("userId") Long userId) throws Exception;
 
     /**
+     * 컨텐츠의 조회수 내림차순으로 리스트 제공
+     */
+    List<Contents> findContentsByViews(@Param("offset") int offset, @Param("userId") Long userId) throws Exception;
+
+    /**
+     * 컨텐츠의 조회수 내림차순으로 리스트 제공
+     */
+    List<Contents>  findContentsByLikes(@Param("offset") int offset, @Param("userId") Long userId) throws Exception;
+
+    /**
      * ID를 이용한 컨텐츠 조회
      */
     Contents findContentsById(Long id) throws Exception;

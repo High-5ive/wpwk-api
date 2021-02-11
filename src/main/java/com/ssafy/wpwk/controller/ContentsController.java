@@ -70,12 +70,12 @@ public class ContentsController {
 
     @ApiOperation(value = "키워드(태그,제목,제작자)가 포함된 컨텐츠 리스트 제공", response = List.class)
     @GetMapping("/contents/keyword/{keyword}/page/{page}")
-    public ResponseEntity<?> findContents(@PathVariable("keyword") String keyword , @PathVariable("page") int page,Authentication authentication) {
+    public ResponseEntity<?> findContents(@PathVariable("keyword") String keyword, @PathVariable("page") int page, Authentication authentication) {
         List<Contents> contentsList;
         try {
             Claims claims = (Claims) authentication.getPrincipal();
             Long userId = claims.get("userId", Long.class);
-            contentsList = contentsService.findContentsByKeyword(keyword,page,userId);
+            contentsList = contentsService.findContentsByKeyword(keyword, page, userId);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -90,12 +90,12 @@ public class ContentsController {
     @ApiOperation(value = "태그가 포함된 컨텐츠 리스트 제공", response = List.class)
     @GetMapping("/contents/tags/{tag}/page/{page}")
     public ResponseEntity<?> findContentsByTag(@PathVariable("tag") String tag,
-                                               @PathVariable("page") int page ,Authentication authentication) {
+                                               @PathVariable("page") int page, Authentication authentication) {
         List<Contents> contentsList;
         try {
             Claims claims = (Claims) authentication.getPrincipal();
             Long userId = claims.get("userId", Long.class);
-            contentsList = contentsService.findContentsByTag(tag, page,userId);
+            contentsList = contentsService.findContentsByTag(tag, page, userId);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -125,12 +125,12 @@ public class ContentsController {
 
     @ApiOperation(value = "페이지별 컨텐츠 리스트 제공", response = List.class)
     @GetMapping("/contents/page/{page}")
-    public ResponseEntity<?> findAllContentsByPage(@PathVariable("page") int page,Authentication authentication) {
+    public ResponseEntity<?> findAllContentsByPage(@PathVariable("page") int page, Authentication authentication) {
         List<Contents> contentsList;
         try {
             Claims claims = (Claims) authentication.getPrincipal();
             Long userId = claims.get("userId", Long.class);
-            contentsList = contentsService.findAllContentsByPage(page,userId);
+            contentsList = contentsService.findAllContentsByPage(page, userId);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -140,6 +140,37 @@ public class ContentsController {
         else
             return new ResponseEntity<>(contentsList, HttpStatus.OK);
     }
+
+    @ApiOperation(value = "컨텐츠의 조회수 내림차순으로 리스트 제공", response = List.class)
+    @GetMapping("/contents/views/page/{page}")
+    public ResponseEntity<?> findContentsByViews(@PathVariable("page") int page, Authentication authentication) {
+        List<Contents> contentsList;
+        try {
+            Claims claims = (Claims) authentication.getPrincipal();
+            Long userId = claims.get("userId", Long.class);
+            contentsList = contentsService.findContentsByViews(page, userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(contentsList, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "컨텐츠의 좋아요수 내림차순으로 리스트 제공", response = List.class)
+    @GetMapping("/contents/likes/page/{page}")
+    public ResponseEntity<?> findContentsByLikes(@PathVariable("page") int page, Authentication authentication) {
+        List<Contents> contentsList;
+        try {
+            Claims claims = (Claims) authentication.getPrincipal();
+            Long userId = claims.get("userId", Long.class);
+            contentsList = contentsService.findContentsByLikes(page, userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(contentsList, HttpStatus.OK);
+    }
+
 
     @ApiOperation(value = "컨텐츠 수정")
     @PutMapping("/contents")

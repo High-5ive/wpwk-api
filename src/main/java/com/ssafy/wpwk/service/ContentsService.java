@@ -39,6 +39,16 @@ public interface ContentsService {
     List<Contents> findAllContentsByPage(int page,Long userId) throws Exception;
 
     /**
+     * 컨텐츠의 조회수 내림차순으로 리스트 제공
+     */
+    List<Contents> findContentsByViews(int page, Long userId) throws Exception;
+
+    /**
+     * 컨텐츠의 좋아요수 내림차순으로 리스트 제공
+     */
+    List<Contents>  findContentsByLikes(int page, Long userId) throws Exception;
+
+    /**
      * 컨텐츠 수정
      */
     void update(Contents contents) throws Exception;
@@ -47,4 +57,6 @@ public interface ContentsService {
      * 컨텐츠 삭제
      */
     void delete(Long id) throws Exception;
+
+
 }
