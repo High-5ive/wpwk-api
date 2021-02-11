@@ -61,9 +61,9 @@ public class ContentsServiceImpl implements ContentsService {
      * 키워드(제목,제작자)가 포함된 컨텐츠 리스트 조회
      */
     @Override
-    public List<Contents> findContentsByKeyword(String keyword,int page,Long userId) throws Exception {
+    public List<Contents> findContentsByKeyword(String keyword, int page, Long userId) throws Exception {
         int offset = (page - 1) * CNT_PAGE;
-        List<Contents> contentsList = contentsMapper.findContentsByKeyword(keyword,offset,userId);
+        List<Contents> contentsList = contentsMapper.findContentsByKeyword(keyword, offset, userId);
 
         for (Contents contents : contentsList) {
             List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
@@ -76,9 +76,9 @@ public class ContentsServiceImpl implements ContentsService {
      * 태그가 포함된 컨텐츠 리스트 조회
      */
     @Override
-    public List<Contents> findContentsByTag(String tag, int page,Long userId) throws Exception {
+    public List<Contents> findContentsByTag(String tag, int page, Long userId) throws Exception {
         int offset = (page - 1) * CNT_PAGE;
-        List<Contents> contentsList = contentsMapper.findContentsByTag(tag, offset,userId);
+        List<Contents> contentsList = contentsMapper.findContentsByTag(tag, offset, userId);
         for (Contents contents : contentsList) {
             List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
             contents.setTagList(tagList);
@@ -105,15 +105,43 @@ public class ContentsServiceImpl implements ContentsService {
      * 페이지별 컨텐츠 조회
      */
     @Override
-    public List<Contents> findAllContentsByPage(int page,Long userId) throws Exception {
+    public List<Contents> findAllContentsByPage(int page, Long userId) throws Exception {
 
         int offset = (page - 1) * CNT_PAGE;
-        List<Contents> contentsList = contentsMapper.findAllContentsByPage(offset,userId);
+        List<Contents> contentsList = contentsMapper.findAllContentsByPage(offset, userId);
         for (Contents contents : contentsList) {
             List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
             contents.setTagList(tagList);
         }
 
+        return contentsList;
+    }
+
+    /**
+     * 컨텐츠의 조회수 내림차순으로 리스트 제공
+     */
+    @Override
+    public List<Contents> findContentsByViews(int page, Long userId) throws Exception {
+        int offset = (page - 1) * CNT_PAGE;
+        List<Contents> contentsList = contentsMapper.findContentsByViews(offset, userId);
+        for (Contents contents : contentsList) {
+            List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
+            contents.setTagList(tagList);
+        }
+        return contentsList;
+    }
+
+    /**
+     * 컨텐츠의 좋아요 내림차순으로 리스트 제공
+     */
+    @Override
+    public List<Contents> findContentsByLikes(int page, Long userId) throws Exception {
+        int offset = (page - 1) * CNT_PAGE;
+        List<Contents> contentsList = contentsMapper.findContentsByLikes(offset, userId);
+        for (Contents contents : contentsList) {
+            List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
+            contents.setTagList(tagList);
+        }
         return contentsList;
     }
 
