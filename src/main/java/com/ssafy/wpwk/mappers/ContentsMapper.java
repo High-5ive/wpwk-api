@@ -62,4 +62,8 @@ public interface ContentsMapper {
      */
     void delete(Long id) throws Exception;
 
+    /**
+     * 컨텐츠 좋아요 카운트
+     */
+    void countLike(@Param("id") Long id, @Param("likes") int likes);
 }

@@ -164,6 +164,13 @@
         WHERE id = #{id}
     </update>
 
+    <!-- 좋아요 +1 -->
+    <update id="countLike" parameterType="map">
+        UPDATE contents SET
+                            likes = likes + #{likes}
+        WHERE id = #{id}
+    </update>
+
     <!-- 데이터 삭제 -->
     <delete id="delete">
         DELETE FROM contents

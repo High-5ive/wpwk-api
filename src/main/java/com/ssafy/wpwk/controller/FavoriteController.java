@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 import static com.ssafy.wpwk.utils.ExceptionUtil.isInValidAuthentication;
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
@@ -19,14 +21,16 @@ public class FavoriteController {
     private ContentsFavoriteServiceImpl contentsFavoriteService;
 
     @ApiOperation(value = "컨텐츠 즐겨찾기 등록")
-    @PostMapping("/contents/favorite/{id}")
-    public ResponseEntity<?> addFavoriteContents(@PathVariable("id") Long id, Authentication authentication) {
+    @PostMapping("/contents/favorite")
+    public ResponseEntity<?> addFavoriteContents(@RequestBody Map<String, Object> resource,
+                                                 Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId", Long.class);
         try {
+            Long id = Long.parseLong(resource.get("id").toString());
             contentsFavoriteService.addFavoriteContents(id,userId);
         } catch (Exception e) {
             e.printStackTrace();
