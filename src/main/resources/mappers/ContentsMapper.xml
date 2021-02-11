@@ -3,11 +3,11 @@
 <mapper namespace="com.ssafy.wpwk.mappers.ContentsMapper">
 
     <!-- 컨텐츠 삽입 -->
-    <insert id = "create" useGeneratedKeys="true" keyProperty="id" parameterType="com.ssafy.wpwk.model.Contents">
+    <insert id="create" useGeneratedKeys="true" keyProperty="id" parameterType="com.ssafy.wpwk.model.Contents">
         INSERT INTO contents (title, spend_time, ability, thumb,
                               created_by, updated_by, user_id)
-        VALUES(#{title}, #{spendTime}, #{ability}, #{thumb},
-               #{createdBy}, #{updatedBy}, #{userId})
+        VALUES (#{title}, #{spendTime}, #{ability}, #{thumb},
+                #{createdBy}, #{updatedBy}, #{userId})
     </insert>
 
     <!--컨텐츠 전체 조회 -->
@@ -19,11 +19,15 @@
                c.views,
                c.ability,
                c.thumb,
+               c.eval_edu,
+               c.eval_fun,
+               c.eval_acs,
                c.created_at,
                c.created_by,
                u.id as user_id,
                u.nickname
-        FROM contents c, user u
+        FROM contents c,
+             user u
         WHERE c.user_id = u.id
         ORDER BY c.id DESC
     </select>
@@ -37,15 +41,19 @@
                c.views,
                c.ability,
                c.thumb,
+               c.eval_edu,
+               c.eval_fun,
+               c.eval_acs,
                c.created_at,
                c.created_by,
                u.id as user_id,
                u.nickname,
                CASE WHEN fc.id IS NULL THEN 'false' ELSE 'true' END as 'favorite'
-        FROM contents c join user u ON c.user_id = u.id
-        LEFT JOIN favorite_contents fc ON c.id =fc.contents_id and fc.user_id =#{userId}
-        ORDER BY c.id DESC
-        LIMIT 10 OFFSET #{offset}
+        FROM contents c
+                 join user u ON c.user_id = u.id
+                 LEFT JOIN favorite_contents fc ON c.id = fc.contents_id and fc.user_id = #{userId}
+        ORDER BY c.id DESC LIMIT 10
+        OFFSET #{offset}
     </select>
 
     <!-- 컨텐츠 검색 이용한 조회 -->
@@ -57,60 +65,72 @@
                c.views,
                c.ability,
                c.thumb,
+               c.eval_edu,
+               c.eval_fun,
+               c.eval_acs,
                c.created_at,
                c.created_by,
                u.id as user_id,
                u.nickname
-        FROM contents c, user u
+        FROM contents c,
+             user u
         WHERE c.user_id = u.id
-        AND c.id = #{id}
+          AND c.id = #{id}
         ORDER BY c.id DESC
     </select>
 
     <!-- 태그를 이용한 컨텐츠 조회 -->
     <select id="findContentsByTag" resultType="com.ssafy.wpwk.model.Contents" parameterType="map">
-        SELECT DISTINCT
-                c.id,
-                c.user_id,
-                c.title,
-                c.spend_time,
-                c.likes,
-                c.views,
-                c.ability,
-                c.thumb,
-                c.created_at,
-                c.updated_at,
-                u.nickname,
-               CASE WHEN fc.id IS NULL THEN 'false' ELSE 'true' END as 'favorite'
+        SELECT DISTINCT c.id,
+                        c.user_id,
+                        c.title,
+                        c.spend_time,
+                        c.likes,
+                        c.views,
+                        c.ability,
+                        c.thumb,
+                        c.eval_edu,
+                        c.eval_fun,
+                        c.eval_acs,
+                        c.created_at,
+                        c.updated_at,
+                        u.nickname,
+                        CASE WHEN fc.id IS NULL THEN 'false' ELSE 'true' END as 'favorite'
         FROM contents c
-        JOIN contents_tag ct ON c.id = ct.contents_id
-        JOIN tags t ON ct.tags_id = t.id
-        JOIN user u ON c.user_id = u.id
-        LEFT JOIN favorite_contents fc ON c.id =fc.contents_id and fc.user_id =#{userId}
+                 JOIN contents_tag ct ON c.id = ct.contents_id
+                 JOIN tags t ON ct.tags_id = t.id
+                 JOIN user u ON c.user_id = u.id
+                 LEFT JOIN favorite_contents fc ON c.id = fc.contents_id and fc.user_id = #{userId}
         WHERE t.name = #{tag}
-        ORDER BY c.id DESC
-        LIMIT 10 OFFSET #{offset}
+        ORDER BY c.id DESC LIMIT 10
+        OFFSET #{offset}
     </select>
 
     <!-- 키워드(제작자 이름, 제목)을 이용한 컨텐트 조회-->
-    <select id="findContentsByKeyword" resultType="com.ssafy.wpwk.model.Contents" >
+    <select id="findContentsByKeyword" resultType="com.ssafy.wpwk.model.Contents">
         SELECT DISTINCT c.id,
-        c.title,
-        c.spend_time,
-        c.likes,
-        c.views,
-        c.created_at,
-        c.created_by,
-        u.id as user_id,
-        u.nickname,
-        CASE WHEN fc.id IS NULL THEN 'false' ELSE 'true' END as 'favorite'
-        FROM contents c JOIN user u
-        ON c.user_id = u.id
-        LEFT JOIN favorite_contents fc ON c.id =fc.contents_id and fc.user_id =#{userId}
-        WHERE nickname LIKE CONCAT('%',#{keyword},'%')
-        OR title LIKE CONCAT('%',#{keyword},'%')
-        ORDER BY id DESC
-        LIMIT 10 OFFSET #{offset}
+                        c.title,
+                        c.spend_time,
+                        c.likes,
+                        c.views,
+                        c.ability,
+                        c.thumb,
+                        c.eval_edu,
+                        c.eval_fun,
+                        c.eval_acs,
+                        c.created_at,
+                        c.created_by,
+                        u.id as user_id,
+                        u.nickname,
+                        CASE WHEN fc.id IS NULL THEN 'false' ELSE 'true' END as 'favorite'
+        FROM contents c
+                 JOIN user u
+                      ON c.user_id = u.id
+                 LEFT JOIN favorite_contents fc ON c.id = fc.contents_id and fc.user_id = #{userId}
+        WHERE nickname LIKE CONCAT('%', #{keyword}, '%')
+           OR title LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY id DESC LIMIT 10
+        OFFSET #{offset}
     </select>
 
     <!-- 조회수 내림차순으로 컨텐트 조회-->
@@ -122,15 +142,19 @@
                c.views,
                c.ability,
                c.thumb,
+               c.eval_edu,
+               c.eval_fun,
+               c.eval_acs,
                c.created_at,
                c.created_by,
                u.id as user_id,
                u.nickname,
                CASE WHEN fc.id IS NULL THEN 'false' ELSE 'true' END as 'favorite'
-        FROM contents c join user u ON c.user_id = u.id
-        LEFT JOIN favorite_contents fc ON c.id =fc.contents_id and fc.user_id =#{userId}
-        ORDER BY c.views DESC, c.id DESC
-        LIMIT 10 OFFSET #{offset}
+        FROM contents c
+                 join user u ON c.user_id = u.id
+                 LEFT JOIN favorite_contents fc ON c.id = fc.contents_id and fc.user_id = #{userId}
+        ORDER BY c.views DESC, c.id DESC LIMIT 10
+        OFFSET #{offset}
     </select>
 
     <!-- 좋아요수 내림차순으로 컨텐트 조회-->
@@ -142,31 +166,45 @@
                c.views,
                c.ability,
                c.thumb,
+               c.eval_edu,
+               c.eval_fun,
+               c.eval_acs,
                c.created_at,
                c.created_by,
                u.id as user_id,
                u.nickname,
                CASE WHEN fc.id IS NULL THEN 'false' ELSE 'true' END as 'favorite'
-        FROM contents c join user u ON c.user_id = u.id
-        LEFT JOIN favorite_contents fc ON c.id =fc.contents_id and fc.user_id =#{userId}
-        ORDER BY c.likes DESC, c.id DESC
-        LIMIT 10 OFFSET #{offset}
+        FROM contents c
+                 join user u ON c.user_id = u.id
+                 LEFT JOIN favorite_contents fc ON c.id = fc.contents_id and fc.user_id = #{userId}
+        ORDER BY c.likes DESC, c.id DESC LIMIT 10
+        OFFSET #{offset}
     </select>
 
-    <!--데이터 수정 -->
+    <!--데이터 업데이트 -->
     <update id="update" parameterType="com.ssafy.wpwk.model.Contents">
-        UPDATE contents SET
-                           title = #{title},
-                           spend_time = #{spendTime},
-                           ability = #{ability},
-                           updated_at = #{updatedAt},
-                           updated_by = #{updatedBy}
+        UPDATE contents
+        SET title      = #{title},
+            spend_time = #{spendTime},
+            ability    = #{ability},
+            updated_at = #{updatedAt},
+            updated_by = #{updatedBy}
         WHERE id = #{id}
     </update>
 
     <!-- 데이터 삭제 -->
     <delete id="delete">
-        DELETE FROM contents
+        DELETE
+        FROM contents
         WHERE id = #{id}
     </delete>
+
+    <!-- 평가 데이터 업데이트-->
+    <update id="updateContentsEval" parameterType="map">
+        UPDATE contents
+        SET eval_fun = #{evalFun},
+            eval_edu = #{evalEdu},
+            eval_acs = #{evalAcs}
+        WHERE id = #{id}
+    </update>
 </mapper>

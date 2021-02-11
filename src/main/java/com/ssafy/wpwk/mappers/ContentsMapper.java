@@ -62,4 +62,10 @@ public interface ContentsMapper {
      */
     void delete(Long id) throws Exception;
 
+    /**
+     * 컨텐츠 평가 지표 업데이트
+     */
+    void updateContentsEval(@Param("id") Long contentsId, @Param("evalEdu") int evalEdu,@Param("evalFun") int evalFun,@Param("evalAcs") int evalAccess);
+
+
 }
