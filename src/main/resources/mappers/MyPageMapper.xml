@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.wpwk.mappers.MyPageMapper">
+
+    <!-- 사용자가 제작한 컨텐츠 리스트 조회 -->
+    <select id="findMyContents" parameterType="map" resultType="com.ssafy.wpwk.model.Contents">
+        SELECT  distinct c.id,
+               c.title,
+               c.spend_time,
+               c.likes,
+               c.views,
+               c.ability,
+               c.thumb,
+               c.created_at,
+               c.created_by,
+               u.id as user_id,
+               u.nickname
+        FROM contents c JOIN user u
+        ON c.user_id = u.id and c.user_id = #{userId}
+        ORDER BY c.id DESC
+        LIMIT 10 OFFSET #{offset}
+    </select>
+
+    <!-- 사용자가 제작한 게시글 리스트 조회-->
+    <select id="findMyBoard" parameterType="map" resultType="com.ssafy.wpwk.model.Board">
+        SELECT distinct b.id,
+               b.content,
+               b.category,
+               b.likes,
+               b.views,
+               b.comments,
+               b.created_at,
+               b.created_by,
+               u.id as user_id,
+               u.nickname as writer
+        FROM board b JOIN user u
+        ON  b.user_id = u.id and u.id = #{userId}
+        ORDER BY b.id DESC
+        LIMIT 10 OFFSET #{offset}
+
+    </select>
+
+    <!-- 사용자의 즐겨찾기 컨텐츠 리스트 조회 -->
+    <select id="findContentsByFavorite" parameterType="map" resultType="com.ssafy.wpwk.model.Contents">
+        SELECT distinct c.id,
+               c.title,
+               c.spend_time,
+               c.likes,
+               c.views,
+               c.ability,
+               c.thumb,
+               c.created_at,
+               c.created_by,
+               u.id as user_id,
+               u.nickname
+        FROM contents c JOIN favorite_contents fc ON c.id = fc.contents_id and fc.user_id = #{userId}
+        JOIN user u ON fc.user_id = u.id
+        ORDER BY c.id DESC
+        LIMIT 10 OFFSET #{offset}
+    </select>
+
+    <!-- 사용자가 댓글 단 게시글 리스트 조회-->
+    <select id="findBoardsByComments" parameterType="map" resultType="com.ssafy.wpwk.model.Board">
+        SELECT distinct b.id,
+               b.content,
+               b.category,
+               b.likes,
+               b.views,
+               b.comments,
+               b.created_at,
+               b.created_by,
+               u.id as user_id,
+               u.nickname as writer
+        FROM board b JOIN board_comment bc
+        ON b.id = bc.board_id
+        JOIN user u ON bc.user_id = u.id and u.id= #{userId}
+        ORDER BY b.id DESC
+        LIMIT 10 OFFSET #{offset};
+    </select>
+
+</mapper>
