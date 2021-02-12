@@ -41,9 +41,6 @@ public class ContentsItemController {
     public ResponseEntity<Void> update(@PathVariable("contentsId") Long contentsId,
                                        @RequestBody List<ContentsItem> contentsItemList) {
 
-        for (ContentsItem item : contentsItemList) {
-            System.out.println(item.getDescription());
-        }
         try {
             contentsItemService.updateByContentsId(contentsId, contentsItemList);
         } catch (Exception e) {

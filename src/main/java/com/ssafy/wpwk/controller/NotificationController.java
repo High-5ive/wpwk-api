@@ -56,7 +56,7 @@ public class NotificationController {
     ) {
 
         Long userId = getUserId(authentication);
-        if(userId == null) {  return new ResponseEntity<>(HttpStatus.FORBIDDEN); }
+        if(userId == null) {  return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); }
 
         List<Notification> notificationList = notificationService.findAllByUserIdAndNotRead(userId);
 
@@ -74,13 +74,13 @@ public class NotificationController {
     ) {
 
         Long userId = getUserId(authentication);
-        if(userId == null) {  return new ResponseEntity<>(HttpStatus.FORBIDDEN); }
+        if(userId == null) {  return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); }
         
         User user = userService.findUserById(userId);
 
         // 관리자가 아닌 경우
         if(user.getStatus() != 2) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // UNAUTHORIZED 401 권한이 없음을 명시
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN); // FORBIDDEN 403 권한이 없음을 명시
         }
 
         Notification notification = Notification.builder()
@@ -104,13 +104,13 @@ public class NotificationController {
     ) {
 
         Long userId = getUserId(authentication);
-        if(userId == null) {  return new ResponseEntity<>(HttpStatus.FORBIDDEN); }
+        if(userId == null) {  return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); }
 
         User user = userService.findUserById(userId);
 
         // 관리자가 아닌 경우
         if(user.getStatus() != 2) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // UNAUTHORIZED 401 권한이 없음을 명시
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN); // UNAUTHORIZED 401 권한이 없음을 명시
         }
 
         Notification notification = Notification.builder()
@@ -132,12 +132,8 @@ public class NotificationController {
             Authentication authentication
     ) {
 
-        if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-
         Long userId = getUserId(authentication);
-        if(userId == null) {  return new ResponseEntity<>(HttpStatus.FORBIDDEN); }
+        if(userId == null) {  return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); }
 
         notificationService.confirm(userId);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -150,7 +146,7 @@ public class NotificationController {
 
         Long userId = getUserId(authentication);
 
-        if(userId == null) {  return new ResponseEntity<>(HttpStatus.FORBIDDEN); }
+        if(userId == null) {  return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); }
 
         notificationService.deleteByUserId(userId);
         return new ResponseEntity<>(HttpStatus.OK);

@@ -44,9 +44,9 @@ public class LoginController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        // 2. 비활성화 여부 확인 -> 401 UNAUTHORIZED Message 전송
+        // 2. 이메일 인증이 되지 않은 경우 -> 403 FORBIDDEN "deactivate" Message 전송
         if (user.getStatus() == 0) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("email", HttpStatus.FORBIDDEN);
         }
 
         // 3. 회원 인증 성공 --> token발급
@@ -67,7 +67,7 @@ public class LoginController {
 
         Long userId = claims.get("userId", Long.class);
         if (id != userId) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         User user = userService.findUserById(userId);

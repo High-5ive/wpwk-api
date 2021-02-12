@@ -5,7 +5,6 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.security.Key;
 import java.util.Date;
@@ -16,7 +15,7 @@ public class JWTUtil {
 
     private Key key;
 
-    private long tokenValidMilisecond = 1000L * 15;
+    private long tokenValidMilisecond = 1000L * 60 * 60 * 24;
 
     public JWTUtil(String key) {
         this.key = Keys.hmacShaKeyFor(key.getBytes());

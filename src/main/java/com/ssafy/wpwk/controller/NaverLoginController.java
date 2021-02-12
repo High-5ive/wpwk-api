@@ -8,17 +8,17 @@ import com.ssafy.wpwk.utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-@Controller
+@RestController
 @CrossOrigin({"*"})
 public class NaverLoginController {
 
@@ -45,13 +45,9 @@ public class NaverLoginController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        // JSON 파싱해서 id, nickname, email 가져오기
-        // Long id = userInfoElement.getAsJsonObject().get("response").getAsJsonObject().get("id").getAsLong();
+        // JSON 파싱해서 nickname, email 가져오기
         String nickName = userInfoElement.getAsJsonObject().get("response").getAsJsonObject().get("name").getAsString();
         String email = userInfoElement.getAsJsonObject().get("response").getAsJsonObject().get("email").getAsString();
-
-        System.out.println(email);
-        System.out.println(nickName);
 
         // 현재 DB에 이메일이 있는 지 확인
         User user = userService.findUserByEmail(email);
@@ -67,8 +63,6 @@ public class NaverLoginController {
 
             userService.insertUser(user, false);
         }
-
-        System.out.println(user.getId());
 
         String accessToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getNickname());
 

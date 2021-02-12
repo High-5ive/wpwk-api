@@ -6,7 +6,6 @@ import com.ssafy.wpwk.service.MyPageServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -31,7 +30,7 @@ public class MyPageController {
     public ResponseEntity<?> findMyContents(@PathVariable("page") int page, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         List<Contents> contentsList;
@@ -52,7 +51,7 @@ public class MyPageController {
     public ResponseEntity<?> findMyBoard(@PathVariable("page") int page, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         List<Board> boardList;
@@ -73,7 +72,7 @@ public class MyPageController {
     public ResponseEntity<?> findContentsByFavorite(@PathVariable("page") int page, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         List<Contents> contentsList;
@@ -94,7 +93,7 @@ public class MyPageController {
     public ResponseEntity<?> findBoardsByComments(@PathVariable("page") int page, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         List<Board> boardList;

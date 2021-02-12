@@ -36,7 +36,7 @@ public class ContentsReportController {
     public ResponseEntity<?> allReports(Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         List<ContentsReport> contentsReportList;
@@ -46,7 +46,7 @@ public class ContentsReportController {
         Long id = claims.get("userId", Long.class);
         User admin = userService.findUserById(id);
         if (admin.getStatus() != 2) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         try {
@@ -62,7 +62,7 @@ public class ContentsReportController {
     @PostMapping("/contentsReport")
     public ResponseEntity<?> contentsReport(@RequestBody ReportRequsetDTO reportRequsetDTO, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         try {
             Claims claims = (Claims) authentication.getPrincipal();
@@ -81,7 +81,7 @@ public class ContentsReportController {
     public ResponseEntity<?> contentsReportUpdate(@PathVariable("id") Long id, @RequestBody Map<String, Object> map,
                                                   Authentication authentication) throws Exception {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         Claims claims = (Claims) authentication.getPrincipal();
         //관리자인지 체크

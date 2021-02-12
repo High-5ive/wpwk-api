@@ -30,7 +30,7 @@ public class BoardCommentController {
             Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -90,7 +90,7 @@ public class BoardCommentController {
     @PutMapping("/boardComments")
     public ResponseEntity<?> updateBoardComment(@RequestBody BoardComment boardComment, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -110,7 +110,7 @@ public class BoardCommentController {
     @DeleteMapping("/boardComments/{id}/boards/{boardId}")
     public ResponseEntity<?> deleteBoardComment(@PathVariable("id") Long id, @PathVariable("boardId")Long boardId, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         Claims claims = (Claims) authentication.getPrincipal();
         Long userId = claims.get("userId", Long.class);

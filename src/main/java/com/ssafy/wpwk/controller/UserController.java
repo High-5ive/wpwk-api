@@ -195,7 +195,7 @@ public class UserController {
     public ResponseEntity<?> findUserAbilities(Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -276,7 +276,7 @@ public class UserController {
     public ResponseEntity<?> requestFollowing(@PathVariable("id") Long id, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         //팔로우 신청당하는 사용자의 ID
@@ -302,7 +302,7 @@ public class UserController {
     public ResponseEntity<?> findFollowerListById(@RequestBody Map<String, Object> map, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         List<User> followerList;

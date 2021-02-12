@@ -27,7 +27,7 @@ public class BoardController {
     public ResponseEntity<?> createBoard(@RequestBody Board resource, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -73,7 +73,7 @@ public class BoardController {
         List<Board> boardList;
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId", Long.class);
@@ -94,7 +94,7 @@ public class BoardController {
         Board board;
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId", Long.class);
@@ -114,7 +114,7 @@ public class BoardController {
         int offset = (page-1)*10;
         List<Board> boardList;
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId", Long.class);
@@ -132,7 +132,7 @@ public class BoardController {
     @PutMapping("/boards")
     public ResponseEntity<?> updateBoard(@RequestBody Board board, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -152,7 +152,7 @@ public class BoardController {
     @DeleteMapping("/boards/{id}")
     public ResponseEntity<?> deleteBoard(@PathVariable("id") Long id, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -173,7 +173,7 @@ public class BoardController {
             @RequestBody Map<String, Object> map, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();

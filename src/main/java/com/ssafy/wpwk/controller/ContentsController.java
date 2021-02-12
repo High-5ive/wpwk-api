@@ -27,7 +27,7 @@ public class ContentsController {
     public ResponseEntity<?> create(@RequestBody Contents resource, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -73,7 +73,7 @@ public class ContentsController {
     public ResponseEntity<?> findContents(@PathVariable("keyword") String keyword, @PathVariable("page") int page, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         List<Contents> contentsList;
@@ -100,7 +100,7 @@ public class ContentsController {
         List<Contents> contentsList;
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         try {
@@ -139,7 +139,7 @@ public class ContentsController {
     public ResponseEntity<?> findAllContentsByPage(@PathVariable("page") int page, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         List<Contents> contentsList;
@@ -163,7 +163,7 @@ public class ContentsController {
     public ResponseEntity<?> findContentsByViews(@PathVariable("page") int page, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         List<Contents> contentsList;
@@ -184,7 +184,7 @@ public class ContentsController {
     public ResponseEntity<?> findContentsByLikes(@PathVariable("page") int page, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         List<Contents> contentsList;
