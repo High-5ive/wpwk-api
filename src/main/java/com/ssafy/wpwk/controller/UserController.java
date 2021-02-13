@@ -172,9 +172,9 @@ public class UserController {
         return ResponseEntity.ok(id);
     }
 
-    @ApiOperation(value = "사용자 역량 정보 업데이트")
-    @PutMapping("/users/abilities")
-    public ResponseEntity<?> updateUser(@RequestBody AbilityRequestDTO abilityDTO,
+    @ApiOperation(value = "사용자,컨텐츠의 역량 정보 업데이트")
+    @PutMapping("/users/contentsEnd")
+    public ResponseEntity<?> contentsEnd(@RequestBody ContentsEndRequestDTO requestDTO,
                                         Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
@@ -184,8 +184,8 @@ public class UserController {
         Claims claims = (Claims) authentication.getPrincipal();
 
         Long id = claims.get("userId", Long.class);
-        System.out.println(abilityDTO);
-        userService.updateUserAbilities(id, abilityDTO);
+
+        userService.contentsEnd(id, requestDTO);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

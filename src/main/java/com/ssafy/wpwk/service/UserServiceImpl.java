@@ -1,9 +1,10 @@
 package com.ssafy.wpwk.service;
 
+import com.ssafy.wpwk.mappers.ContentsMapper;
 import com.ssafy.wpwk.mappers.UserMapper;
 import com.ssafy.wpwk.model.AbilityRequestDTO;
+import com.ssafy.wpwk.model.ContentsEndRequestDTO;
 import com.ssafy.wpwk.model.AbilityResponseDTO;
-import com.ssafy.wpwk.model.Follow;
 import com.ssafy.wpwk.model.User;
 import com.ssafy.wpwk.utils.VerificationKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private ContentsMapper contentsMapper;
 
     /**
      * 사용자 회원가입
@@ -117,15 +121,29 @@ public class UserServiceImpl implements UserService {
      * 사용자 역량 정보 수정
      */
     @Override
-    public void updateUserAbilities(Long id, AbilityRequestDTO abilityDTO) {
+    public void contentsEnd(Long id, ContentsEndRequestDTO requestDTO) {
         // 사용자의 특정 역량 정보가 100이상이라면 더 이상 역량을 증가시키지 않는다. Max <= 100
         AbilityResponseDTO abilityResponseDTO = userMapper.findUserAbilitiesById(id);
+
+        //contentsAbilityDTO = 11001000 의 이진수로 표현 됐기 때문에 파싱해서 배열에 삽입
+        int ability[] = new int[requestDTO.getAbility().length()];
+        for(int i =0 ; i < ability.length; i++){
+            ability[i] = requestDTO.getAbility().charAt(i)-'0';
+        }
+
+        // 기존 유저의 역량정보가 100미만일경우만 증가
         for (int i = 0; i < abilityResponseDTO.getAbilities().length; i++) {
             if (abilityResponseDTO.getAbilities()[i] >= 100) {
-                abilityDTO.getAbilities()[i] = 0;
+                ability[i] = 0;
             }
         }
-        userMapper.updateUserAbilities(id, abilityDTO);
+
+        AbilityRequestDTO abilityRequestDTO = new AbilityRequestDTO(ability);
+        //사용자의 역량 정보 업데이트
+        userMapper.updateUserAbilities(id, abilityRequestDTO);
+
+        //컨텐츠의 평가 정보 업데이트
+        contentsMapper.updateContentsEval(requestDTO.getContentsId(),requestDTO.getEvalEdu(),requestDTO.getEvalFun(),requestDTO.getEvalAcs());
     }
 
     /**

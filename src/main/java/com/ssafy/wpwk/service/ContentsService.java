@@ -1,9 +1,7 @@
 package com.ssafy.wpwk.service;
 
-import com.ssafy.wpwk.model.AbilityRequestDTO;
 import com.ssafy.wpwk.model.Contents;
 
-import java.util.HashMap;
 import java.util.List;
 
 public interface ContentsService {

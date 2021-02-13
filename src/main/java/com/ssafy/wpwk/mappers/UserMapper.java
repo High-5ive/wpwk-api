@@ -1,11 +1,11 @@
 package com.ssafy.wpwk.mappers;
 
 import com.ssafy.wpwk.model.AbilityRequestDTO;
+import com.ssafy.wpwk.model.ContentsEndRequestDTO;
 import com.ssafy.wpwk.model.AbilityResponseDTO;
 import com.ssafy.wpwk.model.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

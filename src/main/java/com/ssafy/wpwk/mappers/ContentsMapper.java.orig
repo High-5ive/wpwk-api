@@ -12,61 +12,66 @@ import java.util.List;
 public interface ContentsMapper {
 
     /**
-     * 컨텐츝성
+     * 컨텐츠 생성
      */
     void create(Contents contents) throws Exception;
 
     /**
-     * �워�그,�목,�작가 �함컨텐�리스조회
+     * 키워드(태그,제목,제작자)가 포함된 컨텐츠 리스트 조회
      */
     List<Contents> findContentsByKeyword(@Param("keyword") String keyword, @Param("offset") int offset, @Param("userId") Long userId) throws Exception;
 
     /**
-     * 컨텐츄체 조회
+     * 컨텐츠 전체 조회
      */
     List<Contents> findAllContents() throws Exception;
 
     /**
-     * 컨텐츘이지�조회
+     * 컨텐츠 페이지별 조회
      */
     List<Contents> findAllContentsByPage(@Param("offset") int offset, @Param("userId") Long userId) throws Exception;
 
     /**
-     * 컨텐츠의 조회�림차순�로 리스�공
+     * 컨텐츠의 조회수 내림차순으로 리스트 제공
      */
     List<Contents> findContentsByViews(@Param("offset") int offset, @Param("userId") Long userId) throws Exception;
 
     /**
-     * 컨텐츠의 조회�림차순�로 리스�공
+     * 컨텐츠의 조회수 내림차순으로 리스트 제공
      */
     List<Contents>  findContentsByLikes(@Param("offset") int offset, @Param("userId") Long userId) throws Exception;
 
     /**
-     * ID르용컨텐�조회
+     * ID를 이용한 컨텐츠 조회
      */
     Contents findContentsById(Long id) throws Exception;
 
     /**
-     * �그르용컨텐�조회
+     * 태그를 이용한 컨텐츠 조회
      */
     List<Contents> findContentsByTag(@Param("tag") String tag,
                                      @Param("offset") int offset, @Param("userId") Long userId) throws Exception;
 
     /**
-     * 컨텐츘정
+     * 컨텐츠 수정
      */
     void update(Contents contents) throws Exception;
 
     /**
-     * 컨텐츠�
+     * 컨텐츠 삭제
      */
     void delete(Long id) throws Exception;
 
     /**
-     * 컨텐�좋아카운
+<<<<<<< HEAD
+     * 컨텐츠 좋아요 카운트
      */
     void countLike(@Param("id") Long id, @Param("likes") int likes);
+=======
+     * 컨텐츠 평가 지표 업데이트
+     */
     void updateContentsEval(@Param("id") Long contentsId, @Param("evalEdu") int evalEdu,@Param("evalFun") int evalFun,@Param("evalAcs") int evalAccess);
 
 
+>>>>>>> origin/feature-contents-evaluations
 }

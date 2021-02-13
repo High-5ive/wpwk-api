@@ -109,6 +109,26 @@
     <!-- 키워드(제작자 이름, 제목)을 이용한 컨텐트 조회-->
     <select id="findContentsByKeyword" resultType="com.ssafy.wpwk.model.Contents">
         SELECT DISTINCT c.id,
+<<<<<<< HEAD
+        c.title,
+        c.spend_time,
+        c.likes,
+        c.views,
+        c.ability,
+        c.thumb,
+        c.created_at,
+        c.created_by,
+        u.id as user_id,
+        u.nickname,
+        CASE WHEN fc.id IS NULL THEN 'false' ELSE 'true' END as 'favorite'
+        FROM contents c JOIN user u
+        ON c.user_id = u.id
+        LEFT JOIN favorite_contents fc ON c.id =fc.contents_id and fc.user_id =#{userId}
+        WHERE nickname LIKE CONCAT('%',#{keyword},'%')
+        OR title LIKE CONCAT('%',#{keyword},'%')
+        ORDER BY id DESC
+        LIMIT 10 OFFSET #{offset}
+=======
                         c.title,
                         c.spend_time,
                         c.likes,
@@ -131,6 +151,7 @@
            OR title LIKE CONCAT('%', #{keyword}, '%')
         ORDER BY id DESC LIMIT 10
         OFFSET #{offset}
+>>>>>>> origin/feature-contents-evaluations
     </select>
 
     <!-- 조회수 내림차순으로 컨텐트 조회-->

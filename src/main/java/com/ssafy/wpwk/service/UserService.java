@@ -1,6 +1,6 @@
 package com.ssafy.wpwk.service;
 
-import com.ssafy.wpwk.model.AbilityRequestDTO;
+import com.ssafy.wpwk.model.ContentsEndRequestDTO;
 import com.ssafy.wpwk.model.AbilityResponseDTO;
 import com.ssafy.wpwk.model.User;
 import org.apache.ibatis.annotations.Param;
@@ -49,7 +49,7 @@ public interface UserService {
     /**
      * 사용자 역량 수정
      */
-    void updateUserAbilities(Long id, AbilityRequestDTO contentsAbilityDTO);
+    void contentsEnd(Long id, ContentsEndRequestDTO requestDTO);
 
     /**
      * 사용자 인증
