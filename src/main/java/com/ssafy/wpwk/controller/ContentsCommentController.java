@@ -11,14 +11,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLOutput;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 import static com.ssafy.wpwk.utils.ExceptionUtil.isInValidAuthentication;
 
+@CrossOrigin(origins = "{*}.", maxAge = 6000)
 @RestController
-@CrossOrigin(origins = "{*}", maxAge = 6000)
 public class ContentsCommentController {
 
     @Autowired
@@ -27,6 +28,7 @@ public class ContentsCommentController {
     @ApiOperation(value = "컨텐츠의 모든 댓글 조회")
     @GetMapping("/contentsComments/{contentsId}")
     public ResponseEntity<?> allComments(@PathVariable Long contentsId) {
+
         List<ContentsComment> commentList;
         try {
             commentList = commentService.allComments(contentsId);
@@ -48,9 +50,10 @@ public class ContentsCommentController {
             Claims claims = (Claims) authentication.getPrincipal();
 
             Long userId = claims.get("userId", Long.class);
-            User user = User.builder()
-                    .id(userId).build();
-            comment.setUser(user);
+            String nickname = claims.get("nickname", String.class);
+
+            comment.setUserId(userId);
+            comment.setNickname(nickname);
 
             setUpdate(comment);
 
@@ -64,14 +67,16 @@ public class ContentsCommentController {
     }
 
     @ApiOperation(value = "컨텐츠 댓글 수정")
-    @PutMapping("/contentsComments{commentId}")
-    public ResponseEntity<?> updateComment(@PathVariable("commentId") Long commentId, @RequestBody Map<String, Object> map, Authentication authentication) {
+    @PutMapping("/contentsComments")
+    public ResponseEntity<?> updateComment(@RequestBody Map<String, Object> map, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         try {
+            Long commentId = Long.parseLong( map.get("commentId").toString());
             String newComment = (String) map.get("comment");
+            System.out.println(newComment+","+commentId);
             ContentsComment contentsComment = ContentsComment.builder()
                     .id(commentId)
                     .comment(newComment).build();
@@ -96,6 +101,7 @@ public class ContentsCommentController {
             Claims claims = (Claims) authentication.getPrincipal();
 
             Long userId = claims.get("userId", Long.class);
+            System.out.println(userId+","+commentId);
             commentService.deleteComment( commentId,userId);
         } catch (Exception e) {
             e.printStackTrace();
