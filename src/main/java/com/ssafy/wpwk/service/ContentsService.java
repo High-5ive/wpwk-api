@@ -19,12 +19,17 @@ public interface ContentsService {
     /**
      * 키워드(제목,제작자)가 포함된 컨텐츠 리스트 조회
      */
-    List<Contents> findContentsByKeyword(String keyword,int page,Long userId) throws Exception;
+    List<Contents> findContentsByKeyword(String keyword, int page, Long userId) throws Exception;
 
     /**
      * 태그를 이용한 컨텐츠 조회
      */
-    List<Contents> findContentsByTag(String tag, int page,Long userId) throws Exception;
+    List<Contents> findContentsByTag(String tag, int page, Long userId) throws Exception;
+
+    /**
+     * 카테고리를 이용한 컨텐츠 조회
+     */
+    List<Contents> findContentsByCategory(int category, int page, Long userId) throws Exception;
 
     /**
      * 컨텐츠 전체 조회
@@ -34,7 +39,7 @@ public interface ContentsService {
     /**
      * 페이지별 컨텐츠 조회
      */
-    List<Contents> findAllContentsByPage(int page,Long userId) throws Exception;
+    List<Contents> findAllContentsByPage(int page, Long userId) throws Exception;
 
     /**
      * 컨텐츠의 조회수 내림차순으로 리스트 제공

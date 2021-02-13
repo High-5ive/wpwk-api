@@ -118,6 +118,31 @@ public class ContentsController {
             return new ResponseEntity<>(contentsList, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "카테고리 검색 컨텐츠 리스트 제공", response = List.class)
+    @GetMapping("/contents/category/{category}/page/{page}")
+    public ResponseEntity<?> findContentsByTag(@PathVariable("category") int category,
+                                               @PathVariable("page") int page, Authentication authentication) {
+        List<Contents> contentsList;
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            Claims claims = (Claims) authentication.getPrincipal();
+            Long userId = claims.get("userId", Long.class);
+            contentsList = contentsService.findContentsByCategory(category, page, userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if (contentsList == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        else
+            return new ResponseEntity<>(contentsList, HttpStatus.OK);
+    }
+
     @ApiOperation(value = "모든 컨텐츠 리스트 제공", response = List.class)
     @GetMapping("/contents")
     public ResponseEntity<?> findAllContents() {

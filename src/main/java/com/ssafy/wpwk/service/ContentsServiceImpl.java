@@ -5,13 +5,21 @@ import com.ssafy.wpwk.mappers.ContentsMapper;
 import com.ssafy.wpwk.mappers.TagMapper;
 import com.ssafy.wpwk.model.Contents;
 import com.ssafy.wpwk.model.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.ssafy.wpwk.utils.ConversionUtil.decimalToBinary;
+
 @Service
 public class ContentsServiceImpl implements ContentsService {
+
+    Logger logger = LoggerFactory.getLogger(ContentsServiceImpl.class);
+    
+    private static final int CATEGORY_CNT = 8; // 카테고리 개수
 
     @Autowired
     private ContentsMapper contentsMapper;
@@ -35,7 +43,15 @@ public class ContentsServiceImpl implements ContentsService {
         if (thumb == null) {
             thumb = contents.getContentsItemList().get(0).getImageAddress();
         }
+
         contents.setThumb(thumb);
+        
+        // 2진수 형태로 들어온 ability -> 10진수 형태로 변환
+        int makeAbility = Integer.parseInt(contents.getAbility(), 2);
+        contents.setAbility(String.valueOf(makeAbility));
+
+        logger.info(contents.getAbility());
+
         contentsMapper.create(contents);
         // 2. 컨텐츠 아이템 정보 추가
         try {
@@ -54,6 +70,8 @@ public class ContentsServiceImpl implements ContentsService {
         List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
         contents.setTagList(tagList);
 
+        contents.setAbility(decimalToBinary(contents.getAbility()));
+
         return contents;
     }
 
@@ -68,6 +86,7 @@ public class ContentsServiceImpl implements ContentsService {
         for (Contents contents : contentsList) {
             List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
             contents.setTagList(tagList);
+            contents.setAbility(decimalToBinary(contents.getAbility()));
         }
         return contentsList;
     }
@@ -82,6 +101,27 @@ public class ContentsServiceImpl implements ContentsService {
         for (Contents contents : contentsList) {
             List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
             contents.setTagList(tagList);
+            contents.setAbility(decimalToBinary(contents.getAbility()));
+        }
+
+        return contentsList;
+    }
+
+    /**
+     * 카테고리가 포함된 컨텐츠 리스트 조회
+     */
+    @Override
+    public List<Contents> findContentsByCategory(int category, int page, Long userId) throws Exception {
+        int offset = (page - 1) * CNT_PAGE;
+
+        // category 수를 2의 제곱 승 형태로 변형
+        int categoryToSquareOfTwo = (int) Math.pow(2, CATEGORY_CNT-category);
+
+        List<Contents> contentsList = contentsMapper.findContentsByCategory(categoryToSquareOfTwo, offset, userId);
+        for (Contents contents : contentsList) {
+            List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
+            contents.setTagList(tagList);
+            contents.setAbility(decimalToBinary(contents.getAbility()));
         }
 
         return contentsList;
@@ -96,6 +136,7 @@ public class ContentsServiceImpl implements ContentsService {
         for (Contents contents : contentsList) {
             List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
             contents.setTagList(tagList);
+            contents.setAbility(decimalToBinary(contents.getAbility()));
         }
 
         return contentsList;
@@ -112,6 +153,7 @@ public class ContentsServiceImpl implements ContentsService {
         for (Contents contents : contentsList) {
             List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
             contents.setTagList(tagList);
+            contents.setAbility(decimalToBinary(contents.getAbility()));
         }
 
         return contentsList;
@@ -127,6 +169,7 @@ public class ContentsServiceImpl implements ContentsService {
         for (Contents contents : contentsList) {
             List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
             contents.setTagList(tagList);
+            contents.setAbility(decimalToBinary(contents.getAbility()));
         }
         return contentsList;
     }
@@ -141,6 +184,7 @@ public class ContentsServiceImpl implements ContentsService {
         for (Contents contents : contentsList) {
             List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
             contents.setTagList(tagList);
+            contents.setAbility(decimalToBinary(contents.getAbility()));
         }
         return contentsList;
     }
@@ -160,6 +204,4 @@ public class ContentsServiceImpl implements ContentsService {
     public void delete(Long id) throws Exception {
         contentsMapper.delete(id);
     }
-
-
 }

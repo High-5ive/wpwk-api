@@ -88,7 +88,7 @@ public class ContentsReportController {
         Long userId = claims.get("userId", Long.class);
         User admin = userService.findUserById(userId);
         if (admin.getStatus() != 2) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         String status = (String) map.get("status");
 
