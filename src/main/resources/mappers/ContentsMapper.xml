@@ -99,6 +99,8 @@
         c.spend_time,
         c.likes,
         c.views,
+        c.ability,
+        c.thumb,
         c.created_at,
         c.created_by,
         u.id as user_id,

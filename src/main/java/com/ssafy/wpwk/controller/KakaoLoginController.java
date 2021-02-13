@@ -44,7 +44,7 @@ public class KakaoLoginController {
             MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
             param.add("grant_type", "authorization_code");
             param.add("client_id", "f871952e3d6294ff03c50c4e129fa152");
-            param.add("redirect_uri", "http://localhost:8080/kakao");
+            param.add("redirect_uri", "http://i4a205.p.ssafy.io/kakao");
             param.add("code", authorize_code);
 
             HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
