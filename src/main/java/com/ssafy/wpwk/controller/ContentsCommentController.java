@@ -74,11 +74,15 @@ public class ContentsCommentController {
         }
 
         try {
+            Claims claims = (Claims) authentication.getPrincipal();
+
+            Long userId = claims.get("userId", Long.class);
             Long commentId = Long.parseLong( map.get("commentId").toString());
             String newComment = (String) map.get("comment");
-            System.out.println(newComment+","+commentId);
+
             ContentsComment contentsComment = ContentsComment.builder()
                     .id(commentId)
+                    .userId((userId))
                     .comment(newComment).build();
 
             setUpdate(contentsComment);
@@ -101,7 +105,6 @@ public class ContentsCommentController {
             Claims claims = (Claims) authentication.getPrincipal();
 
             Long userId = claims.get("userId", Long.class);
-            System.out.println(userId+","+commentId);
             commentService.deleteComment( commentId,userId);
         } catch (Exception e) {
             e.printStackTrace();
