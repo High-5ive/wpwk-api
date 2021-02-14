@@ -67,10 +67,13 @@ public class ContentsCommentController {
     }
 
     @ApiOperation(value = "컨텐츠 댓글 수정")
-
+<<<<<<< HEAD
+    @PutMapping("/contentsComments/{commentId}")
+    public ResponseEntity<?> updateComment(@PathVariable("commentId") Long commentId, @RequestBody Map<String, Object> map, Authentication authentication) {
+=======
     @PutMapping("/contentsComments")
     public ResponseEntity<?> updateComment(@RequestBody Map<String, Object> map, Authentication authentication) {
-
+>>>>>>> feature-contents-evaluations
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

@@ -3,29 +3,18 @@
 <mapper namespace="com.ssafy.wpwk.mappers.ContentsCommentMapper">
 
 
-    <resultMap id ="User" type="com.ssafy.wpwk.model.User">
-        <result column="id" property="id"/>
-        <result column="nickname" property="nickname"/>
-    </resultMap>
-
-    <resultMap id="ContentsComment" type="com.ssafy.wpwk.model.ContentsComment">
-        <result column="id" property="id"/>
-        <result column="comment" property="comment"/>
-        <result column="created_at" property="createdAt"/>
-        <result column="updated_at" property="updatedAt"/>
-        <collection property="user" resultMap="User"/>
-    </resultMap>
 
     <insert id="addComment" parameterType="com.ssafy.wpwk.model.ContentsComment">
         INSERT INTO contents_comment (comment,created_by,updated_by,contents_id,user_id)
         VALUES (#{comment},#{createdBy},#{updatedBy},#{contentsId}, #{userId})
     </insert>
 
-    <select id="allComments" resultType="com.ssafy.wpwk.model.ContentsComment"  resultMap="ContentsComment">
-        SELECT u.id,u.nickname,c.contents_id,c.comment,c.created_at,c.updated_at
+    <select id="allComments" resultType="com.ssafy.wpwk.model.ContentsComment" >
+        SELECT c.id,c.user_id,u.nickname,c.contents_id,c.comment,c.created_at,c.updated_at
         FROM contents_comment c JOIN user u
         ON c.user_id = u.id
         WHERE contents_id = #{id}
+        ORDER BY c.id DESC
     </select>
 
     <update id="updateComment" parameterType="com.ssafy.wpwk.model.ContentsComment">

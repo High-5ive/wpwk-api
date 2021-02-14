@@ -44,7 +44,7 @@ public class ContentsCommentController {
     @PostMapping("/contentsComments")
     public ResponseEntity<?> addComment(@RequestBody ContentsComment comment, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
             Claims claims = (Claims) authentication.getPrincipal();
@@ -67,12 +67,10 @@ public class ContentsCommentController {
     }
 
     @ApiOperation(value = "컨텐츠 댓글 수정")
-
     @PutMapping("/contentsComments")
     public ResponseEntity<?> updateComment(@RequestBody Map<String, Object> map, Authentication authentication) {
-
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         try {
@@ -101,7 +99,7 @@ public class ContentsCommentController {
     @DeleteMapping("/contentsComments/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long commentId, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
             Claims claims = (Claims) authentication.getPrincipal();

@@ -11,15 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLOutput;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 import static com.ssafy.wpwk.utils.ExceptionUtil.isInValidAuthentication;
 
-@CrossOrigin(origins = "{*}.", maxAge = 6000)
 @RestController
+@CrossOrigin(origins = "{*}", maxAge = 6000)
 public class ContentsCommentController {
 
     @Autowired
@@ -28,7 +27,6 @@ public class ContentsCommentController {
     @ApiOperation(value = "컨텐츠의 모든 댓글 조회")
     @GetMapping("/contentsComments/{contentsId}")
     public ResponseEntity<?> allComments(@PathVariable Long contentsId) {
-
         List<ContentsComment> commentList;
         try {
             commentList = commentService.allComments(contentsId);
@@ -44,16 +42,15 @@ public class ContentsCommentController {
     @PostMapping("/contentsComments")
     public ResponseEntity<?> addComment(@RequestBody ContentsComment comment, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
             Claims claims = (Claims) authentication.getPrincipal();
 
             Long userId = claims.get("userId", Long.class);
-            String nickname = claims.get("nickname", String.class);
-
-            comment.setUserId(userId);
-            comment.setNickname(nickname);
+            User user = User.builder()
+                    .id(userId).build();
+            comment.setUser(user);
 
             setUpdate(comment);
 
@@ -67,24 +64,16 @@ public class ContentsCommentController {
     }
 
     @ApiOperation(value = "컨텐츠 댓글 수정")
-
-    @PutMapping("/contentsComments")
-    public ResponseEntity<?> updateComment(@RequestBody Map<String, Object> map, Authentication authentication) {
-
+    @PutMapping("/contentsComments{commentId}")
+    public ResponseEntity<?> updateComment(@PathVariable("commentId") Long commentId, @RequestBody Map<String, Object> map, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         try {
-            Claims claims = (Claims) authentication.getPrincipal();
-
-            Long userId = claims.get("userId", Long.class);
-            Long commentId = Long.parseLong( map.get("commentId").toString());
             String newComment = (String) map.get("comment");
-
             ContentsComment contentsComment = ContentsComment.builder()
                     .id(commentId)
-                    .userId((userId))
                     .comment(newComment).build();
 
             setUpdate(contentsComment);
@@ -101,7 +90,7 @@ public class ContentsCommentController {
     @DeleteMapping("/contentsComments/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long commentId, Authentication authentication) {
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
             Claims claims = (Claims) authentication.getPrincipal();
