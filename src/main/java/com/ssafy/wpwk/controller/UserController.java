@@ -4,6 +4,8 @@ import com.ssafy.wpwk.model.*;
 import com.ssafy.wpwk.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,8 @@ import static com.ssafy.wpwk.utils.ExceptionUtil.isInValidAuthentication;
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
 public class UserController {
+
+    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
@@ -106,6 +110,8 @@ public class UserController {
                 .createdAt(user.getCreatedAt())
                 .updatedBy(user.getUpdatedBy())
                 .updatedAt(user.getUpdatedAt())
+                .followed(user.getFollowed())
+                .following(user.getFollowing())
                 .build();
         Map<String, Object> map = new HashMap<>();
         map.put("findUser", findUser);
@@ -272,15 +278,15 @@ public class UserController {
      * 사용자 팔로잉 요청
      */
     @ApiOperation(value = "사용자 팔로잉 요청")
-    @PostMapping("/users/following/{id}")
-    public ResponseEntity<?> requestFollowing(@PathVariable("id") Long id, Authentication authentication) {
+    @PostMapping("/users/following")
+    public ResponseEntity<?> requestFollowing(@RequestBody Map<String, Object> map, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         //팔로우 신청당하는 사용자의 ID
-        Long toUserId = id;
+        Long toUserId = Long.parseLong(map.get("targetId").toString());
         Claims claims = (Claims) authentication.getPrincipal();
 
         //팔로우 신청한 사용자의 ID

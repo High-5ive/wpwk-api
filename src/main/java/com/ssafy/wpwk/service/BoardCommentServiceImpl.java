@@ -54,7 +54,7 @@ public class BoardCommentServiceImpl implements BoardCommentService {
      * 게시글 댓글 삭제
      */
     @Override
-    public void deleteComment(Long boardCommentId, Long userId,Long boardId) throws Exception {
+    public void deleteComment(Long boardCommentId, Long userId, Long boardId) throws Exception {
         boardCommentMapper.delete(boardCommentId, userId);
         boardMapper.updateCommentsCnt(boardId,-1);
     }
