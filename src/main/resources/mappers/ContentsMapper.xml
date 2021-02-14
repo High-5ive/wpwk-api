@@ -238,9 +238,9 @@
     <!-- 평가 데이터 업데이트-->
     <update id="updateContentsEval" parameterType="map">
         UPDATE contents
-        SET eval_fun = #{evalFun},
-            eval_edu = #{evalEdu},
-            eval_acs = #{evalAcs}
+        SET eval_fun = eval_fun + #{evalFun},
+            eval_edu = eval_edu + #{evalEdu},
+            eval_acs = eval_acs + #{evalAcs}
         WHERE id = #{id}
     </update>
 </mapper>

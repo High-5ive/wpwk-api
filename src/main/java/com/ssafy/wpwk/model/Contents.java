@@ -106,6 +106,6 @@ public class Contents {
     /**
      * 컨텐츠 평가 Access Point
      */
-    private int evalAccess;
+    private int evalAcs;
 
 }
