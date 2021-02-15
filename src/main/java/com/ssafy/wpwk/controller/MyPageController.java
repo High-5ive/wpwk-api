@@ -26,8 +26,8 @@ public class MyPageController {
     private MyPageServiceImpl myPageService;
 
     @ApiOperation(value = "사용자가 제작한 컨텐츠 리스트 조회", response = List.class)
-    @GetMapping("/mypage/contents/page/{page}")
-    public ResponseEntity<?> findMyContents(@PathVariable("page") int page, Authentication authentication) {
+    @GetMapping("/mypage/contents/{userId}page/{page}")
+    public ResponseEntity<?> findMyContents(@PathVariable("userId") Long userId,@PathVariable("page") int page, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -36,8 +36,6 @@ public class MyPageController {
         List<Contents> contentsList;
 
         try {
-            Claims claims = (Claims) authentication.getPrincipal();
-            Long userId = claims.get("userId", Long.class);
             contentsList = myPageService.findMyContents(userId, page);
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,8 +45,8 @@ public class MyPageController {
     }
 
     @ApiOperation(value = "사용자가 작성한 게시글 리스트 조회", response = List.class)
-    @GetMapping("/mypage/board/page/{page}")
-    public ResponseEntity<?> findMyBoard(@PathVariable("page") int page, Authentication authentication) {
+    @GetMapping("/mypage/board/{userId}/page/{page}")
+    public ResponseEntity<?> findMyBoard(@PathVariable("userId") Long userId,@PathVariable("page") int page, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -57,8 +55,6 @@ public class MyPageController {
         List<Board> boardList;
 
         try {
-            Claims claims = (Claims) authentication.getPrincipal();
-            Long userId = claims.get("userId", Long.class);
             boardList = myPageService.findMyBoards(userId, page);
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,8 +64,8 @@ public class MyPageController {
     }
 
     @ApiOperation(value = "사용자의 즐겨찾기 컨텐츠 리스트 조회", response = List.class)
-    @GetMapping("/mypage/favoriteContents/page/{page}")
-    public ResponseEntity<?> findContentsByFavorite(@PathVariable("page") int page, Authentication authentication) {
+    @GetMapping("/mypage/favoriteContents/{userId}/page/{page}")
+    public ResponseEntity<?> findContentsByFavorite(@PathVariable("userId") Long userId,@PathVariable("page") int page, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -78,8 +74,6 @@ public class MyPageController {
         List<Contents> contentsList;
 
         try {
-            Claims claims = (Claims) authentication.getPrincipal();
-            Long userId = claims.get("userId", Long.class);
             contentsList = myPageService.findContentsByFavorite(userId, page);
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,8 +83,8 @@ public class MyPageController {
     }
 
     @ApiOperation(value = "사용자가 댓글 단 게시글 리스트 조회", response = List.class)
-    @GetMapping("/mypage/commentBoard/page/{page}")
-    public ResponseEntity<?> findBoardsByComments(@PathVariable("page") int page, Authentication authentication) {
+    @GetMapping("/mypage/commentBoard/{userId}/page/{page}")
+    public ResponseEntity<?> findBoardsByComments(@PathVariable("userId") Long userId,@PathVariable("page") int page, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -99,8 +93,6 @@ public class MyPageController {
         List<Board> boardList;
 
         try {
-            Claims claims = (Claims) authentication.getPrincipal();
-            Long userId = claims.get("userId", Long.class);
             boardList = myPageService.findBoardsByComments(userId, page);
         } catch (Exception e) {
             e.printStackTrace();
