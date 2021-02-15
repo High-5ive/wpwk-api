@@ -20,4 +20,14 @@ public interface TagService {
      * 컨텐츠에 태그 생성하기
      */
     void createTags(Long contentsId, List<String> tags);
+
+    /***
+     * 컨텐츠에 태그 수정하기
+     */
+    void updateTags(Long contentsId, List<String> tagList);
+
+    /***
+     * 컨텐츠에 태그 삭제하기
+     */
+    void removeTags(Long contentsId);
 }
