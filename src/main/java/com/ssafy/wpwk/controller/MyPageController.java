@@ -26,7 +26,7 @@ public class MyPageController {
     private MyPageServiceImpl myPageService;
 
     @ApiOperation(value = "사용자가 제작한 컨텐츠 리스트 조회", response = List.class)
-    @GetMapping("/mypage/contents/{userId}page/{page}")
+    @GetMapping("/mypage/contents/{userId}/page/{page}")
     public ResponseEntity<?> findMyContents(@PathVariable("userId") Long userId,@PathVariable("page") int page, Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
