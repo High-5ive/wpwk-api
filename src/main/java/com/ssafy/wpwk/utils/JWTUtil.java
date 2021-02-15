@@ -24,13 +24,14 @@ public class JWTUtil {
     /**
      * token 생성 메서드
      */
-    public String createToken(Long userId, String email, String nickname) {
+    public String createToken(Long userId, String email, String nickname, int status) {
 
         Date now = new Date();
         return Jwts.builder()
                 .claim("userId", userId)
                 .claim("email", email)
                 .claim("nickname", nickname)
+                .claim("status", status)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + tokenValidMilisecond))
                 .signWith(key, SignatureAlgorithm.HS256)

@@ -90,7 +90,7 @@ public class UserController {
         }
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -128,7 +128,7 @@ public class UserController {
                                             Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -167,7 +167,7 @@ public class UserController {
     public ResponseEntity<?> deactivate(Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();
@@ -184,7 +184,7 @@ public class UserController {
                                         Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         Claims claims = (Claims) authentication.getPrincipal();

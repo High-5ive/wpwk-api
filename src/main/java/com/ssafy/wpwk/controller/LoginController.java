@@ -50,7 +50,7 @@ public class LoginController {
         }
 
         // 3. 회원 인증 성공 --> token발급
-        String accessToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getNickname());
+        String accessToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getNickname(), user.getStatus());
         LoginResponseDTO loginResponseDTO = LoginResponseDTO.builder().accessToken(accessToken).build();
 
         return new ResponseEntity<>(loginResponseDTO, HttpStatus.CREATED);

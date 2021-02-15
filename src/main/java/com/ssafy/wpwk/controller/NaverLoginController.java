@@ -64,7 +64,7 @@ public class NaverLoginController {
             userService.insertUser(user, false);
         }
 
-        String accessToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getNickname());
+        String accessToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getNickname(), user.getStatus());
 
         return new ResponseEntity<>(accessToken, HttpStatus.OK);
     }

@@ -99,7 +99,7 @@ public class KakaoLoginController {
 
                 userService.insertUser(user, false);
             }
-            String jwtToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getNickname());
+            String jwtToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getNickname(), user.getStatus());
             return new ResponseEntity<>(jwtToken, HttpStatus.OK);
         } catch (Exception e) {
             // TODO Auto-generated catch block

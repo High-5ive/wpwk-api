@@ -86,14 +86,14 @@ public class ContentsReportController {
         Claims claims = (Claims) authentication.getPrincipal();
         //관리자인지 체크
         Long userId = claims.get("userId", Long.class);
-        User admin = userService.findUserById(userId);
-        if (admin.getStatus() != 2) {
+        // User admin = userService.findUserById(userId);
+        int userStatus = claims.get("status", Integer.class);
+        if (userStatus != 2) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         String status = (String) map.get("status");
 
-        contentsReportService.updateStatus(id, status, admin.getId());
-
+        contentsReportService.updateStatus(id, status, userId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
