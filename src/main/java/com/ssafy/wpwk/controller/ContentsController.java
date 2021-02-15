@@ -240,7 +240,7 @@ public class ContentsController {
             Long userId = claims.get("userId", Long.class);
             int status = claims.get("status", Integer.class);
             
-            if(status != 2 && resource.getUserId() != userId) { // 관리자도 아니고 제작자가 아닌 경우
+            if(status != 2 && !resource.getUserId().equals(userId)) { // 관리자도 아니고 제작자가 아닌 경우
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN); // 권한이 없는 경우
             }
             contentsService.update(resource);
