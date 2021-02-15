@@ -50,4 +50,18 @@ public class TagServiceImpl implements TagService{
             tagMapper.createContentsTag(contentsId, tagIdList);
         }
     }
+
+    @Override
+    public void updateTags(Long contentsId, List<String> tagList) {
+        
+        // contentsId에 해당하는 태그 삭제
+        removeTags(contentsId);
+        // tagList 생성
+        createTags(contentsId, tagList);
+    }
+
+    @Override
+    public void removeTags(Long contentsId) {
+        tagMapper.removeContentsTag(contentsId);
+    }
 }

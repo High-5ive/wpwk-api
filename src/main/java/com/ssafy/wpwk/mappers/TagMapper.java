@@ -35,4 +35,9 @@ public interface TagMapper {
      * 컨텐츠 아이디와 태그 아이디 연관관계 추가
      */
     void createContentsTag(@Param("contentsId") Long contentsId, @Param("tagIdList") List<Long> tagIdList);
+
+    /***
+     * 태그 삭제
+     */
+    void removeContentsTag(@Param("contentsId") Long contentsId);
 }

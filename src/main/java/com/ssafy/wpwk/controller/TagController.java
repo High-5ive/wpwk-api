@@ -54,4 +54,25 @@ public class TagController {
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    // 컨텐츠 태그리스트 수정
+    @ApiOperation(value = "컨텐츠 태그리스트 수정")
+    @PutMapping("/tags/contents/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") Long contentsId,
+                                    @RequestBody Map<String, Object> resources) {
+
+        String tagString = resources.values().toString(); // [":1", ":3", "30분"] 형태를 String으로 저장
+
+        StringTokenizer st = new StringTokenizer(tagString, "[],"); // '[', ']', ','으로 분리
+        List<String> tagList = new ArrayList<>();
+
+        int size = st.countTokens();
+        while(size-->0) { tagList.add(st.nextToken().trim()); } // 태그에 개수만큼 저장(저장시 공백 제거)
+
+        System.out.println(contentsId);
+
+        tagService.updateTags(contentsId, tagList);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

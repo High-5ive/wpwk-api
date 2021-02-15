@@ -41,4 +41,9 @@
             (#{contentsId}, #{tagId})
         </foreach>
     </insert>
+
+    <delete id="removeContentsTag">
+        DELETE FROM contents_tag
+        WHERE contents_id = #{contentsId}
+    </delete>
 </mapper>
