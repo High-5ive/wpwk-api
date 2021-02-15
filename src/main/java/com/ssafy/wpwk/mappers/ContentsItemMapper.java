@@ -23,7 +23,17 @@ public interface ContentsItemMapper {
                             @Param("itemList") List<ContentsItem> contentsItemList) throws Exception;
 
     /**
+     * 컨텐츠 아이디를 이용한 컨텐츠 아이템 수정
+     */
+    void updateContentsItem(ContentsItem contentsItem);
+
+    /**
      * 컨텐츠 아이디를 이용한 컨텐츠 아이템 삭제
      */
     void deleteByContentsId(Long contentsId) throws Exception;
+
+    /**
+     * 컨텐츠 아이템 아이디를 이용한 컨텐츠 아이템 삭제
+     */
+    void deleteById(Long id);
 }

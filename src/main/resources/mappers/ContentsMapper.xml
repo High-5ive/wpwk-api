@@ -210,14 +210,14 @@
         OFFSET #{offset}
     </select>
 
-    <!--데이터 업데이트 -->
+    <!-- 컨텐츠 업데이트 -->
     <update id="update" parameterType="com.ssafy.wpwk.model.Contents">
         UPDATE contents
         SET title      = #{title},
             spend_time = #{spendTime},
             ability    = #{ability},
-            updated_at = #{updatedAt},
-            updated_by = #{updatedBy}
+            updated_at = NOW(),
+            updated_by = "server1"
         WHERE id = #{id}
     </update>
 

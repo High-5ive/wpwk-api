@@ -228,10 +228,22 @@ public class ContentsController {
 
     @ApiOperation(value = "컨텐츠 수정")
     @PutMapping("/contents")
-    public ResponseEntity<?> update(@RequestBody Contents contents) {
+    public ResponseEntity<?> update(@RequestBody Contents resource, Authentication authentication) {
+
+        if (isInValidAuthentication(authentication)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        
         try {
-            contents.setUpdatedAt(LocalDateTime.now());
-            contentsService.update(contents);
+
+            Claims claims = (Claims) authentication.getPrincipal();
+            Long userId = claims.get("userId", Long.class);
+            int status = claims.get("status", Integer.class);
+            
+            if(status != 2 && resource.getUserId() != userId) { // 관리자도 아니고 제작자가 아닌 경우
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN); // 권한이 없는 경우
+            }
+            contentsService.update(resource);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

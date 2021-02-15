@@ -4,6 +4,7 @@ import com.ssafy.wpwk.mappers.ContentsItemMapper;
 import com.ssafy.wpwk.mappers.ContentsMapper;
 import com.ssafy.wpwk.mappers.TagMapper;
 import com.ssafy.wpwk.model.Contents;
+import com.ssafy.wpwk.model.ContentsItem;
 import com.ssafy.wpwk.model.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -194,7 +195,28 @@ public class ContentsServiceImpl implements ContentsService {
      */
     @Override
     public void update(Contents contents) throws Exception {
+
+        // 1. 컨텐츠 수정
         contentsMapper.update(contents);
+
+        // 2. 컨텐츠 조회
+        List<ContentsItem> list = contentsItemMapper.findByContentsItemList(contents.getId());
+
+        // 3. 컨텐츠 아이템 삭제
+        int idx = 0;
+        for(ContentsItem contentsItem : list) {
+
+            logger.info(contentsItem.getId() + " " + contents.getContentsItemList().get(idx).getId());
+            if(contentsItem.getId().equals(contents.getContentsItemList().get(idx).getId())) {
+                contentsItemMapper.updateContentsItem(contents.getContentsItemList().get(idx));
+                idx++;
+                continue;
+            }
+
+            // 해당리스트에 없으면 삭제
+            contentsItemMapper.deleteById(contentsItem.getId());
+        }
+
     }
 
     /**

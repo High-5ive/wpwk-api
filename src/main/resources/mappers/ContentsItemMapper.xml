@@ -33,11 +33,27 @@
         ORDER BY page_no ASC
     </select>
 
+    <!-- 컨텐츠 아이템 수정 -->
+    <update id="updateContentsItem" parameterType="com.ssafy.wpwk.model.ContentsItem">
+        UPDATE contents_item
+        SET youtube_id = #{youtubeId},
+            youtube_title = #{youtubeTitle},
+            youtube_thumbnail = #{youtubeThumbnail},
+            image_address = #{imageAddress},
+            description = #{description},
+            page_no = #{pageNo}
+        WHERE id = #{id}
+    </update>
+
     <!-- 컨텐츠 아이디를 이용한 컨텐츠 아이템 삭제 -->
     <delete id="deleteByContentsId">
         DELETE FROM contents_item
         WHERE contents_id = #{contentsId}
     </delete>
 
-
+    <!-- 컨텐츠 아이템 아이디를 이용한 컨텐츠 아이템 삭제 -->
+    <delete id="deleteById">
+        DELETE FROM contents_item
+        WHERE id = #{id}
+    </delete>
 </mapper>
