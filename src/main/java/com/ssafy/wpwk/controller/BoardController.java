@@ -167,27 +167,4 @@ public class BoardController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ApiOperation(value = "게시글 좋아요(증가,감소)")
-    @PutMapping("/boards/{id}/likes")
-    public ResponseEntity<?> likesUpdateBoard(@PathVariable("id") Long id,
-            @RequestBody Map<String, Object> map, Authentication authentication) {
-
-        if (isInValidAuthentication(authentication)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        Claims claims = (Claims) authentication.getPrincipal();
-
-        Long userId = claims.get("userId", Long.class);
-        int likes = Integer.parseInt(map.get("likes").toString());
-        try {
-            boardService.updateLikes(id, userId, likes);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
 }

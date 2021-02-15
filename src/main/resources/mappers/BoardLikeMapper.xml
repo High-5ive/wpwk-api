@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.wpwk.mappers.BoardLikeMapper">
+
+    <insert id="likeBoard" parameterType="map">
+        INSERT INTO board_like (user_id, board_id)
+        VALUES (#{userId}, #{id})
+    </insert>
+
+    <delete id="deleteLikeBoard" parameterType="map">
+        DELETE FROM board_like
+        WHERE user_id = #{userId} and board_id = #{id}
+    </delete>
+</mapper>
