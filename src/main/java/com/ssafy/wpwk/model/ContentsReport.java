@@ -19,7 +19,12 @@ public class ContentsReport {
     /*
      * 컨텐츠 신고자의 id
      */
-    private User user;
+    private Long reporterId;
+
+    /*
+     * 컨텐츠 신고자의 닉네임
+     */
+    private String reporterNickname;
 
     /*
      * 신고당한 컨텐츠의 id
@@ -50,6 +55,5 @@ public class ContentsReport {
      * 컨텐츠 신고 처리 일자
      * */
     private LocalDateTime processedAt;
-
 
 }

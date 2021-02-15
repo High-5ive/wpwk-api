@@ -1,5 +1,6 @@
 package com.ssafy.wpwk.controller;
 
+import com.ssafy.wpwk.model.Contents;
 import com.ssafy.wpwk.model.ContentsReport;
 import com.ssafy.wpwk.model.ReportRequsetDTO;
 import com.ssafy.wpwk.model.User;
@@ -77,8 +78,8 @@ public class ContentsReportController {
     }
 
     @ApiOperation(value = "컨텐츠 신고 처리")
-    @PutMapping("/contentsReport/{id}")
-    public ResponseEntity<?> contentsReportUpdate(@PathVariable("id") Long id, @RequestBody Map<String, Object> map,
+    @PutMapping("/contentsReport")
+    public ResponseEntity<?> contentsReportUpdate(@RequestBody Map<String, Object> map,
                                                   Authentication authentication) throws Exception {
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -86,11 +87,13 @@ public class ContentsReportController {
         Claims claims = (Claims) authentication.getPrincipal();
         //관리자인지 체크
         Long userId = claims.get("userId", Long.class);
+
         User admin = userService.findUserById(userId);
         if (admin.getStatus() != 2) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        String status = (String) map.get("status");
+        Long id = Long.parseLong(map.get("id").toString());
+        String status =  map.get("status").toString();
 
         contentsReportService.updateStatus(id, status, admin.getId());
 

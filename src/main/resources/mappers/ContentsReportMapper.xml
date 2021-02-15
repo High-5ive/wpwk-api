@@ -2,33 +2,45 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.wpwk.mappers.ContentsReportMapper">
 
-    <resultMap id ="User" type="com.ssafy.wpwk.model.User">
-        <result column="user_id" property="id"/>
-        <result column="nickname" property="nickname"/>
-    </resultMap>
 
     <resultMap id="Contents" type="com.ssafy.wpwk.model.Contents">
         <result column="contents_id" property="id"/>
         <result column="title" property="title"/>
+        <result column="spend_time" property="spendTime"/>
+        <result column="likes" property="likes"/>
+        <result column="views" property="views"/>
+        <result column="ability" property="ability"/>
     </resultMap>
 
     <resultMap id="ContentsReport" type="com.ssafy.wpwk.model.ContentsReport">
-        <result column="id" property="id"/>
+        <result column="contents_report_id" property="id"/>
         <result column="comment" property="comment"/>
+        <result column="reporter_nickname" property="reporterNickname"/>
         <result column="created_at" property="createdAt"/>
         <result column="status" property="status"/>
-        <collection property="user" resultMap="User"/>
+        <result column="reporter_id" property="reporterId"/>
         <collection property="contents" resultMap="Contents"/>
     </resultMap>
 
     <select id="allReports" resultMap="ContentsReport" resultType="com.ssafy.wpwk.model.ContentsReport">
-        SELECT c2.id ,c2.contents_id, c2.title, c2.user_id, u.nickname,c2.comment,c2.status, c2.created_at,c2.processed_at
+        SELECT c2.*, u.nickname as "reporter_nickname"
         FROM user u join(
-            SELECT cr.id ,c.id as "contents_id", cr.comment, c.title, cr.user_id, cr.status, cr.created_at,cr.processed_at
+            SELECT cr.id as "contents_report_id",
+                   cr.comment,
+                   cr.status,
+                   cr.created_at,
+                   cr.user_id as "reporter_id",
+                   c.id as"contents_id",
+                   c.title,
+                   c.spend_time,
+                   c.likes,
+                   c.views,
+                   c.ability
             FROM contents_report cr join contents c
             where cr.contents_id =  c.id
         ) c2
-        WHERE u.id = c2.user_id
+        WHERE u.id = c2.reporter_id;
+
     </select>
 
     <select id="findContentsReportById" resultMap="ContentsReport" resultType="com.ssafy.wpwk.model.ContentsReport">
