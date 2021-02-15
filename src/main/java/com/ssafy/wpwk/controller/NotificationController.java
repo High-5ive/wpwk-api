@@ -127,12 +127,9 @@ public class NotificationController {
     
     // 6. 공지사항 확인처리
     @ApiOperation(value = "공지사항 확인처리")
-    @PutMapping("/notifications/confirm")
-    public ResponseEntity<?> confirm(
-            Authentication authentication
-    ) {
+    @PutMapping("/notifications/confirm/{id}")
+    public ResponseEntity<?> confirm(@PathVariable("id")Long userId) {
 
-        Long userId = getUserId(authentication);
         if(userId == null) {  return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); }
 
         notificationService.confirm(userId);
