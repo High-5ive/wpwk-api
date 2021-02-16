@@ -39,8 +39,8 @@
             FROM contents_report cr join contents c
             where cr.contents_id =  c.id
         ) c2
-        WHERE u.id = c2.reporter_id;
-
+        WHERE u.id = c2.reporter_id
+        ORDER BY c2.contents_report_id DESC
     </select>
 
     <select id="findContentsReportById" resultMap="ContentsReport" resultType="com.ssafy.wpwk.model.ContentsReport">
