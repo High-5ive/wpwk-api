@@ -17,6 +17,7 @@
         <result column="contents_report_id" property="id"/>
         <result column="comment" property="comment"/>
         <result column="reporter_nickname" property="reporterNickname"/>
+        <result column="creator_nickname" property="creatorNickname"/>
         <result column="created_at" property="createdAt"/>
         <result column="status" property="status"/>
         <result column="reporter_id" property="reporterId"/>

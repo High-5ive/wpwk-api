@@ -32,6 +32,10 @@ public class ContentsReport {
     private Contents contents;
 
     /*
+     * 신고당한 컨텐츠의 id
+     */
+    private String creatorNickname;
+    /*
      * 컨텐츠 신고 내역
      */
     private String comment;
