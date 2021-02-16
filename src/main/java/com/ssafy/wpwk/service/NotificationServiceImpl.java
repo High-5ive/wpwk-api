@@ -6,9 +6,13 @@ import com.ssafy.wpwk.mappers.UserMapper;
 import com.ssafy.wpwk.model.Notification;
 import com.ssafy.wpwk.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.ssafy.wpwk.utils.MessageUtil.makeMessage;
 
 @Service
 public class NotificationServiceImpl implements NotificationService{
@@ -58,29 +62,37 @@ public class NotificationServiceImpl implements NotificationService{
 
     /**
      * 공지사항 특정 수신자에게 작성
+     * @Param(fromUserId) : 송신자 아이디
+     * @Param(targetUserId) : 수신자 아이디
+     * @Param(contentsTitle) : 콘텐츠 제목
+     * @Param(type) : 메시지 타입
      */
     @Override
-    public void createNotification(Notification notification) {
-        notificationMapper.createNotification(notification);
-    }
+    @Async
+    @Transactional
+    public void createNotification(Long fromUserId, 
+                                   Long targetUserId,
+                                   String contentsTitle,
+                                   String message,
+                                   MessageType type) {
 
-    @Override
-    public void createReportNotification(Long targetUserId, Long contentsId,
-                                         String contentsTitle, String status, Long adminId) {
+        if(fromUserId.equals(targetUserId)) { return; } // 송신자와 수신자가 같은 경우 메시지 전송 X
 
-        User admin = User.builder().id(adminId).build();
+        User fromUser = userMapper.findUserById(fromUserId);
 
         Notification notification = Notification.builder()
-                .fromUser(admin)
-                .messageType(MessageType.WARN)
-                .message(makeWarnMessage(contentsTitle, status))
-                .createdBy("server1")
+                .fromUserId(fromUserId)
+                .fromUserNickname(fromUser.getNickname())
                 .toUserId(targetUserId)
+                .messageType(type)
+                .message(makeMessage(fromUser.getNickname(),
+                        contentsTitle,
+                        message,
+                        type))
                 .build();
 
-        createNotification(notification);
+        notificationMapper.createNotification(notification);
     }
-
 
     /**
      * 사용자별 공지사항 삭제
@@ -98,19 +110,5 @@ public class NotificationServiceImpl implements NotificationService{
         notificationMapper.confirm(userId);
     }
 
-    public String makeWarnMessage(String title, String status) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(title);
 
-        switch (status){
-            case "WARN": // 경고처리
-                sb.append("에 부적절한 내용이 포함되어 있어 확인 바랍니다.");
-                break;
-            case "DELETE": // 삭제처리
-                sb.append("에 부적절한 내용이 포함되어 있어 삭제되었습니다.");
-                break;
-        }
-
-        return sb.toString();
-    }
 }

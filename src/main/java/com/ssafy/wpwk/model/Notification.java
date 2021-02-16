@@ -18,14 +18,19 @@ public class Notification {
     private Long id;
 
     /**
-     * 수신자
+     * 수신자 id
      * */
     private Long toUserId;
 
     /**
-     * 송신자
+     * 송신자 id
      * */
-    private User fromUser;
+    private Long fromUserId;
+
+    /**
+     * 송신자 닉네임
+     * */
+    private String fromUserNickname;
 
     /**
      * 메시지 타입

@@ -1,5 +1,6 @@
 package com.ssafy.wpwk.service;
 
+import com.ssafy.wpwk.enums.MessageType;
 import com.ssafy.wpwk.model.Notification;
 import java.util.List;
 
@@ -28,13 +29,8 @@ public interface NotificationService {
     /**
      * 공지사항 특정 수신자에게 작성
      */
-    void createNotification(Notification notification);
-
-    /**
-     * 경고 메시지 전송
-     */
-    void createReportNotification(Long targetUserId, Long contentsId,
-                                  String contentsTitle, String status, Long adminId);
+    void createNotification(Long fromUserId, Long targetUserId,
+                            String message, String contentsTitle, MessageType type);
 
     /**
      * 공지사항 삭제

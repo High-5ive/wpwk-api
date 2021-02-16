@@ -84,7 +84,8 @@ public class NotificationController {
         }
 
         Notification notification = Notification.builder()
-                                                .fromUser(user)
+                                                .fromUserId(user.getId())
+                                                .fromUserNickname(user.getNickname())
                                                 .message(resource.getMessage())
                                                 .messageType(MessageType.ADMIN_MESSAGE)
                                                 .createdBy("server1")
@@ -113,15 +114,13 @@ public class NotificationController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN); // UNAUTHORIZED 401 권한이 없음을 명시
         }
 
-        Notification notification = Notification.builder()
-                .fromUser(user)
-                .toUserId(targetId)
-                .message(resource.getMessage())
-                .messageType(MessageType.ADMIN_MESSAGE)
-                .createdBy("server1")
-                .build();
-
-        notificationService.createNotification(notification);
+        notificationService.createNotification(
+                userId,
+                targetId,
+                "",
+                resource.getMessage(),
+                MessageType.ADMIN_MESSAGE
+        );
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     

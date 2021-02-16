@@ -1,5 +1,6 @@
 package com.ssafy.wpwk.service;
 
+import com.ssafy.wpwk.enums.MessageType;
 import com.ssafy.wpwk.mappers.ContentsMapper;
 import com.ssafy.wpwk.mappers.UserMapper;
 import com.ssafy.wpwk.model.AbilityRequestDTO;
@@ -29,6 +30,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ContentsMapper contentsMapper;
+
+    @Autowired
+    private NotificationService notificationService;
 
     /**
      * 사용자 회원가입
@@ -174,16 +178,23 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean requestFollowing(Long toUserId, Long fromUserId) {
-        User user;
+        User user = userMapper.findFollowById(toUserId, fromUserId);
 
-        user = userMapper.findFollowById(toUserId, fromUserId);
-        //처음으로 팔로잉 하는 사람이라면 팔로잉 승인
+        // 처음으로 팔로잉 하는 사람이라면 팔로잉 승인
         if (user == null) {
             userMapper.updateFollowed(toUserId);
             userMapper.updateFollowing(fromUserId);
             userMapper.insertFollow(toUserId, fromUserId);
+            notificationService.createNotification(
+                    fromUserId,
+                    toUserId,
+                    "",
+                    "",
+                    MessageType.FOLLOW
+            );
             return true;
         }
+
         //팔로잉 하려고 하는 사람이 이미 팔로잉을 한 경우라면 팔로잉 해제
         else {
             userMapper.unFollowed(toUserId);

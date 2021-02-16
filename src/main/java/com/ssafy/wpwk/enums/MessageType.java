@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum MessageType {
 
     ADMIN_MESSAGE("admin_message"),
+    DELETE("delete"),
     WARN("warn"),
     LIKE("like"),
     COMMENT("comment"),

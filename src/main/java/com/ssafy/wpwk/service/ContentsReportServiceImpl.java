@@ -1,5 +1,6 @@
 package com.ssafy.wpwk.service;
 
+import com.ssafy.wpwk.enums.MessageType;
 import com.ssafy.wpwk.mappers.ContentsReportMapper;
 import com.ssafy.wpwk.model.ContentsReport;
 import com.ssafy.wpwk.model.ReportRequsetDTO;
@@ -49,7 +50,13 @@ public class ContentsReportServiceImpl implements ContentsReportService {
         Long targetUserId = contentsService.findContentsById(contentsId).getUserId();
 
         // 신고 처리 메시지 전송
-        notificationService.createReportNotification(targetUserId, contentsId, contentsTitle, status, adminId);
+        if(status.equals("WARN")) {
+            notificationService.createNotification(adminId, targetUserId, "",
+                    contentsTitle, MessageType.WARN);
+        } else {
+            notificationService.createNotification(adminId, targetUserId, "",
+                    contentsTitle, MessageType.DELETE);
+        }
 
         contentsReportMapper.updateStatus(id, status);
     }
