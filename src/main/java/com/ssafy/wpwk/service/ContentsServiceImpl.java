@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -56,12 +57,16 @@ public class ContentsServiceImpl implements ContentsService {
      * ID를 이용한 컨텐츠 조회
      */
     @Override
+    @Transactional
     public Contents findContentsById(Long id) throws Exception {
         Contents contents = contentsMapper.findContentsById(id);
         List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
         contents.setTagList(tagList);
 
         contents.setAbility(decimalToBinary(contents.getAbility()));
+
+        // 해당 컨텐츠 조회수 증가
+        contentsMapper.countViews(id);
 
         return contents;
     }
@@ -189,12 +194,6 @@ public class ContentsServiceImpl implements ContentsService {
         preProcess(contents);
 
         // 1. 컨텐츠 수정
-
-        logger.info("id : " + contents.getId());
-        logger.info("title : " + contents.getTitle());
-        logger.info("ability : " + contents.getAbility());
-        logger.info("spendTime : " + contents.getSpendTime());
-
         contentsMapper.update(contents);
 
         // 2. 콘텐츠 아이템 수정(기존 아이템 삭제 및 새로 생성)

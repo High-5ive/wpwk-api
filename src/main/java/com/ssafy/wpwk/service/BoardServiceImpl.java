@@ -40,7 +40,8 @@ public class BoardServiceImpl implements BoardService {
      * ID를 이용한 컨텐츠 상세조회
      */
     @Override
-    public Board findById(Long id,Long userId) throws Exception {
+    public Board findById(Long id, Long userId) throws Exception {
+        boardMapper.increaseViews(id);
         return boardMapper.findById(id,userId);
     }
 
@@ -74,9 +75,5 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void updateLikes(Long id, Long userId, int likes) throws Exception {
         boardMapper.updateLikes(id, likes);
-        //Todo
-        // id유저가 어떤 게시글에 대해서 좋아요를 했는지 기록이 필요함...
     }
-
-
 }

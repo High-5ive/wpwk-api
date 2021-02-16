@@ -229,6 +229,13 @@
         WHERE id = #{id}
     </update>
 
+    <!-- 조회수 +1 -->
+    <update id="countViews">
+        UPDATE contents SET
+            views = views + 1
+        WHERE id = #{id}
+    </update>
+
     <!-- 데이터 삭제 -->
     <delete id="delete">
         DELETE

@@ -71,6 +71,11 @@ public interface ContentsMapper {
      * 컨텐츠 좋아요 카운트
      */
     void countLike(@Param("id") Long id, @Param("likes") int likes);
+
+    /**
+     * 컨텐츠 조회수 카운트
+     */
+    void countViews(Long id);
     
     /**
      * 컨텐츠 역량 업데이트

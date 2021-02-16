@@ -3,7 +3,6 @@ package com.ssafy.wpwk.controller;
 import com.ssafy.wpwk.model.Board;
 import com.ssafy.wpwk.model.Contents;
 import com.ssafy.wpwk.service.MyPageServiceImpl;
-import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

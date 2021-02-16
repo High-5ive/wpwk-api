@@ -238,15 +238,6 @@ public class ContentsController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        logger.info("id : " + resource.getId());
-        logger.info("title : " + resource.getTitle());
-        logger.info("ability : " + resource.getAbility());
-        logger.info("spendTime : " + resource.getSpendTime());
-
-        for (ContentsItem contentsItem : resource.getContentsItemList()) {
-            logger.info("cItem : " + contentsItem.toString());
-        }
-
         try {
 
             Claims claims = (Claims) authentication.getPrincipal();
