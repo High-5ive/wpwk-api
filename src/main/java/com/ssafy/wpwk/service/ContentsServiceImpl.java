@@ -29,6 +29,9 @@ public class ContentsServiceImpl implements ContentsService {
     private ContentsItemMapper contentsItemMapper;
 
     @Autowired
+    private ContentsItemService contentsItemService;
+
+    @Autowired
     private TagMapper tagMapper;
 
     static final int CNT_PAGE = 10;
@@ -38,21 +41,8 @@ public class ContentsServiceImpl implements ContentsService {
      */
     @Override
     public void create(Contents contents) throws Exception {
-        // 1. 컨텐츠 정보추가
-        // 1-1. 컨텐츠 아이템 첫 번째 페이지에 유튜브 썸네일이 있는 경우 -> 컨텐츠 썸네일에 활용
-        String thumb = contents.getContentsItemList().get(0).getYoutubeThumbnail();
-        if (thumb == null) {
-            thumb = contents.getContentsItemList().get(0).getImageAddress();
-        }
-
-        contents.setThumb(thumb);
-        
-        // 2진수 형태로 들어온 ability -> 10진수 형태로 변환
-        int makeAbility = Integer.parseInt(contents.getAbility(), 2);
-        contents.setAbility(String.valueOf(makeAbility));
-
+        preProcess(contents);
         logger.info(contents.getAbility());
-
         contentsMapper.create(contents);
         // 2. 컨텐츠 아이템 정보 추가
         try {
@@ -196,27 +186,19 @@ public class ContentsServiceImpl implements ContentsService {
     @Override
     public void update(Contents contents) throws Exception {
 
+        preProcess(contents);
+
         // 1. 컨텐츠 수정
+
+        logger.info("id : " + contents.getId());
+        logger.info("title : " + contents.getTitle());
+        logger.info("ability : " + contents.getAbility());
+        logger.info("spendTime : " + contents.getSpendTime());
+
         contentsMapper.update(contents);
 
-        // 2. 컨텐츠 조회
-        List<ContentsItem> list = contentsItemMapper.findByContentsItemList(contents.getId());
-
-        // 3. 컨텐츠 아이템 삭제
-        int idx = 0;
-        for(ContentsItem contentsItem : list) {
-
-            logger.info(contentsItem.getId() + " " + contents.getContentsItemList().get(idx).getId());
-            if(contentsItem.getId().equals(contents.getContentsItemList().get(idx).getId())) {
-                contentsItemMapper.updateContentsItem(contents.getContentsItemList().get(idx));
-                idx++;
-                continue;
-            }
-
-            // 해당리스트에 없으면 삭제
-            contentsItemMapper.deleteById(contentsItem.getId());
-        }
-
+        // 2. 콘텐츠 아이템 수정(기존 아이템 삭제 및 새로 생성)
+        contentsItemService.updateByContentsId(contents.getId(), contents.getContentsItemList());
     }
 
     /**
@@ -225,5 +207,21 @@ public class ContentsServiceImpl implements ContentsService {
     @Override
     public void delete(Long id) throws Exception {
         contentsMapper.delete(id);
+    }
+
+    /**
+     * 콘텐츠 생성 시 전처리 작업
+     */
+    public void preProcess(Contents contents) throws Exception {
+        String thumb = contents.getContentsItemList().get(0).getYoutubeThumbnail();
+        if (thumb == null) {
+            thumb = contents.getContentsItemList().get(0).getImageAddress();
+        }
+
+        contents.setThumb(thumb);
+
+        // 2진수 형태로 들어온 ability -> 10진수 형태로 변환
+        int makeAbility = Integer.parseInt(contents.getAbility(), 2);
+        contents.setAbility(String.valueOf(makeAbility));
     }
 }

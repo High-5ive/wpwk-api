@@ -216,6 +216,7 @@
         SET title      = #{title},
             spend_time = #{spendTime},
             ability    = #{ability},
+            thumb  = #{thumb},
             updated_at = NOW(),
             updated_by = "server1"
         WHERE id = #{id}

@@ -1,16 +1,18 @@
 package com.ssafy.wpwk.controller;
 
 import com.ssafy.wpwk.model.Contents;
+import com.ssafy.wpwk.model.ContentsItem;
 import com.ssafy.wpwk.service.ContentsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.ssafy.wpwk.utils.ExceptionUtil.isInValidAuthentication;
@@ -18,6 +20,8 @@ import static com.ssafy.wpwk.utils.ExceptionUtil.isInValidAuthentication;
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
 public class ContentsController {
+
+    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private ContentsServiceImpl contentsService;
@@ -233,7 +237,16 @@ public class ContentsController {
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        
+
+        logger.info("id : " + resource.getId());
+        logger.info("title : " + resource.getTitle());
+        logger.info("ability : " + resource.getAbility());
+        logger.info("spendTime : " + resource.getSpendTime());
+
+        for (ContentsItem contentsItem : resource.getContentsItemList()) {
+            logger.info("cItem : " + contentsItem.toString());
+        }
+
         try {
 
             Claims claims = (Claims) authentication.getPrincipal();
