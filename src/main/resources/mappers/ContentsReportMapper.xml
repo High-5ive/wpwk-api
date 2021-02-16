@@ -6,6 +6,7 @@
     <resultMap id="Contents" type="com.ssafy.wpwk.model.Contents">
         <result column="contents_id" property="id"/>
         <result column="title" property="title"/>
+        <result column="creator_id" property="userId"/>
         <result column="spend_time" property="spendTime"/>
         <result column="likes" property="likes"/>
         <result column="views" property="views"/>
@@ -23,8 +24,8 @@
     </resultMap>
 
     <select id="allReports" resultMap="ContentsReport" resultType="com.ssafy.wpwk.model.ContentsReport">
-        SELECT c2.*, u.nickname as "reporter_nickname"
-        FROM user u join(
+        SELECT c2.*, u2.nickname as "creator_nickname",u.nickname as "reporter_nickname"
+        FROM user u JOIN (
             SELECT cr.id as "contents_report_id",
                    cr.comment,
                    cr.status,
@@ -32,15 +33,17 @@
                    cr.user_id as "reporter_id",
                    c.id as"contents_id",
                    c.title,
+                   c.user_id as "creator_id",
                    c.spend_time,
                    c.likes,
                    c.views,
                    c.ability
-            FROM contents_report cr join contents c
-            where cr.contents_id =  c.id
+            FROM contents_report cr JOIN contents c
+            ON cr.contents_id =  c.id
         ) c2
-        WHERE u.id = c2.reporter_id;
-
+        ON u.id = c2.reporter_id
+        JOIN user u2 ON u2.id = c2.creator_id
+        ORDER BY c2.contents_report_id DESC
     </select>
 
     <select id="findContentsReportById" resultMap="ContentsReport" resultType="com.ssafy.wpwk.model.ContentsReport">
