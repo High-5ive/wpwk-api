@@ -304,20 +304,17 @@ public class UserController {
      * 사용자 팔로워 or 팔로잉 리스트 정보 조회
      */
     @ApiOperation(value = "사용자 팔로우&팔로워 리스트 정보 조회")
-    @GetMapping("/users/follow")
-    public ResponseEntity<?> findFollowerListById(@RequestBody Map<String, Object> map, Authentication authentication) {
+    @GetMapping("/users/follow/{option}/{targetId}")
+    public ResponseEntity<?> findFollowerListById(
+            @PathVariable("option") String option,
+            @PathVariable("targetId") Long targetId,
+            Authentication authentication) {
 
         if (isInValidAuthentication(authentication)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        List<User> followerList;
-        Claims claims = (Claims) authentication.getPrincipal();
-
-        Long id = claims.get("userId", Long.class);
-
-        String option = (String) map.get("option");
-        followerList = userService.findFollowListById(id, option);
+        List<User> followerList = userService.findFollowListById(targetId, option);
         return new ResponseEntity<>(followerList, HttpStatus.OK);
     }
 
