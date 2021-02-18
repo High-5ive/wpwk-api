@@ -1,6 +1,7 @@
 package com.ssafy.wpwk.service;
 
 import com.ssafy.wpwk.model.Contents;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -30,6 +31,11 @@ public interface ContentsService {
      * 카테고리를 이용한 컨텐츠 조회
      */
     List<Contents> findContentsByCategory(int category, int page, Long userId) throws Exception;
+
+    /**
+     * 즐겨찾기 컨텐츠 검색
+     */
+    List<Contents> findContentsByFavorite(int page, Long userId);
 
     /**
      * 컨텐츠 전체 조회

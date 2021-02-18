@@ -49,6 +49,11 @@ public class LoginController {
             return new ResponseEntity<>("email", HttpStatus.FORBIDDEN);
         }
 
+        // 3. 비활성화 된 경우
+        if (user.getStatus() == -1) {
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
         // 3. 회원 인증 성공 --> token발급
         String accessToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getNickname(), user.getStatus());
         LoginResponseDTO loginResponseDTO = LoginResponseDTO.builder().accessToken(accessToken).build();

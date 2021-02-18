@@ -58,6 +58,11 @@ public interface ContentsMapper {
     List<Contents> findContentsByCategory(@Param("category")int categoryToSquareOfTwo, @Param("offset")int offset, @Param("userId")Long userId);
 
     /**
+     * 즐겨찾기 컨텐츠 검색
+     */
+    List<Contents> findContentsByFavorite(@Param("offset")int offset, @Param("userId")Long userId);
+
+    /**
      * 컨텐츠 수정
      */
     void update(Contents contents) throws Exception;

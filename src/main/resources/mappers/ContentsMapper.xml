@@ -135,6 +135,30 @@
         ]]>
     </select>
 
+    <!-- 사용자의 즐겨찾기 컨텐츠 리스트 조회 -->
+    <select id="findContentsByFavorite" parameterType="map" resultType="com.ssafy.wpwk.model.Contents">
+        <![CDATA[
+        SELECT distinct c.id,
+                        c.title,
+                        c.spend_time,
+                        c.likes,
+                        c.views,
+                        c.ability,
+                        c.thumb,
+                        c.created_at,
+                        c.created_by,
+                        u.id as user_id,
+                        u.nickname,
+                        CASE WHEN fc.id IS NULL THEN 'false' ELSE 'true' END as 'favorite'
+        FROM contents c
+                JOIN favorite_contents fc ON c.id = fc.contents_id
+                AND fc.user_id = #{userId}
+        JOIN user u ON c.user_id = u.id
+        ORDER BY c.id DESC
+        LIMIT 10 OFFSET #{offset}
+        ]]>
+    </select>
+
     <!-- 키워드(제작자 이름, 제목)을 이용한 컨텐트 조회-->
     <select id="findContentsByKeyword" resultType="com.ssafy.wpwk.model.Contents">
         SELECT DISTINCT c.id,

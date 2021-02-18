@@ -32,7 +32,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader("Authorization");
 
         Claims claims = null;
-        if(token != null) { // token이 있는 경우
+        if(token != null && token.length() > 6) { // token이 있는 경우
             claims = jwtUtil.getClaims(token.substring("Bearer ".length()));
         }
 

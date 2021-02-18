@@ -36,6 +36,7 @@
         WHERE n.from_user_id = u.id
         AND n.to_user_id = #{userId}
         AND n.read_at IS NULL
+        ORDER BY n.id DESC
     </select>
 
     <!-- 공지사항 특정 수신자에게 작성 -->

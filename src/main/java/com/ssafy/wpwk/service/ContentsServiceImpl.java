@@ -123,6 +123,20 @@ public class ContentsServiceImpl implements ContentsService {
         return contentsList;
     }
 
+    @Override
+    public List<Contents> findContentsByFavorite(int page, Long userId) {
+        int offset = (page - 1) * CNT_PAGE;
+
+        List<Contents> contentsList = contentsMapper.findContentsByFavorite(offset, userId);
+        for (Contents contents : contentsList) {
+            List<Tag> tagList = tagMapper.getTagListByContentsId(contents.getId());
+            contents.setTagList(tagList);
+            contents.setAbility(decimalToBinary(contents.getAbility()));
+        }
+
+        return contentsList;
+    }
+
     /**
      * 컨텐츠 전체 조회
      */
