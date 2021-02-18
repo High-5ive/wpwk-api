@@ -49,14 +49,16 @@ public class ContentsReportServiceImpl implements ContentsReportService {
         // 신고 대상자 아이디 가져오기
         Long targetUserId = contentsService.findContentsById(contentsId).getUserId();
 
-        // 신고 처리 메시지 전송
-        if(status.equals("WARN")) {
-            notificationService.createNotification(adminId, targetUserId, "",
-                    contentsTitle, MessageType.WARN);
-        } else {
-            notificationService.createNotification(adminId, targetUserId, "",
-                    contentsTitle, MessageType.DELETE);
+        MessageType messageType = Enum.valueOf(MessageType.class, status);
+
+        // 삭제처리인 경우 해당 콘텐츠 삭제
+        if(messageType.equals(MessageType.DELETE)) {
+            contentsService.delete(contentsId);
         }
+
+        // 신고 처리 메시지 전송
+        notificationService.createNotification(adminId, targetUserId, contentsTitle,
+                "", messageType);
 
         contentsReportMapper.updateStatus(id, status);
     }

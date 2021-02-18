@@ -83,10 +83,13 @@ public class NotificationController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN); // FORBIDDEN 403 권한이 없음을 명시
         }
 
+        StringBuffer sb = new StringBuffer("[공지사항] ");
+        sb.append(resource.getMessage());
+
         Notification notification = Notification.builder()
                                                 .fromUserId(user.getId())
                                                 .fromUserNickname(user.getNickname())
-                                                .message(resource.getMessage())
+                                                .message(sb.toString())
                                                 .messageType(MessageType.ADMIN_MESSAGE)
                                                 .createdBy("server1")
                                                 .build();

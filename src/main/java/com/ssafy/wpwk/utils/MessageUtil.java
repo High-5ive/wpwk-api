@@ -14,15 +14,13 @@ public class MessageUtil {
         StringBuffer sb = new StringBuffer();
 
         switch (type){
-            case ADMIN_MESSAGE: // 공지사항
-                sb.append("[공지사항] ")
-                  .append(message);
-                break;
             case WARN: // 경고처리
+                System.out.println("WARN");
                 sb.append(title);
                 sb.append("에 부적절한 내용이 포함되어 있어 확인 바랍니다");
                 break;
             case DELETE: // 삭제처리
+                System.out.println("DELETE");
                 sb.append(title);
                 sb.append("에 부적절한 내용이 포함되어 있어 삭제되었습니다");
                 break;

@@ -54,7 +54,7 @@
                u.id as user_id,
                u.nickname
         FROM contents c JOIN favorite_contents fc ON c.id = fc.contents_id and fc.user_id = #{userId}
-        JOIN user u ON fc.user_id = u.id
+        JOIN user u ON c.user_id = u.id
         ORDER BY c.id DESC
         <!-- LIMIT 10 OFFSET #{offset} -->
     </select>
@@ -73,7 +73,7 @@
                u.nickname as writer
         FROM board b JOIN board_comment bc
         ON b.id = bc.board_id
-        JOIN user u ON bc.user_id = u.id and u.id= #{userId}
+        JOIN user u ON b.user_id = u.id and bc.user_id= #{userId}
         ORDER BY b.id DESC
         <!-- LIMIT 10 OFFSET #{offset} -->
     </select>

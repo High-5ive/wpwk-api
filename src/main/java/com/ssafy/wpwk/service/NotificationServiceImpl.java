@@ -80,6 +80,8 @@ public class NotificationServiceImpl implements NotificationService{
 
         User fromUser = userMapper.findUserById(fromUserId);
 
+        System.out.println(" :: " + contentsTitle);
+
         Notification notification = Notification.builder()
                 .fromUserId(fromUserId)
                 .fromUserNickname(fromUser.getNickname())
@@ -90,6 +92,8 @@ public class NotificationServiceImpl implements NotificationService{
                         message,
                         type))
                 .build();
+
+        System.out.println(notification.getMessage());
 
         notificationMapper.createNotification(notification);
     }

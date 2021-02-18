@@ -5,13 +5,13 @@ import lombok.Getter;
 @Getter
 public enum MessageType {
 
-    ADMIN_MESSAGE("admin_message"),
-    DELETE("delete"),
-    WARN("warn"),
-    LIKE("like"),
-    COMMENT("comment"),
-    FOLLOW("follow"),
-    NEW_CONTENTS("new_contents");
+    ADMIN_MESSAGE("ADMIN_MESSAGE"),
+    DELETE("DELETE"),
+    WARN("WARN"),
+    LIKE("LIKE"),
+    COMMENT("COMMENT"),
+    FOLLOW("FOLLOW"),
+    NEW_CONTENTS("NEW_CONTENTS");
 
     private String name;
 
