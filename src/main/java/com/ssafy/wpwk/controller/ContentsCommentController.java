@@ -18,7 +18,7 @@ import java.util.Map;
 
 import static com.ssafy.wpwk.utils.ExceptionUtil.isInValidAuthentication;
 
-@CrossOrigin(origins = "{*}.", maxAge = 6000)
+@CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
 public class ContentsCommentController {
 
